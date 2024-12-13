@@ -1,0 +1,2 @@
+C:\Users\2240114\Desktop\ゲームプログラミングⅢ\ゲームプログラミングⅢ(学生配布)\ゲームプログラミングⅢ(学生配布) - コピー\External\DirectXTex\Bin\Desktop_2022\x64\Release\DirectXTex.lib
+C:\Users\2240114\Desktop\ゲームプログラミングⅢ\ゲームプログラミングⅢ(学生配布)\ゲーム\External\DirectXTex\Bin\Desktop_2022\x64\Release\DirectXTex.lib
