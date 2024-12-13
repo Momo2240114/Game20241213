@@ -77,7 +77,7 @@ protected:
 
 	void Jump(float speed);
 
-	void Jump2(float speed);
+
 
 	void UpdateVelocity(float elapsedTime);
 
@@ -107,5 +107,3 @@ protected:
 	float stepOffset = 1.0f;
 };
 
-
-//なんでーーーーー
