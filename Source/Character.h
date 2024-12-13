@@ -77,6 +77,8 @@ protected:
 
 	void Jump(float speed);
 
+	void Jump2(float speed);
+
 	void UpdateVelocity(float elapsedTime);
 
 	void Updateinvincibletimer(float elapsedTime);
