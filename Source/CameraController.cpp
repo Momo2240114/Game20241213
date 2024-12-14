@@ -1,77 +1,147 @@
-
+ï»¿
 #include "System/Input.h"
 #include "CameraController.h"
 #include "Camera.h"
 
 void CameraController::Update(float elapsedTime)
 {
-    //ver1
+    GamePad& gamePad = Input::Instance().GetGamePad();
+    float ax = gamePad.GetAxisRX();
+    float ay = gamePad.GetAxisRY();
+
     {
-    //GamePad& gamePad = Input::Instance().GetGamePad();
-    //float ax = gamePad.GetAxisRX();
-    //float ay = gamePad.GetAxisRY();
+        // // ã‚«ãƒ¡ãƒ©ã®å›è»¢é€Ÿåº¦
+        //float speed = rollSpeed * elapsedTime;
 
-    //// ƒJƒƒ‰‚Ì‰ñ“]‘¬“x
-    //float speed = rollSpeed * elapsedTime;
+        //// ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å…¥åŠ›å€¤ã«åˆã‚ã›ã¦Xè»¸ã¨Yè»¸ã‚’å›è»¢
+        //angle.x += ay * speed; //ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å‰å¾Œå€’ã—
+        //angle.y += ax * speed; //ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å·¦å³å€’ã—
 
-    //// ƒXƒeƒBƒbƒN‚Ì“ü—Í’l‚É‡‚í‚¹‚ÄX²‚ÆY²‚ğ‰ñ“]
-    //angle.x += ay * speed;//ƒXƒeƒBƒbƒN‚Ì‘OŒã“|‚µ
-    //angle.y += ax * speed;//ƒXƒeƒBƒbƒN‚Ì¶‰E“|‚µ
+        //// Xè»¸ã®ã‚«ãƒ¡ãƒ©å›è»¢ã‚’åˆ¶é™
+        //if (angle.x < minAngleX)
+        //{
+        //    angle.x = minAngleX;
+        //}
+        //if (angle.x > maxAngleX)
+        //{
+        //    angle.x = maxAngleX;
+        //}
 
-    // X²‚ÌƒJƒƒ‰‰ñ“]‚ğ§ŒÀ
-    if (angle.x < minAngleX)
-    {
-    	angle.x = minAngleX;
+        //// Yè»¸ã®å›è»¢å€¤ã‚’-3.14ï½3.14ã«ç´ã¾ã‚‹ã‚ˆã†ã«ã™ã‚‹
+        //if (angle.y < -DirectX::XM_PI)
+        //{
+        //    angle.y += DirectX::XM_2PI;
+        //}
+        //if (angle.y > DirectX::XM_PI)
+        //{
+        //    angle.y -= DirectX::XM_2PI;
+        //}
+
+        //// ã‚«ãƒ¡ãƒ©å›è»¢å€¤ã‚’å›è»¢è¡Œåˆ—ã«å¤‰æ›ï¼ˆå¼•æ•°ã¯ãƒ”ãƒƒãƒã€ãƒ¨ãƒ¼ã€ãƒ­ãƒ¼ãƒ«ï¼‰
+        //DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
+
+        //// å›è»¢è¡Œåˆ—ã‹ã‚‰å‰æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’å–ã‚Šå‡ºã™ï¼ˆZè»¸ãƒ™ã‚¯ãƒˆãƒ«ï¼‰
+        //DirectX::XMVECTOR Front = Transform.r[2];
+        //DirectX::XMFLOAT3 front;
+        //DirectX::XMStoreFloat3(&front, Front);
+
+        //// æ³¨è¦–ç‚¹ã‹ã‚‰å¾Œã‚ãƒ™ã‚¯ãƒˆãƒ«æ–¹å‘ã«ä¸€å®šè·é›¢é›¢ã‚ŒãŸã‚«ãƒ¡ãƒ©è¦–ç‚¹ã‚’æ±‚ã‚ã‚‹
+        //DirectX::XMFLOAT3 eye;
+        //eye.x = target.x - front.x * range;
+        //eye.y = target.y - front.y * range;
+        //eye.z = target.z - front.z * range;
+
+        //// ã‚«ãƒ¡ãƒ©ã«è¦–ç‚¹ã‚’æ³¨è¦–ç‚¹ã‚’è¨­å®šï¼ˆå¼•æ•°ï¼šeye , focus , up)
+        //Camera::Instance().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
+
+        //// ãƒã‚¦ã‚¹ãƒ›ã‚¤ãƒ¼ãƒ«ã®å…¥åŠ›ã‚’å–å¾—
+        //wheelDelta = Input::Instance().GetMouse().GetWheel();
+        //const float zoomSpeed = 5.0f; // ãƒ›ã‚¤ãƒ¼ãƒ«æ„Ÿåº¦
+
+        //// è·é›¢ã‚’ãƒ›ã‚¤ãƒ¼ãƒ«ã®å…¥åŠ›ã«åŸºã¥ã„ã¦å¤‰æ›´
+        //range -= wheelDelta * zoomSpeed;
+
+        //// è·é›¢ã®ç¯„å›²åˆ¶é™
+        //const float minRange = 5.0f;  // æœ€å°è·é›¢
+        //const float maxRange = 1000.0f; // æœ€å¤§è·é›¢
+
+        //if (range < minRange)
+        //{
+        //    range = minRange;
+        //}
+        //if (range > maxRange)
+        //{
+        //    range = maxRange;
+        //}
+
+        ////// UpdateVer4 ã‚’å‘¼ã³å‡ºã—
+        /////*UpdateVer4(elapsedTime);*/
     }
-    if (angle.x > maxAngleX)
+    // ãƒœã‚¿ãƒ³å…¥åŠ›ã®ç¢ºèªï¼ˆä¾‹ï¼šAãƒœã‚¿ãƒ³ã§å›è»¢é–‹å§‹ï¼‰
     {
-    	angle.x = maxAngleX;
-    }
-    //// Y²‚Ì‰ñ“]’l‚ğ-3.14`3.14‚Éû‚Ü‚é‚æ‚¤‚É‚·‚é
-    //if (angle.y < -DirectX::XM_PI)
-    //{
-    //	angle.y += DirectX::XM_2PI;
-    //}
-    //if (angle.y > DirectX::XM_PI)
-    //{
-    //	angle.y -= DirectX::XM_2PI;
-    //}
+        if (ax != 0)
+        {
+            if (!isRotating)
+            {
+                isRotating = true; // å›è»¢é–‹å§‹
+                currentTime = 0.0f; // çµŒéæ™‚é–“ã‚’ãƒªã‚»ãƒƒãƒˆ
+                if (ax < 0) AddAng = +45;
+                else if (ax > 0) AddAng = -45;
 
+                targetAngle.x = angle.x; // Xè»¸ã¯ãã®ã¾ã¾
+                targetAngle.y = angle.y + DirectX::XMConvertToRadians(AddAng); // 45åº¦å›è»¢
+                targetAngle.z = angle.z; // Zè»¸ã¯ãã®ã¾ã¾
 
+                // Yè»¸è§’åº¦ã‚’-Ï€ï½Ï€ã®ç¯„å›²ã«åã‚ã‚‹ï¼ˆã“ã“ã ã‘èª¿æ•´ï¼‰
+                if (targetAngle.y < -DirectX::XM_PI)
+                {
+                    targetAngle.y += DirectX::XM_2PI;
+                }
+                if (targetAngle.y > DirectX::XM_PI)
+                {
+                    targetAngle.y -= DirectX::XM_2PI;
+                }
+            }
+        }
+        if (ay != 0)
+        {
+            range += ay * rangeChangeSpeed * elapsedTime; // ayã®å€¤ã§rangeã‚’å¢—æ¸›
+            if (range < minRange) range = minRange;      // æœ€å°å€¤åˆ¶é™
+            if (range > maxRange) range = maxRange;      // æœ€å¤§å€¤åˆ¶é™
+        }
 
+        // å›è»¢ä¸­ã®å‡¦ç†
+        if (isRotating)
+        {
+            currentTime += elapsedTime; // æ™‚é–“ã‚’é€²ã‚ã‚‹
 
-    //// ƒJƒƒ‰‰ñ“]’l‚ğ‰ñ“]s—ñ‚É•ÏŠ·iˆø”‚Íƒsƒbƒ`Aƒˆ[Aƒ[ƒ‹j
-    //DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
+            // è£œé–“ä¿‚æ•°ã‚’è¨ˆç®—ï¼ˆ0ï½1ã®ç¯„å›²ï¼‰
+            float t = currentTime / rotationDuration;
+            if (currentTime >= rotationDuration) // å›è»¢çµ‚äº†æ¡ä»¶
+            {
+                t = 1.0f;
+                isRotating = false; // å›è»¢çµ‚äº†
+            }
 
-    //// ‰ñ“]s—ñ‚©‚ç‘O•ûŒüƒxƒNƒgƒ‹‚ğæ‚èo‚·iZ²ƒxƒNƒgƒ‹j
-    //DirectX::XMVECTOR Front = Transform.r[2];
-    //DirectX::XMFLOAT3 front;
-    //DirectX::XMStoreFloat3(&front, Front);
+            // Yè»¸ã®è§’åº¦å·®ãŒÏ€ã‚’è¶…ãˆã‚‹å ´åˆã€æœ€çŸ­çµŒè·¯ã§è£œé–“ã™ã‚‹
+            float deltaY = targetAngle.y - angle.y;
+            if (deltaY > DirectX::XM_PI)
+            {
+                deltaY -= DirectX::XM_2PI; // -Ï€ã€œÏ€ã®ç¯„å›²å†…ã«åã‚ã‚‹
+            }
+            else if (deltaY < -DirectX::XM_PI)
+            {
+                deltaY += DirectX::XM_2PI; // -Ï€ã€œÏ€ã®ç¯„å›²å†…ã«åã‚ã‚‹
+            }
 
-    //// ’‹“_‚©‚çŒã‚ëƒxƒNƒgƒ‹•ûŒü‚Éˆê’è‹——£—£‚ê‚½ƒJƒƒ‰‹“_‚ğ‹‚ß‚é
-    //DirectX::XMFLOAT3 eye;
-    //eye.x = target.x - front.x * range;
-    //eye.y = target.y - front.y * range;
-    //eye.z = target.z - front.z * range;
+            // ç·šå½¢è£œé–“ã‚’ä½¿ç”¨ã—ã¦ç¾åœ¨ã®è§’åº¦ã‚’æ›´æ–°
+            angle.x = angle.x + (targetAngle.x - angle.x) * t;
+            angle.y = angle.y + deltaY * t; // æœ€çŸ­çµŒè·¯ã‚’ä½¿ç”¨
+            angle.z = angle.z + (targetAngle.z - angle.z) * t;
+        }
 
-    //// ƒJƒƒ‰‚É‹“_‚ğ’‹“_‚ğİ’èiˆø”Feye , focus , up)
-    //Camera::Instance().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
- //   UpdateVer4(elapsedTime);
-}
-
-    {
-        GamePad& gamePad = Input::Instance().GetGamePad();
-        float ax = gamePad.GetAxisRX();
-        float ay = gamePad.GetAxisRY();
-
-        // ƒJƒƒ‰‚Ì‰ñ“]‘¬“x
-        float speed = rollSpeed * elapsedTime;
-
-        // ƒXƒeƒBƒbƒN‚Ì“ü—Í’l‚É‡‚í‚¹‚ÄX²‚ÆY²‚ğ‰ñ“]
-        angle.x += ay * speed; //ƒXƒeƒBƒbƒN‚Ì‘OŒã“|‚µ
-        angle.y += ax * speed; //ƒXƒeƒBƒbƒN‚Ì¶‰E“|‚µ
-
-        // X²‚ÌƒJƒƒ‰‰ñ“]‚ğ§ŒÀ
+        // ä»¥ä¸‹ã¯å…ƒã®ã‚«ãƒ¡ãƒ©è¨ˆç®—å‡¦ç†
+        // Xè»¸ã®ã‚«ãƒ¡ãƒ©å›è»¢ã‚’åˆ¶é™
         if (angle.x < minAngleX)
         {
             angle.x = minAngleX;
@@ -80,58 +150,20 @@ void CameraController::Update(float elapsedTime)
         {
             angle.x = maxAngleX;
         }
-
-        // Y²‚Ì‰ñ“]’l‚ğ-3.14`3.14‚É”[‚Ü‚é‚æ‚¤‚É‚·‚é
-        if (angle.y < -DirectX::XM_PI)
-        {
-            angle.y += DirectX::XM_2PI;
-        }
-        if (angle.y > DirectX::XM_PI)
-        {
-            angle.y -= DirectX::XM_2PI;
-        }
-
-        // ƒJƒƒ‰‰ñ“]’l‚ğ‰ñ“]s—ñ‚É•ÏŠ·iˆø”‚Íƒsƒbƒ`Aƒˆ[Aƒ[ƒ‹j
+        // å›è»¢è¡Œåˆ—ã‚„ã‚«ãƒ¡ãƒ©ä½ç½®ã®è¨ˆç®—ã¯ãã®ã¾ã¾
         DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
-
-        // ‰ñ“]s—ñ‚©‚ç‘O•ûŒüƒxƒNƒgƒ‹‚ğæ‚èo‚·iZ²ƒxƒNƒgƒ‹j
         DirectX::XMVECTOR Front = Transform.r[2];
         DirectX::XMFLOAT3 front;
         DirectX::XMStoreFloat3(&front, Front);
 
-        // ’‹“_‚©‚çŒã‚ëƒxƒNƒgƒ‹•ûŒü‚Éˆê’è‹——£—£‚ê‚½ƒJƒƒ‰‹“_‚ğ‹‚ß‚é
         DirectX::XMFLOAT3 eye;
         eye.x = target.x - front.x * range;
         eye.y = target.y - front.y * range;
         eye.z = target.z - front.z * range;
 
-        // ƒJƒƒ‰‚É‹“_‚ğ’‹“_‚ğİ’èiˆø”Feye , focus , up)
         Camera::Instance().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
 
-        // ƒ}ƒEƒXƒzƒC[ƒ‹‚Ì“ü—Í‚ğæ“¾
-        wheelDelta = Input::Instance().GetMouse().GetWheel();
-        const float zoomSpeed = 5.0f; // ƒzƒC[ƒ‹Š´“x
-
-        // ‹——£‚ğƒzƒC[ƒ‹‚Ì“ü—Í‚ÉŠî‚Ã‚¢‚Ä•ÏX
-        range -= wheelDelta * zoomSpeed;
-
-        // ‹——£‚Ì”ÍˆÍ§ŒÀ
-        const float minRange = 5.0f;  // Å¬‹——£
-        const float maxRange = 50.0f; // Å‘å‹——£
-
-        if (range < minRange)
-        {
-            range = minRange;
-        }
-        if (range > maxRange)
-        {
-            range = maxRange;
-        }
-
-        // UpdateVer4 ‚ğŒÄ‚Ño‚µ
-        /*UpdateVer4(elapsedTime);*/
     }
-
 }
 
 
@@ -140,56 +172,56 @@ void CameraController::UpdateVer1(float elapsedTime)
 {
     Input& input = Input::Instance();
 
-    // ƒ}ƒEƒX‚ÌˆÚ“®—Ê‚ğæ“¾
+    // ãƒã‚¦ã‚¹ã®ç§»å‹•é‡ã‚’å–å¾—
     float deltaX = input.GetMouse().GetPositionX() - input.GetMouse().GetOldPositionX();
     float deltaY = input.GetMouse().GetPositionY() - input.GetMouse().GetOldPositionY();
 
-    // ƒ}ƒEƒX‚ÌŠ´“x‚ğİ’è
+    // ãƒã‚¦ã‚¹ã®æ„Ÿåº¦ã‚’è¨­å®š
     const float mouseSensitivity = 0.005f;
 
-    // ƒJƒƒ‰‚Ì‰ñ“]‘¬“x
+    // ã‚«ãƒ¡ãƒ©ã®å›è»¢é€Ÿåº¦
     float speed = rollSpeed * elapsedTime;
 
-    // ƒ}ƒEƒX‚ÌˆÚ“®—Ê‚É‰‚¶‚ÄƒJƒƒ‰‚Ì‰ñ“]Šp“x‚ğXV
-    angle.x += deltaY * mouseSensitivity; // ã‰º”½“]‚ğl—¶
+    // ãƒã‚¦ã‚¹ã®ç§»å‹•é‡ã«å¿œã˜ã¦ã‚«ãƒ¡ãƒ©ã®å›è»¢è§’åº¦ã‚’æ›´æ–°
+    angle.x += deltaY * mouseSensitivity; // ä¸Šä¸‹åè»¢ã‚’è€ƒæ…®
     angle.y += deltaX * mouseSensitivity;
 
 
 
-    // ‰ñ“]‚ğƒXƒ€[ƒY‚É‚·‚é‚½‚ß‚Ì•âŠÔ‚ğ’Ç‰Á
+    // å›è»¢ã‚’ã‚¹ãƒ ãƒ¼ã‚ºã«ã™ã‚‹ãŸã‚ã®è£œé–“ã‚’è¿½åŠ 
     static DirectX::XMFLOAT3 smoothAngle = angle;
-    const float smoothFactor = 0.1f; // ŠŠ‚ç‚©‚³‚ğ’²®
+    const float smoothFactor = 0.1f; // æ»‘ã‚‰ã‹ã•ã‚’èª¿æ•´
     smoothAngle.x += (angle.x - smoothAngle.x) * smoothFactor;
     smoothAngle.y -= (angle.y - smoothAngle.y) * smoothFactor;
 
 
-    // ƒJƒƒ‰‰ñ“]’l‚ğ‰ñ“]s—ñ‚É•ÏŠ·iˆø”‚Íƒsƒbƒ`Aƒˆ[Aƒ[ƒ‹j
+    // ã‚«ãƒ¡ãƒ©å›è»¢å€¤ã‚’å›è»¢è¡Œåˆ—ã«å¤‰æ›ï¼ˆå¼•æ•°ã¯ãƒ”ãƒƒãƒã€ãƒ¨ãƒ¼ã€ãƒ­ãƒ¼ãƒ«ï¼‰
     DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
 
-    // ‰ñ“]s—ñ‚©‚ç‘O•ûŒüƒxƒNƒgƒ‹‚ğæ‚èo‚·iZ²ƒxƒNƒgƒ‹j
+    // å›è»¢è¡Œåˆ—ã‹ã‚‰å‰æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’å–ã‚Šå‡ºã™ï¼ˆZè»¸ãƒ™ã‚¯ãƒˆãƒ«ï¼‰
     DirectX::XMVECTOR Front = Transform.r[2];
     DirectX::XMFLOAT3 front;
     DirectX::XMStoreFloat3(&front, Front);
 
-    // ’‹“_‚©‚çŒã‚ëƒxƒNƒgƒ‹•ûŒü‚Éˆê’è‹——£—£‚ê‚½ƒJƒƒ‰‹“_‚ğ‹‚ß‚é
+    // æ³¨è¦–ç‚¹ã‹ã‚‰å¾Œã‚ãƒ™ã‚¯ãƒˆãƒ«æ–¹å‘ã«ä¸€å®šè·é›¢é›¢ã‚ŒãŸã‚«ãƒ¡ãƒ©è¦–ç‚¹ã‚’æ±‚ã‚ã‚‹
     DirectX::XMFLOAT3 eye;
     eye.x = target.x - front.x * range;
     eye.y = target.y - front.y * range;
     eye.z = target.z - front.z * range;
 
-    // ƒ}ƒEƒX‚Ì¶ƒNƒŠƒbƒN‚ª‰Ÿ‚³‚ê‚Ä‚¢‚éŠÔ‚Ì‚İƒJƒƒ‰‚ğ§Œä
+    // ãƒã‚¦ã‚¹ã®å·¦ã‚¯ãƒªãƒƒã‚¯ãŒæŠ¼ã•ã‚Œã¦ã„ã‚‹é–“ã®ã¿ã‚«ãƒ¡ãƒ©ã‚’åˆ¶å¾¡
     if (input.GetMouse().GetButton() & Mouse::BTN_LEFT)
     {
-        // ƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ğ‰æ–Ê’†‰›‚É–ß‚·
+        // ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã‚’ç”»é¢ä¸­å¤®ã«æˆ»ã™
         POINT center;
         center.x = input.GetMouse().GetScreenWidth() / 2;
         center.y = input.GetMouse().GetScreenHeight() / 2;
         SetCursorPos(center.x, center.y);
 
-        // ƒ}ƒEƒX‚Ì‹ŒˆÊ’u‚ğ‰æ–Ê’†‰›‚ÉƒŠƒZƒbƒg
+        // ãƒã‚¦ã‚¹ã®æ—§ä½ç½®ã‚’ç”»é¢ä¸­å¤®ã«ãƒªã‚»ãƒƒãƒˆ
         input.GetMouse().Update();
     }
-    // ƒJƒƒ‰‚É‹“_‚ğ’‹“_‚ğİ’èiˆø”Feye , focus , up)
+    // ã‚«ãƒ¡ãƒ©ã«è¦–ç‚¹ã‚’æ³¨è¦–ç‚¹ã‚’è¨­å®šï¼ˆå¼•æ•°ï¼šeye , focus , up)
     Camera::Instance().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
 }
 
@@ -197,7 +229,7 @@ void CameraController::UpdateVer2(float elapsedTime)
 {
     Input& input = Input::Instance();
 
-    // ƒ}ƒEƒX‚ÌˆÚ“®—Ê‚ğæ“¾
+    // ãƒã‚¦ã‚¹ã®ç§»å‹•é‡ã‚’å–å¾—
     static int lastMouseX = input.GetMouse().GetPositionX();
     static int lastMouseY = input.GetMouse().GetPositionY();
 
@@ -210,17 +242,17 @@ void CameraController::UpdateVer2(float elapsedTime)
     lastMouseX = currentMouseX;
     lastMouseY = currentMouseY;
 
-    // ƒ}ƒEƒX‚ÌŠ´“x‚ğİ’è
-    const float mouseSensitivity = 0.02f; // Š´“x‚ğ’²®
+    // ãƒã‚¦ã‚¹ã®æ„Ÿåº¦ã‚’è¨­å®š
+    const float mouseSensitivity = 0.02f; // æ„Ÿåº¦ã‚’èª¿æ•´
 
-    // ƒJƒƒ‰‚Ì‰ñ“]‘¬“x
+    // ã‚«ãƒ¡ãƒ©ã®å›è»¢é€Ÿåº¦
     float speed = rollSpeed * elapsedTime;
 
-    // ƒ}ƒEƒX‚ÌˆÚ“®—Ê‚É‰‚¶‚ÄƒJƒƒ‰‚Ì‰ñ“]Šp“x‚ğXV
-    angle.x += deltaY * mouseSensitivity; // ã‰º”½“]‚ğl—¶
+    // ãƒã‚¦ã‚¹ã®ç§»å‹•é‡ã«å¿œã˜ã¦ã‚«ãƒ¡ãƒ©ã®å›è»¢è§’åº¦ã‚’æ›´æ–°
+    angle.x += deltaY * mouseSensitivity; // ä¸Šä¸‹åè»¢ã‚’è€ƒæ…®
     angle.y += deltaX * mouseSensitivity;
 
-    //// X²‚ÌƒJƒƒ‰‰ñ“]‚ğ§ŒÀ
+    //// Xè»¸ã®ã‚«ãƒ¡ãƒ©å›è»¢ã‚’åˆ¶é™
     //if (angle.x < minAngleX)
     //{
     //    angle.x = minAngleX;
@@ -230,7 +262,7 @@ void CameraController::UpdateVer2(float elapsedTime)
     //    angle.x = maxAngleX;
     //}
 
-    //// Y²‚Ì‰ñ“]’l‚ğ-3.14`3.14‚Éû‚Ü‚é‚æ‚¤‚É‚·‚é
+    //// Yè»¸ã®å›è»¢å€¤ã‚’-3.14ï½3.14ã«åã¾ã‚‹ã‚ˆã†ã«ã™ã‚‹
     //if (angle.y < -DirectX::XM_PI)
     //{
     //    angle.y += DirectX::XM_2PI;
@@ -240,27 +272,27 @@ void CameraController::UpdateVer2(float elapsedTime)
     //    angle.y -= DirectX::XM_2PI;
     //}
 
-    // ‰ñ“]‚ğƒXƒ€[ƒY‚É‚·‚é‚½‚ß‚Ì•âŠÔ‚ğ’Ç‰Á
+    // å›è»¢ã‚’ã‚¹ãƒ ãƒ¼ã‚ºã«ã™ã‚‹ãŸã‚ã®è£œé–“ã‚’è¿½åŠ 
     static DirectX::XMFLOAT3 smoothAngle = angle;
-    const float smoothFactor = 0.1f; // ŠŠ‚ç‚©‚³‚ğ’²®
+    const float smoothFactor = 0.1f; // æ»‘ã‚‰ã‹ã•ã‚’èª¿æ•´
     smoothAngle.x += (angle.x - smoothAngle.x) * smoothFactor;
     smoothAngle.y += (angle.y - smoothAngle.y) * smoothFactor;
 
-    // ƒJƒƒ‰‰ñ“]’l‚ğ‰ñ“]s—ñ‚É•ÏŠ·iˆø”‚Íƒsƒbƒ`Aƒˆ[Aƒ[ƒ‹j
+    // ã‚«ãƒ¡ãƒ©å›è»¢å€¤ã‚’å›è»¢è¡Œåˆ—ã«å¤‰æ›ï¼ˆå¼•æ•°ã¯ãƒ”ãƒƒãƒã€ãƒ¨ãƒ¼ã€ãƒ­ãƒ¼ãƒ«ï¼‰
     DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(smoothAngle.x, smoothAngle.y, smoothAngle.z);
 
-    // ‰ñ“]s—ñ‚©‚ç‘O•ûŒüƒxƒNƒgƒ‹‚ğæ‚èo‚·iZ²ƒxƒNƒgƒ‹j
+    // å›è»¢è¡Œåˆ—ã‹ã‚‰å‰æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’å–ã‚Šå‡ºã™ï¼ˆZè»¸ãƒ™ã‚¯ãƒˆãƒ«ï¼‰
     DirectX::XMVECTOR Front = Transform.r[2];
     DirectX::XMFLOAT3 front;
     DirectX::XMStoreFloat3(&front, Front);
 
-    // ’‹“_‚©‚çŒã‚ëƒxƒNƒgƒ‹•ûŒü‚Éˆê’è‹——£—£‚ê‚½ƒJƒƒ‰‹“_‚ğ‹‚ß‚é
+    // æ³¨è¦–ç‚¹ã‹ã‚‰å¾Œã‚ãƒ™ã‚¯ãƒˆãƒ«æ–¹å‘ã«ä¸€å®šè·é›¢é›¢ã‚ŒãŸã‚«ãƒ¡ãƒ©è¦–ç‚¹ã‚’æ±‚ã‚ã‚‹
     DirectX::XMFLOAT3 eye;
     eye.x = target.x - front.x * range;
     eye.y = target.y - front.y * range;
     eye.z = target.z - front.z * range;
 
-    // ƒJƒƒ‰‚É‹“_‚ğ’‹“_‚ğİ’èiˆø”Feye , focus , up)
+    // ã‚«ãƒ¡ãƒ©ã«è¦–ç‚¹ã‚’æ³¨è¦–ç‚¹ã‚’è¨­å®šï¼ˆå¼•æ•°ï¼šeye , focus , up)
     Camera::Instance().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
 }
 
@@ -268,21 +300,21 @@ void CameraController::UpdateVer3(float elapsedTime)
 {
     Input& input = Input::Instance();
 
-    // ƒ}ƒEƒX‚ÌˆÚ“®—Ê‚ğæ“¾
+    // ãƒã‚¦ã‚¹ã®ç§»å‹•é‡ã‚’å–å¾—
     float deltaX = input.GetMouse().GetPositionX() - input.GetMouse().GetOldPositionX();
     float deltaY = input.GetMouse().GetPositionY() - input.GetMouse().GetOldPositionY();
 
-    // ƒ}ƒEƒX‚ÌŠ´“x‚ğİ’è
+    // ãƒã‚¦ã‚¹ã®æ„Ÿåº¦ã‚’è¨­å®š
     const float mouseSensitivity = 0.005f;
 
-    // ƒJƒƒ‰‚Ì‰ñ“]‘¬“x
+    // ã‚«ãƒ¡ãƒ©ã®å›è»¢é€Ÿåº¦
     float speed = rollSpeed * elapsedTime;
 
-    // ƒ}ƒEƒX‚ÌˆÚ“®—Ê‚É‰‚¶‚ÄƒJƒƒ‰‚Ì‰ñ“]Šp“x‚ğXV
-    angle.x += deltaY * mouseSensitivity; // ã‰º”½“]‚ğl—¶
+    // ãƒã‚¦ã‚¹ã®ç§»å‹•é‡ã«å¿œã˜ã¦ã‚«ãƒ¡ãƒ©ã®å›è»¢è§’åº¦ã‚’æ›´æ–°
+    angle.x += deltaY * mouseSensitivity; // ä¸Šä¸‹åè»¢ã‚’è€ƒæ…®
     angle.y += deltaX * mouseSensitivity;
 
-    // X²‚ÌƒJƒƒ‰‰ñ“]‚ğ§ŒÀ
+    // Xè»¸ã®ã‚«ãƒ¡ãƒ©å›è»¢ã‚’åˆ¶é™
     if (angle.x < -360)
     {
         angle.x = 0;
@@ -292,7 +324,7 @@ void CameraController::UpdateVer3(float elapsedTime)
         angle.x = 0;
     }
 
-    // Y²‚Ì‰ñ“]’l‚ğ-3.14`3.14‚Éû‚Ü‚é‚æ‚¤‚É‚·‚é
+    // Yè»¸ã®å›è»¢å€¤ã‚’-3.14ï½3.14ã«åã¾ã‚‹ã‚ˆã†ã«ã™ã‚‹
     //if (angle.y < -360)
     //{
     //    angle.y = 0;
@@ -302,21 +334,21 @@ void CameraController::UpdateVer3(float elapsedTime)
     //    angle.y = 0;
     //}
 
-    // ƒJƒƒ‰‰ñ“]’l‚ğ‰ñ“]s—ñ‚É•ÏŠ·iˆø”‚Íƒsƒbƒ`Aƒˆ[Aƒ[ƒ‹j
+    // ã‚«ãƒ¡ãƒ©å›è»¢å€¤ã‚’å›è»¢è¡Œåˆ—ã«å¤‰æ›ï¼ˆå¼•æ•°ã¯ãƒ”ãƒƒãƒã€ãƒ¨ãƒ¼ã€ãƒ­ãƒ¼ãƒ«ï¼‰
     DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
 
-    // ‰ñ“]s—ñ‚©‚ç‘O•ûŒüƒxƒNƒgƒ‹‚ğæ‚èo‚·iZ²ƒxƒNƒgƒ‹j
+    // å›è»¢è¡Œåˆ—ã‹ã‚‰å‰æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’å–ã‚Šå‡ºã™ï¼ˆZè»¸ãƒ™ã‚¯ãƒˆãƒ«ï¼‰
     DirectX::XMVECTOR Front = Transform.r[2];
     DirectX::XMFLOAT3 front;
     DirectX::XMStoreFloat3(&front, Front);
 
-    // ’‹“_‚©‚çŒã‚ëƒxƒNƒgƒ‹•ûŒü‚Éˆê’è‹——£—£‚ê‚½ƒJƒƒ‰‹“_‚ğ‹‚ß‚é
+    // æ³¨è¦–ç‚¹ã‹ã‚‰å¾Œã‚ãƒ™ã‚¯ãƒˆãƒ«æ–¹å‘ã«ä¸€å®šè·é›¢é›¢ã‚ŒãŸã‚«ãƒ¡ãƒ©è¦–ç‚¹ã‚’æ±‚ã‚ã‚‹
     DirectX::XMFLOAT3 eye;
     eye.x = target.x - front.x * range;
     eye.y = target.y - front.y * range;
     eye.z = target.z - front.z * range;
 
-    // ƒJƒƒ‰‚É‹“_‚ğ’‹“_‚ğİ’èiˆø”Feye , focus , up)
+    // ã‚«ãƒ¡ãƒ©ã«è¦–ç‚¹ã‚’æ³¨è¦–ç‚¹ã‚’è¨­å®šï¼ˆå¼•æ•°ï¼šeye , focus , up)
     Camera::Instance().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
 }
 
@@ -324,40 +356,40 @@ void CameraController::UpdateVer4(float elapsedTime)
 {
     Input& input = Input::Instance();
 
-    // ƒ}ƒEƒX‚ÌˆÚ“®—Ê‚ğæ“¾
+    // ãƒã‚¦ã‚¹ã®ç§»å‹•é‡ã‚’å–å¾—
     float deltaX = input.GetMouse().GetPositionX() - input.GetMouse().GetOldPositionX();
     float deltaY = input.GetMouse().GetPositionY() - input.GetMouse().GetOldPositionY();
 
-    // ƒ}ƒEƒX‚ÌŠ´“x‚ğİ’è
+    // ãƒã‚¦ã‚¹ã®æ„Ÿåº¦ã‚’è¨­å®š
     const float mouseSensitivity = 0.005f;
 
-    // ƒ}ƒEƒX‚ÌˆÚ“®—Ê‚É‰‚¶‚ÄƒJƒƒ‰‚Ì‰ñ“]Šp“x‚ğXV
-    angle.x += deltaY * mouseSensitivity; // ã‰º”½“]‚ğl—¶
+    // ãƒã‚¦ã‚¹ã®ç§»å‹•é‡ã«å¿œã˜ã¦ã‚«ãƒ¡ãƒ©ã®å›è»¢è§’åº¦ã‚’æ›´æ–°
+    angle.x += deltaY * mouseSensitivity; // ä¸Šä¸‹åè»¢ã‚’è€ƒæ…®
     angle.y += deltaX * mouseSensitivity;
 
-    // ƒ}ƒEƒXƒzƒC[ƒ‹‚Ì“ü—Í‚ğæ“¾
+    // ãƒã‚¦ã‚¹ãƒ›ã‚¤ãƒ¼ãƒ«ã®å…¥åŠ›ã‚’å–å¾—
     float wheelDelta = input.GetMouse().GetWheel();
-    const float zoomSpeed = 5.0f; // ƒzƒC[ƒ‹Š´“x
+    const float zoomSpeed = 5.0f; // ãƒ›ã‚¤ãƒ¼ãƒ«æ„Ÿåº¦
     range -= wheelDelta * zoomSpeed;
 
-    // ‹——£‚Ì”ÍˆÍ§ŒÀ
-    const float minRange = 5.0f;  // Å¬‹——£
-    const float maxRange = 50.0f; // Å‘å‹——£
+    // è·é›¢ã®ç¯„å›²åˆ¶é™
+    const float minRange = 5.0f;  // æœ€å°è·é›¢
+    const float maxRange = 50.0f; // æœ€å¤§è·é›¢
 
-    // ƒJƒƒ‰‰ñ“]’l‚ğ‰ñ“]s—ñ‚É•ÏŠ·iˆø”‚Íƒsƒbƒ`Aƒˆ[Aƒ[ƒ‹j
+    // ã‚«ãƒ¡ãƒ©å›è»¢å€¤ã‚’å›è»¢è¡Œåˆ—ã«å¤‰æ›ï¼ˆå¼•æ•°ã¯ãƒ”ãƒƒãƒã€ãƒ¨ãƒ¼ã€ãƒ­ãƒ¼ãƒ«ï¼‰
     DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
 
-    // ‰ñ“]s—ñ‚©‚ç‘O•ûŒüƒxƒNƒgƒ‹‚ğæ‚èo‚·iZ²ƒxƒNƒgƒ‹j
+    // å›è»¢è¡Œåˆ—ã‹ã‚‰å‰æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’å–ã‚Šå‡ºã™ï¼ˆZè»¸ãƒ™ã‚¯ãƒˆãƒ«ï¼‰
     DirectX::XMVECTOR Front = Transform.r[2];
     DirectX::XMFLOAT3 front;
     DirectX::XMStoreFloat3(&front, Front);
 
-    // ’‹“_‚©‚çŒã‚ëƒxƒNƒgƒ‹•ûŒü‚Éˆê’è‹——£—£‚ê‚½ƒJƒƒ‰‹“_‚ğ‹‚ß‚é
+    // æ³¨è¦–ç‚¹ã‹ã‚‰å¾Œã‚ãƒ™ã‚¯ãƒˆãƒ«æ–¹å‘ã«ä¸€å®šè·é›¢é›¢ã‚ŒãŸã‚«ãƒ¡ãƒ©è¦–ç‚¹ã‚’æ±‚ã‚ã‚‹
     DirectX::XMFLOAT3 eye;
     eye.x = target.x - front.x * range;
     eye.y = target.y - front.y * range;
     eye.z = target.z - front.z * range;
 
-    // ƒJƒƒ‰‚É‹“_‚Æ’‹“_‚ğİ’èiˆø”Feye , focus , up)
+    // ã‚«ãƒ¡ãƒ©ã«è¦–ç‚¹ã¨æ³¨è¦–ç‚¹ã‚’è¨­å®šï¼ˆå¼•æ•°ï¼šeye , focus , up)
     Camera::Instance().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
 }

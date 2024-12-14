@@ -131,6 +131,7 @@
     <ClInclude Include="Source\MathUtiles.h" />
     <ClInclude Include="Source\MapDate.h" />
     <ClInclude Include="Source\PutBlock.h" />
+    <ClInclude Include="Source\AutoRunCharacter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui-docking\imgui.cpp">
@@ -266,6 +267,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\PutBlock.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AutoRunCharacter.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

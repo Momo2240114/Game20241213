@@ -1,109 +1,34 @@
-﻿  compilation object save succeeded; see C:\Users\2240114\Desktop\チーム制作３\GitHub\Data\Shader\BasicPS.cso
-  compilation object save succeeded; see C:\Users\2240114\Desktop\チーム制作３\GitHub\Data\Shader\BasicVS.cso
-  compilation object save succeeded; see C:\Users\2240114\Desktop\チーム制作３\GitHub\Data\Shader\LambertPS.cso
-  compilation object save succeeded; see C:\Users\2240114\Desktop\チーム制作３\GitHub\Data\Shader\LambertVS.cso
-  compilation object save succeeded; see C:\Users\2240114\Desktop\チーム制作３\GitHub\Data\Shader\ShapeRendererPS.cso
-  compilation object save succeeded; see C:\Users\2240114\Desktop\チーム制作３\GitHub\Data\Shader\ShapeRendererVS.cso
-  compilation object save succeeded; see C:\Users\2240114\Desktop\チーム制作３\GitHub\Data\Shader\PrimitiveRendererPS.cso
-  compilation object save succeeded; see C:\Users\2240114\Desktop\チーム制作３\GitHub\Data\Shader\PrimitiveRendererVS.cso
-  compilation object save succeeded; see C:\Users\2240114\Desktop\チーム制作３\GitHub\Data\Shader\SpritePS.cso
-  compilation object save succeeded; see C:\Users\2240114\Desktop\チーム制作３\GitHub\Data\Shader\SpriteVS.cso
-  imgui.cpp
-  imgui_demo.cpp
-  imgui_draw.cpp
-  imgui_impl_dx11.cpp
-  imgui_impl_win32.cpp
-  imgui_widgets.cpp
-  Camera.cpp
-  CameraController.cpp
+﻿  CameraController.cpp
   Character.cpp
-  Collision.cpp
-  Enemy.cpp
-  EnemyManager.cpp
-  EnemySlime.cpp
   Framework.cpp
-  Main.cpp
-  MathUtiles.cpp
-  Player.cpp
-  Projectile.cpp
-  ProjectileHoming.cpp
-  ProjectileManager.cpp
-  ProjectileStraight.cpp
-  PutBlock.cpp
-  Scene.cpp
   SceneGame.cpp
-  SceneLoading.cpp
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.h(91,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/Character.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(91,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/EnemySlime.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル 'Source/EnemySlime.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(112,59): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(144,18): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(145,18): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(272,18): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(273,18): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(328,18): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(329,18): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(339,22): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(91,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/Enemy.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Collision.cpp(85,17): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(91,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/EnemyManager.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(91,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/Player.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル 'Source/Player.cpp' をコンパイルしています)
-  
-  SceneManager.cpp
   SceneTitle.cpp
   Stage.cpp
-  Audio.cpp
-  AudioResource.cpp
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル 'Source/Projectile.cpp' をコンパイルしています)
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.h(97,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル 'Source/Character.cpp' をコンパイルしています)
   
-  AudioSource.cpp
-  BasicShader.cpp
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル 'Source/ProjectileManager.cpp' をコンパイルしています)
-  
-  GamePad.cpp
-  GpuResourceUtils.cpp
-  Graphics.cpp
-  ImGuiRenderer.cpp
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(91,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/PutBlock.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル 'Source/PutBlock.cpp' をコンパイルしています)
-  
-  Input.cpp
-  LambertShader.cpp
-  Model.cpp
-  ModelRenderer.cpp
-  ModelResource.cpp
-  Mouse.cpp
-  RenderState.cpp
-  ShapeRenderer.cpp
-  Sprite.cpp
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.cpp(44,20): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.cpp(219,21): warning C4101: 'BlockAngle': ローカル変数は 1 度も使われていません。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.cpp(549,22): warning C4244: '-=': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(91,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(92,71): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(176,18): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(177,18): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(304,18): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(305,18): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(360,18): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(361,18): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\CameraController.cpp(371,22): warning C4244: '初期化中': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.cpp(45,20): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.cpp(218,21): warning C4101: 'BlockAngle': ローカル変数は 1 度も使われていません。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.cpp(577,22): warning C4244: '-=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(97,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
   (ソース ファイル 'Source/SceneGame.cpp' をコンパイルしています)
   
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
   (ソース ファイル 'Source/SceneGame.cpp' をコンパイルしています)
   
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Stage.cpp(73,1): warning C4715: 'Stage::BlockRayCast': 値を返さないコントロール パスがあります。
-     ライブラリ bin\x64\Debug\Game.lib とオブジェクト bin\x64\Debug\Game.exp を作成中
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(97,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル 'Source/Stage.cpp' をコンパイルしています)
+  
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  (ソース ファイル 'Source/Stage.cpp' をコンパイルしています)
+  
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Stage.cpp(75,1): warning C4715: 'Stage::BlockRayCast': 値を返さないコントロール パスがあります。
   Game.vcxproj -> C:\Users\2240114\Desktop\チーム制作３\GitHub\bin\x64\Debug\Game.exe

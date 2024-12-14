@@ -37,10 +37,10 @@ void Player::Initialize()
 	model = new Model("Data/Model/Mr.Incredible/Mr.Incredible.mdl");
 
 	// モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.01f;
+	scale.x = scale.y = scale.z = 0.02f;
 
 	position.y = 5;
-	position.x = 10;
+
 }
 
 // デストラクタの代わり
@@ -275,6 +275,7 @@ void Player::InputMove(float elapsedTime)
 {
 	// 進行ベクトル取得
 	DirectX::XMFLOAT3 moveVec = GetMoveVec();
+	//moveVec = {0,0,0};
 
 	// 移動処理
 	Move(elapsedTime, moveVec.x, moveVec.z, moveSpeed);

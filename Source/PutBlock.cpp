@@ -44,8 +44,35 @@ void PutBlock::putBlockOnBlock()
 			UpdateTransform();
 		}*/
 		if(Stage::Instance().UnifiedRayCast(RayState, RayEnd,
-			HitPos, HitNor, HitType, true))
+			HitPos, HitNor, HitType, false,true))
 		{
+			// Type‚ª0‚Ìê‡AHitPos‚ðRayEnd•ûŒü‚É­‚µi‚ß‚é
+			if (Type == 0)
+			{
+				// RayEnd•ûŒü‚ÌƒxƒNƒgƒ‹‚ð³‹K‰»‚µ‚Ä0.1i‚ß‚é
+				DirectX::XMFLOAT3 direction;
+				direction.x= (RayEnd.x - HitPos.x);
+				direction.y= (RayEnd.y - HitPos.y);
+				direction.z= (RayEnd.z - HitPos.z);
+
+				// ƒxƒNƒgƒ‹‚Ì’·‚³‚ðŒvŽZ
+				float length = sqrt(direction.x * direction.x + direction.y * direction.y + direction.z * direction.z);
+
+				// ’·‚³‚ªƒ[ƒ‚Å‚È‚¢‚±‚Æ‚ðŠm”F‚µ‚Ä³‹K‰»
+				if (length > 0.0f)
+				{
+					direction.x /= length;  // x¬•ª‚ð³‹K‰»
+					direction.y /= length;  // y¬•ª‚ð³‹K‰»
+					direction.z /= length;  // z¬•ª‚ð³‹K‰»
+				}
+
+				HitPos.x += direction.x * 0.1f;  // 0.1f‚¾‚¯i‚ß‚é
+				HitPos.y += direction.y * 0.1f;  // 0.1f‚¾‚¯i‚ß‚é
+				HitPos.y += direction.y * 0.1f;  // 0.1f‚¾‚¯i‚ß‚é
+			}
+
+
+
 			UpdateTransform();
 		}
 		if (Input::Instance().GetMouse().GetButtonDown() & Mouse::BTN_LEFT)
@@ -57,7 +84,7 @@ void PutBlock::putBlockOnBlock()
 
 void PutBlock::SetBlock()
 {
-	const int maxType = 4;
+	const int maxType = 5;
 	const int minType = 0;
 
 	if (Input::Instance().GetMouse().GetButtonDown() & Mouse::BTN_MIDDLE)
@@ -86,6 +113,7 @@ void PutBlock::Initialize()
 	PutBlockModel2 = new Model("Data/Model/Block/Block2.mdl");
 	PutBlockModel3 = new Model("Data/Model/Block/Block3.mdl");
 	PutBlockModel4 = new Model("Data/Model/Block/Block4.mdl");
+	PutBlockModel5 = new Model("Data/Model/Block/Hasi.mdl");
 	EraseBlockModel = new Model("Data/Model/Block/Erase.mdl");
 }
 
@@ -96,12 +124,14 @@ void PutBlock::Finalize()
 	delete PutBlockModel2;
 	delete PutBlockModel3;
 	delete PutBlockModel4;
+	delete PutBlockModel5;
 	delete EraseBlockModel;
 	PutBlockModel = nullptr;
 	PutBlockModel1 = nullptr;
 	PutBlockModel2 = nullptr;
 	PutBlockModel3 = nullptr;
 	PutBlockModel4 = nullptr;
+	PutBlockModel5 = nullptr;
 	EraseBlockModel = nullptr;
 }
 
@@ -123,6 +153,9 @@ void PutBlock::render(const RenderContext& rc, ModelRenderer* renderer)
 		break;
 	case 4:
 		renderer->Render(rc, transform, PutBlockModel4, ShaderId::Lambert);
+		break;	
+	case 5:
+		renderer->Render(rc, transform, PutBlockModel5, ShaderId::Lambert);
 		break;
 	}
 }

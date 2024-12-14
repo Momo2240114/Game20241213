@@ -56,7 +56,7 @@ private:
 
 private:
 	Model* model = nullptr;
-	float		moveSpeed = 1.5f;
+	float		moveSpeed = 3.0f;
 	float		turnSpeed = DirectX::XMConvertToRadians(720);
 	float jumpSpeed = 8.0f;
 	//float rot = 0.0f;//ImGui‚Å•ÏˆÚ‚ğŒ©‚½‚­Aƒƒ“ƒo•Ï”‚É•ÏX

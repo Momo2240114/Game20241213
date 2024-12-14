@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "Stage.h"
+#include "DirectXMath.h"
 
 //行列更新処理
 void Character::UpdateTransform()
@@ -101,21 +102,19 @@ void Character::UpdateHorizonVelocity(float elapsedTime)
 			Friction *= airControl; // 空中では摩擦力を30%に減少
 		}
 			
-
-
-		//摩擦による後方向の減速
+		////摩擦による後方向の減速
 		if (Length > Friction)
 		{
-			 //摩擦を適用して速度を減少させる
-			float decelerationFactor = (Length - Friction) / Length;
-			Velocity.x *= decelerationFactor;
-			Velocity.z *= decelerationFactor;
+			// //摩擦を適用して速度を減少させる
+			//float decelerationFactor = (Length - Friction) / Length;
+			//Velocity.x *= decelerationFactor;
+			//Velocity.z *= decelerationFactor;
 		}
 		//横方向の速力が摩擦以下になったとき速力を無効化
 		else
 		{
-			Velocity.x = 0.0f;
-			Velocity.z = 0.0f;
+			//Velocity.x = 0.0f;
+			//Velocity.z = 0.0f;
 		}
 	}
 	// 最大速度未満の場合の加速処理
@@ -139,8 +138,8 @@ void Character::UpdateHorizonVelocity(float elapsedTime)
 	}
 
 	// 移動ベクトルをリセット
-	MoveVecX = 0.0f;
-	MoveVecZ = 0.0f;
+	//MoveVecX = 0.0f;
+	//MoveVecZ = 0.0f;
 }
 
 
@@ -211,7 +210,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 
 	if (my < 1.0f) // 下方向の移動（落下）
 	{
-		DirectX::XMFLOAT3 start = { position.x, position.y + stepOffset * 0.2f, position.z };
+		DirectX::XMFLOAT3 start = { position.x, position.y + stepOffset, position.z };
 		DirectX::XMFLOAT3 end = { position.x, position.y + my, position.z };
 
 		DirectX::XMFLOAT3 hitPosition;
@@ -223,8 +222,9 @@ void Character::UpdateVerticalMove(float elapsedTime)
 			end.y += my * 0.3f;
 		}
 
-		if (Stage::Instance().UnifiedRayCast(start, end, hitPosition, hitNormal, HitBlock,true))
+		if (Stage::Instance().UnifiedRayCast(start, end, hitPosition, hitNormal, HitBlock,true,true))
 		{
+			//あたったブロックに応じて処理を変える
 			switch (HitBlock)
 			{
 			case 0:
@@ -245,6 +245,32 @@ void Character::UpdateVerticalMove(float elapsedTime)
 				Jump(16);
 				break;
 			case 4:
+				position.y = hitPosition.y;
+
+				if (!isGround)
+				{
+					OnLanding();
+				}
+				isGround = true;
+				Velocity.y = 0.0f;
+				//あたったブロックのAngle.yに応じてVelocity.x,zを変える
+				if (std::abs(HitBlockAngle.y - 0.0f) < 0.01f) {
+					Velocity.x = 0;
+					Velocity.z = 4;
+				}
+				else if (std::abs(HitBlockAngle.y - 70.6858368f) < 0.01f) {
+					Velocity.x = 4;
+					Velocity.z = 0;
+				}
+				else if (std::abs(HitBlockAngle.y - 141.371674f) < 0.01f) {
+					Velocity.x = 0;
+					Velocity.z = -4;
+				}
+				else if (std::abs(HitBlockAngle.y - 212.057510f) < 0.01f) {
+					Velocity.x = -4;
+					Velocity.z = 0;
+				}
+			
 				break;
 			}
 			
@@ -434,7 +460,7 @@ void Character::UpdateHorizonMove(float elapsedTime)
 		// 足元の当たり判定だけ行う
 		bool hitFeet = false;
 		bool hitBlockFeet = false;
-		hitFeet = Stage::Instance().UnifiedRayCast(sFeet, eFeet, pFeet, nFeet, HitBlock,true);
+		hitFeet = Stage::Instance().UnifiedRayCast(sFeet, eFeet, pFeet, nFeet, HitBlock,true,true);
 
 		if (hitFeet)
 		{
@@ -462,6 +488,8 @@ void Character::UpdateHorizonMove(float elapsedTime)
 			 //衝突点で再度レイキャストを行って修正された位置を計算
 			if (Stage::Instance().UnifiedRayCast(sFeet, q, pFeet, nFeet, HitBlock,true))
 			{
+				Velocity.x = 0;
+				Velocity.z = 0;
 				DirectX::XMVECTOR correctedPosition = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&pFeet), DirectX::XMVectorScale(N, 0.05f));
 				DirectX::XMFLOAT3 correctedPositionFloat3;
 				DirectX::XMStoreFloat3(&correctedPositionFloat3, correctedPosition);

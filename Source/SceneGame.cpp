@@ -13,7 +13,6 @@ void SceneGame::Initialize()
 	//ステージ初期化
 	/*stage = new Stage();*/
 	Stage::Instance().init();
-	Stage::Instance().SetMapdate(1);
 	Stage::Instance().UpdateBlockTransform();
 	Stage::Instance().UpdateTransform();
 	PutBlock::Instance().Initialize();
@@ -55,6 +54,7 @@ void SceneGame::Initialize()
 	//	enemyManager.Register(slime);
 	//}
 
+
 	this->SetReady();
 }
 
@@ -93,7 +93,8 @@ void SceneGame::Update(float elapsedTime)
 {
 	//カメラコントローラー更新処理
 	//DirectX::XMFLOAT3 target = player->GetPosition();
-	DirectX::XMFLOAT3 target = Player::Instance().GetPosition();
+	//DirectX::XMFLOAT3 target = Player::Instance().GetPosition();
+	DirectX::XMFLOAT3 target = { 0,0,0 };
 	target.y += 0.5f;
 	cameraController->SetTarget(target);
 	cameraController->Update(elapsedTime);

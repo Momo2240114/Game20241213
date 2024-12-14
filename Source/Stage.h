@@ -13,7 +13,7 @@ struct  MAPDate
     int  BlockID[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 position[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 angle[mapY][mapX][mapZ] = {};
-    DirectX::XMFLOAT3 scale = { 1.0f, 1.0f, 1.0f };
+    DirectX::XMFLOAT3 scale = { 2.0f, 2.0f, 2.0f };
     DirectX::XMFLOAT4X4 transform[mapY][mapX][mapZ] = {};
 
 };
@@ -26,14 +26,12 @@ public:
     static Stage& Instance();
 
     void Finalize();
-
+    //ブロックの設置
     void putBlock(int Type,const DirectX::XMFLOAT3& Position, const DirectX::XMFLOAT3& Angle);
-
     //更新処理
     void Update(float elapsedTime);
-    //ブロックの設置
-    void SetMapdate(int Level);
-
+    ////ブロックの設置
+    //void SetMapdate(int Level);
     //描画処理
     void Render(const RenderContext& rc, ModelRenderer* renderer);   
     void BlockRender(const RenderContext& rc, ModelRenderer* renderer);   
@@ -57,7 +55,7 @@ public:
     bool UnifiedRayCast(
         const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end,
         DirectX::XMFLOAT3& hitPosition, DirectX::XMFLOAT3& hitNormal,
-        int& hitBlock,bool checkBlocks = false);
+        int& hitBlock, bool isPlayer, bool checkBlocks = false);
 
     float GetBlockSize() { return Blocksize; }
     DirectX::XMFLOAT3 GetBlockscale() { return MapDate.scale; }
@@ -84,6 +82,7 @@ private:
     Model* Blockmodel2 = nullptr;
     Model* Blockmodel3 = nullptr;
     Model* Blockmodel4 = nullptr;
+    Model* Blockmodel5 = nullptr;
 };
 
 

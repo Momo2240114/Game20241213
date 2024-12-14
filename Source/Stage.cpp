@@ -1,5 +1,6 @@
 #include "Stage.h"
 #include "Collision.h"
+#include "Player.h"
 
 void Stage::init()
 {
@@ -10,6 +11,7 @@ void Stage::init()
     Blockmodel2 = new Model("Data/Model/Block/Block2.mdl");
     Blockmodel3 = new Model("Data/Model/Block/Block3.mdl");
     Blockmodel4 = new Model("Data/Model/Block/Block4.mdl");
+    Blockmodel5 = new Model("Data/Model/Block/Hasi.mdl");
     // 初期化処理
     for (int PY = 0; PY < MAPDate::mapY; ++PY) {
         for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
@@ -75,7 +77,7 @@ bool Stage::BlockRayCast(
 bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end,
     DirectX::XMFLOAT3& hitPosition, 
     DirectX::XMFLOAT3& hitNormal, int& hitBlock, 
-    bool checkBlocks)
+    bool isPlayer,bool checkBlocks)
 {
     // ブロックチェックが必要な場合にBlockRayCastを実行
     if (checkBlocks) {
@@ -97,6 +99,7 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
                     case 2: blockModel = Blockmodel2; break;
                     case 3: blockModel = Blockmodel3; break;
                     case 4: blockModel = Blockmodel4; break;
+                    case 5: blockModel = Blockmodel5; break;
                     }
 
                     // ブロックモデルが無効な場合はスキップ
@@ -107,7 +110,7 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
                     // レイキャスト処理
                     if (Collision::RayCast(start, end, blockTransform, blockModel, hitPosition, hitNormal)) {
                         hitBlock = MapDate.BlockID[PY][PX][PZ];
-                       
+                      Player::Instance().SetBlockAngle(MapDate.angle[PY][PX][PZ]);
                         return true; // 衝突があった場合は即座に true を返す
                     }
                 }
@@ -142,7 +145,9 @@ void Stage::Finalize()
     delete Blockmodel3;
     Blockmodel3 = nullptr;   
     delete Blockmodel4;
-    Blockmodel4 = nullptr;
+    Blockmodel4 = nullptr;   
+    delete Blockmodel5;
+    Blockmodel5 = nullptr;
 }
 
 void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX::XMFLOAT3& Angle) 
@@ -185,45 +190,45 @@ void Stage::Update(float elapsedTime)
 
 
 }
-
-void Stage::SetMapdate(int Level)
-{
-    L = Level;
-    for (int PY = 0; PY < MAPDate::mapY; ++PY) {
-        for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
-            for (int PX = 0; PX < MAPDate::mapX; ++PX) {
-               /* int ID = 0;*/
-                /*ID = Mapid[L][PY][PZ][PX];*/
-                 /*MapDate.BlockID[PY][PZ][PX] = ID;*/
-                // //ブロックIDに対応するモデルを設定
-                //switch (MapDate.BlockID[PY][PZ][PX])
-                //{
-                //case 1:
-                //    MapDate.BlockModels[PY][PZ][PX] = new Model(*Blockmodel1); // 個別のインスタンスを作成
-                //    break;
-                //case 2:
-                //    MapDate.BlockModels[PY][PZ][PX] = new Model(*Blockmodel2);
-                //    break;
-                //case 3:
-                //    MapDate.BlockModels[PY][PZ][PX] = new Model(*Blockmodel3);
-                //    break;
-                //default:
-                //    MapDate.BlockModels[PY][PZ][PX] = nullptr;
-                //    break;
-                //}
-
-                // ブロックの位置計算
-                if (MapDate.BlockID[PY][PX][PZ] != 0) {
-                    MapDate.position[PY][PX][PZ] = {
-                        (float)PX,
-                        (float)PY,
-                        (float)PZ
-                    };
-                }
-            }
-        }
-    }
-}
+//真布チップでテスト用
+//void Stage::SetMapdate(int Level)
+//{
+//    L = Level;
+//    for (int PY = 0; PY < MAPDate::mapY; ++PY) {
+//        for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
+//            for (int PX = 0; PX < MAPDate::mapX; ++PX) {
+//               /* int ID = 0;*/
+//                /*ID = Mapid[L][PY][PZ][PX];*/
+//                 /*MapDate.BlockID[PY][PZ][PX] = ID;*/
+//                 //ブロックIDに対応するモデルを設定
+//                switch (MapDate.BlockID[PY][PZ][PX])
+//                {
+//                case 1:
+//                    MapDate.BlockModels[PY][PZ][PX] = new Model(*Blockmodel1); // 個別のインスタンスを作成
+//                    break;
+//                case 2:
+//                    MapDate.BlockModels[PY][PZ][PX] = new Model(*Blockmodel2);
+//                    break;
+//                case 3:
+//                    MapDate.BlockModels[PY][PZ][PX] = new Model(*Blockmodel3);
+//                    break;
+//                default:
+//                    MapDate.BlockModels[PY][PZ][PX] = nullptr;
+//                    break;
+//                }
+//
+//                 ブロックの位置計算
+//                if (MapDate.BlockID[PY][PX][PZ] != 0) {
+//                    MapDate.position[PY][PX][PZ] = {
+//                        (float)PX,
+//                        (float)PY,
+//                        (float)PZ
+//                    };
+//                }
+//            }
+//        }
+//    }
+//}
 
 void Stage::Render(const RenderContext& rc, ModelRenderer* renderer)
 {
@@ -254,6 +259,9 @@ void Stage::BlockRender(const RenderContext& rc, ModelRenderer* renderer)
                         break;  
                     case 4:
                         renderer->Render(rc, MapDate.transform[PY][PX][PZ], Blockmodel4, ShaderId::Lambert);
+                        break;            
+                    case 5://橋は当たり判定ができていない
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], Blockmodel5, ShaderId::Lambert);
                         break;
                     }
                 }

@@ -11,7 +11,6 @@ class PutBlock
 {
 public:
 	static PutBlock& Instance();
-	void putBlock();
 	void putBlockOnBlock();
 	void SetBlock();
 	void Initialize();
@@ -32,6 +31,7 @@ private:
 	Model* PutBlockModel2 = nullptr;
 	Model* PutBlockModel3 = nullptr;
 	Model* PutBlockModel4 = nullptr;
+	Model* PutBlockModel5 = nullptr;
 	DirectX::XMFLOAT3 RayState = { 0,0,0 };
 	DirectX::XMFLOAT3 RayEnd = { 0,0,0 };
 	DirectX::XMVECTOR WorldPositionFar = {};
@@ -39,7 +39,7 @@ private:
 	DirectX::XMVECTOR ScreenPosition = {};
 	DirectX::XMVECTOR WorldPosition = {};
 	DirectX::XMFLOAT3 screenPosition = { 0,0,0 };
-	DirectX::XMFLOAT3 HitPos = { 0,0,0 };
+	DirectX::XMFLOAT3 HitPos = { 0,0,10 };
 	DirectX::XMFLOAT3 HitNor = {0,0,0};
 	DirectX::XMFLOAT3		scale = { 1, 1, 1 };
 	DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };

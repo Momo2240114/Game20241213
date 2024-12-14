@@ -34,6 +34,8 @@ public:
 	// スケール取得
 	void SetScale(const DirectX::XMFLOAT3& scale) { this->scale = scale; }
 
+	void SetBlockAngle(const DirectX::XMFLOAT3& angle) { this->HitBlockAngle = angle; }
+
 	float GetRadius() const { return radius; }
 
 	virtual void RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer);
@@ -53,6 +55,7 @@ private:
 		//垂直の移動更新
 	void UpdateHorizonMove(float elapsedTime);
 
+
 protected:
 	DirectX::XMFLOAT3	position = {0,0,0};
 	DirectX::XMFLOAT3	Previousposition = {0,0,0};
@@ -69,7 +72,10 @@ protected:
 	virtual void OnDead() {};
 
 	float gravity = -30.0f;
+
 	DirectX::XMFLOAT3 Velocity = { 0,0,0 };
+
+	DirectX::XMFLOAT3 HitBlockAngle = { 0,0,0 };
 
 	bool isGround = false;
 
