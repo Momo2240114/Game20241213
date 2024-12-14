@@ -238,39 +238,49 @@ void Character::UpdateVerticalMove(float elapsedTime)
 				}
 				isGround = true;
 				Velocity.y = 0.0f;
+					OnMovingFloorTime = 0;
 				break;
 			case 3:
 				position.y = hitPosition.y;
 				isGround = true;
 				Jump(16);
+				OnMovingFloorTime = 0;
 				break;
 			case 4:
 				position.y = hitPosition.y;
-
+				
 				if (!isGround)
 				{
 					OnLanding();
 				}
 				isGround = true;
 				Velocity.y = 0.0f;
-				//あたったブロックのAngle.yに応じてVelocity.x,zを変える
-				if (std::abs(HitBlockAngle.y - 0.0f) < 0.01f) {
-					Velocity.x = 0;
-					Velocity.z = 4;
+				OnMovingFloorTime += elapsedTime;
+				
+				if (OnMovingFloorTime > elapsedTime * 8)
+				{
+					//あたったブロックのAngle.yに応じてVelocity.x,zを変える
+					if (std::abs(HitBlockAngle.y - 0.0f) < 0.01f) {
+						angle.y = HitBlockAngle.y;
+						Velocity.x = 0;
+						Velocity.z = 4;
+					}
+					else if (std::abs(HitBlockAngle.y - 70.6858368f) < 0.01f) {
+						angle.y = 70.6858368f;
+						Velocity.x = 4;
+						Velocity.z = 0;
+					}
+					else if (std::abs(HitBlockAngle.y - 141.371674f) < 0.01f) {
+						angle.y = HitBlockAngle.y;
+						Velocity.x = 0;
+						Velocity.z = -4;
+					}
+					else if (std::abs(HitBlockAngle.y - 212.057510f) < 0.01f) {
+						angle.y = HitBlockAngle.y;
+						Velocity.x = -4;
+						Velocity.z = 0;
+					}
 				}
-				else if (std::abs(HitBlockAngle.y - 70.6858368f) < 0.01f) {
-					Velocity.x = 4;
-					Velocity.z = 0;
-				}
-				else if (std::abs(HitBlockAngle.y - 141.371674f) < 0.01f) {
-					Velocity.x = 0;
-					Velocity.z = -4;
-				}
-				else if (std::abs(HitBlockAngle.y - 212.057510f) < 0.01f) {
-					Velocity.x = -4;
-					Velocity.z = 0;
-				}
-			
 				break;
 			}
 			
