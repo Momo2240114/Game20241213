@@ -60,25 +60,7 @@ bool Character::ApplyDamage(int damage, float invincibletime)
 
 void Character::HandleBlockCollision(int blockID, const DirectX::XMFLOAT3& hitPosition, const DirectX::XMFLOAT3& hitNormal)
 {
-	//switch (blockID) {
-	//case 1:
-	//	// ギミック1: 例) キャラクターの動きを止める
-	//	Velocity = { 0.0f, 0.0f, 0.0f };
-	//	break;
-	//case 2:
-	//	// ギミック2: 例) キャラクターを跳ね返す
-	//	Velocity.y = 10.0f; // 上向きの速度を付与
-	//	break;
-
-	//case 3:
-	//	// ギミック3: 例) 特定のアクションを発動する
-	//	/*TriggerSpecialAction();*/
-	//	break;
-
-	//default:
-	//	// 他のブロックIDや未定義の動作
-	//	break;
-	//}
+	
 }
 
 void Character::UpdateVerticalVelocity(float elapsedTime)
@@ -136,7 +118,6 @@ void Character::UpdateHorizonVelocity(float elapsedTime)
 			Velocity.z *= normalizationFactor;
 		}
 	}
-
 	// 移動ベクトルをリセット
 	//MoveVecX = 0.0f;
 	//MoveVecZ = 0.0f;
@@ -201,10 +182,19 @@ void Character::UpdateVerticalMove(float elapsedTime)
 	//		isGround = false;
 	//	}
 	}
+	float Blocksize = Stage::Instance().GetBlockSize();
+	int mapX = Stage::Instance().GetMapXsize();
+	int mapZ = Stage::Instance().GetMapZsize();
+	DirectX::XMFLOAT3 Bscale = Stage::Instance().GetBlockscale();
+
+	int Putx = static_cast<int>(position.x / (Blocksize * Bscale.x));
+	int Putz = static_cast<int>(position.z / (Blocksize * Bscale.z));
+
+
 
 	int HitBlock = 0;
 	float my = Velocity.y * elapsedTime;
-
+	constexpr float anglepattern = DirectX::XMConvertToRadians(90.0f);
 	bool BackframeisGround = isGround;
 	isGround = false;
 
@@ -222,6 +212,8 @@ void Character::UpdateVerticalMove(float elapsedTime)
 			end.y += my * 0.3f;
 		}
 
+
+
 		if (Stage::Instance().UnifiedRayCast(start, end, hitPosition, hitNormal, HitBlock,true,true))
 		{
 			//あたったブロックに応じて処理を変える
@@ -238,7 +230,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 				}
 				isGround = true;
 				Velocity.y = 0.0f;
-					OnMovingFloorTime = 0;
+				OnMovingFloorTime = 0;
 				break;
 			case 3:
 				position.y = hitPosition.y;
@@ -256,37 +248,78 @@ void Character::UpdateVerticalMove(float elapsedTime)
 				isGround = true;
 				Velocity.y = 0.0f;
 				OnMovingFloorTime += elapsedTime;
-				
-				if (OnMovingFloorTime > elapsedTime * 8)
+				//ブロックの端で作動するのを防ぐ
+				if (OnMovingFloorTime > elapsedTime * 10)
 				{
 					//あたったブロックのAngle.yに応じてVelocity.x,zを変える
 					if (std::abs(HitBlockAngle.y - 0.0f) < 0.01f) {
 						angle.y = HitBlockAngle.y;
 						Velocity.x = 0;
 						Velocity.z = 4;
+						OnMovingFloorTime = 0;
 					}
-					else if (std::abs(HitBlockAngle.y - 70.6858368f) < 0.01f) {
-						angle.y = 70.6858368f;
+					else if (std::abs(HitBlockAngle.y - anglepattern) < 0.01f) {
+						angle.y = HitBlockAngle.y;
 						Velocity.x = 4;
 						Velocity.z = 0;
+						OnMovingFloorTime = 0;
 					}
-					else if (std::abs(HitBlockAngle.y - 141.371674f) < 0.01f) {
+					else if (std::abs(HitBlockAngle.y - anglepattern * 2) < 0.01f) {
 						angle.y = HitBlockAngle.y;
 						Velocity.x = 0;
 						Velocity.z = -4;
+						OnMovingFloorTime = 0;
 					}
-					else if (std::abs(HitBlockAngle.y - 212.057510f) < 0.01f) {
+					else if (std::abs(HitBlockAngle.y - anglepattern * 3) < 0.01f) {
+						angle.y = HitBlockAngle.y;
+						Velocity.x = -4;
+						Velocity.z = 0;
+						OnMovingFloorTime = 0;
+					}
+				}
+				break;
+			case 5:
+				if (!isGround)
+				{
+					OnLanding();
+				}
+				isGround = true;
+				Velocity.y = 0.0f;
+				OnMovingFloorTime += elapsedTime;
+				//ブロックの端で作動するのを防ぐ
+				if (OnMovingFloorTime > elapsedTime * 8)
+				{
+					Jump(16);
+					//あたったブロックのAngle.yに応じてVelocity.x,zを変える
+					if (std::abs(HitBlockAngle.y) < 0.01f) {
+						angle.y = HitBlockAngle.y;
+						Velocity.x = 0;
+						Velocity.z = 4;
+					}
+					else if (std::abs(HitBlockAngle.y - anglepattern) < 0.01f) {
+						angle.y = HitBlockAngle.y;
+						Velocity.x = 4;
+						Velocity.z = 0;
+					}
+					else if (std::abs(HitBlockAngle.y - anglepattern * 2) < 0.01f) {
+						angle.y = HitBlockAngle.y;
+						Velocity.x = 0;
+						Velocity.z = -4;
+
+					}
+					else if (std::abs(HitBlockAngle.y - anglepattern * 3) < 0.01f) {
 						angle.y = HitBlockAngle.y;
 						Velocity.x = -4;
 						Velocity.z = 0;
 					}
+					break;
 				}
-				break;
 			}
 			
 		}
 		else
 		{
+			OnMovingFloorTime = 0;
 			position.y += my;
 			isGround = false;
 		}
@@ -554,6 +587,8 @@ void Character::UpdateVelocity(float elapsedTime)
 	//垂直の移動更新
 	UpdateHorizonMove(elapsedTime);
 
+	
+
 	{
 
 		//Velocity.y += gravity * elapsedTime;
@@ -577,7 +612,9 @@ void Character::UpdateVelocity(float elapsedTime)
 		}*/
 	}
 
-	UpdateTransform();
+	
+
+
 }
 
 void Character::Updateinvincibletimer(float elapsedTime)
@@ -645,4 +682,5 @@ void Character::Move(float elapsedTime, float vx, float vz, float speed)
 	MoveVecZ = vz; // vz方向の移動入力
 
 	MaxMoveSpeed = speed; // 最大移動速度を設定
+
 }

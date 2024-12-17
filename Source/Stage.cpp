@@ -11,7 +11,7 @@ void Stage::init()
     Blockmodel2 = new Model("Data/Model/Block/Block2.mdl");
     Blockmodel3 = new Model("Data/Model/Block/Block3.mdl");
     Blockmodel4 = new Model("Data/Model/Block/Block4.mdl");
-    Blockmodel5 = new Model("Data/Model/Block/Hasi.mdl");
+    Blockmodel5 = new Model("Data/Model/Block/Block5.mdl");
     // 初期化処理
     for (int PY = 0; PY < MAPDate::mapY; ++PY) {
         for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
@@ -56,6 +56,7 @@ bool Stage::BlockRayCast(
                 case 2: blockModel = Blockmodel2; break;
                 case 3: blockModel = Blockmodel3; break;
                 case 4: blockModel = Blockmodel4; break;
+                case 5: blockModel = Blockmodel5; break;
                 }
 
                 //// ブロックモデルが無効な場合はスキップ
@@ -172,8 +173,13 @@ void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX:
     int Puty = static_cast<int>((Position.y / MapDate.scale.y) / Blocksize);
     int Putz = static_cast<int>((Position.z / MapDate.scale.z) / Blocksize + MAPDate::mapZ / 2);
 
+    int SetType = Type;
+
+    if ((MapDate.BlockID[Puty][Putx][Putz] == 3 && Type == 4) ||
+        (MapDate.BlockID[Puty][Putx][Putz] == 4 && Type == 3))SetType = 5;
+
     // ブロックIDと回転角度を設定
-    MapDate.BlockID[Puty][Putx][Putz] = Type;
+    MapDate.BlockID[Puty][Putx][Putz] = SetType;
     MapDate.angle[Puty][Putx][Putz] = Angle;
 
     // ブロック位置を計算
@@ -260,7 +266,7 @@ void Stage::BlockRender(const RenderContext& rc, ModelRenderer* renderer)
                     case 4:
                         renderer->Render(rc, MapDate.transform[PY][PX][PZ], Blockmodel4, ShaderId::Lambert);
                         break;            
-                    case 5://橋は当たり判定ができていない
+                    case 5:
                         renderer->Render(rc, MapDate.transform[PY][PX][PZ], Blockmodel5, ShaderId::Lambert);
                         break;
                     }

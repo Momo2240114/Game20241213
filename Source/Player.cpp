@@ -80,6 +80,7 @@ void Player::Update(float elapsedTime)
 	CollisionPlayerVSEnemys();
 
 	CollisionProjectileVsEnemies();
+
 }
 
 void Player::Render(const RenderContext& rc, ModelRenderer* renderer)

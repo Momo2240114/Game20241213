@@ -85,8 +85,12 @@ void CameraController::Update(float elapsedTime)
             {
                 isRotating = true; // 回転開始
                 currentTime = 0.0f; // 経過時間をリセット
-                if (ax < 0) AddAng = +45;
-                else if (ax > 0) AddAng = -45;
+                if (ax != 0)
+                {
+                    if (ax < 0) AddAng = +45;
+                    else if (ax > 0) AddAng = -45;
+                }
+              
 
                 targetAngle.x = angle.x; // X軸はそのまま
                 targetAngle.y = angle.y + DirectX::XMConvertToRadians(AddAng); // 45度回転

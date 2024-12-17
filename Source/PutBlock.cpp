@@ -47,7 +47,7 @@ void PutBlock::putBlockOnBlock()
 			HitPos, HitNor, HitType, false,true))
 		{
 			// Typeが0の場合、HitPosをRayEnd方向に少し進める
-			if (Type == 0)
+			if (Type == 0 || Type == 4)
 			{
 				// RayEnd方向のベクトルを正規化して0.1進める
 				DirectX::XMFLOAT3 direction;
@@ -89,17 +89,18 @@ void PutBlock::SetBlock()
 
 	if (Input::Instance().GetMouse().GetButtonDown() & Mouse::BTN_MIDDLE)
 	{
-		Angle.y += 45 * DirectX::XM_PI / 2.0f;
+		Angle.y += DirectX::XMConvertToRadians(90.0f);
 
 		// 360度を超えないように調整 (ラップアラウンド)
-		if (Angle.y > 45 * DirectX::XM_PI / 2.0f * 4) {
-			Angle.y -= 45 * DirectX::XM_PI / 2.0f * 4;
+		if (Angle.y >= DirectX::XMConvertToRadians(90.0f) * 4) {
+			Angle.y = 0;
 		}
 	}
 	if (Input::Instance().GetMouse().GetButtonDown() & Mouse::BTN_RIGHT)
 	{
 		Angle.y = 0;
 		Type++;
+		if (Type == 5)Type++;
 		if (Type > maxType) 
 		{
 			Type = minType;
@@ -113,7 +114,7 @@ void PutBlock::Initialize()
 	PutBlockModel2 = new Model("Data/Model/Block/Block2.mdl");
 	PutBlockModel3 = new Model("Data/Model/Block/Block3.mdl");
 	PutBlockModel4 = new Model("Data/Model/Block/Block4.mdl");
-	PutBlockModel5 = new Model("Data/Model/Block/Hasi.mdl");
+	PutBlockModel5 = new Model("Data/Model/Block/Block5.mdl");
 	EraseBlockModel = new Model("Data/Model/Block/Erase.mdl");
 }
 

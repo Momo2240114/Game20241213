@@ -13,7 +13,7 @@ struct  MAPDate
     int  BlockID[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 position[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 angle[mapY][mapX][mapZ] = {};
-    DirectX::XMFLOAT3 scale = { 2.0f, 2.0f, 2.0f };
+    DirectX::XMFLOAT3 scale = { 2.0f,  2.0f, 2.0f };
     DirectX::XMFLOAT4X4 transform[mapY][mapX][mapZ] = {};
 
 };
