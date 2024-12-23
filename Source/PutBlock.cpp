@@ -84,8 +84,7 @@ void PutBlock::putBlockOnBlock()
 
 void PutBlock::SetBlock()
 {
-	const int maxType = 5;
-	const int minType = 0;
+
 
 	if (Input::Instance().GetMouse().GetButtonDown() & Mouse::BTN_MIDDLE)
 	{
@@ -115,6 +114,7 @@ void PutBlock::Initialize()
 	PutBlockModel3 = new Model("Data/Model/Block/Block3.mdl");
 	PutBlockModel4 = new Model("Data/Model/Block/Block4.mdl");
 	PutBlockModel5 = new Model("Data/Model/Block/Block5.mdl");
+	PutBlockModel6 = new Model("Data/Model/Block/BlockStop.mdl");
 	EraseBlockModel = new Model("Data/Model/Block/Erase.mdl");
 }
 
@@ -126,6 +126,7 @@ void PutBlock::Finalize()
 	delete PutBlockModel3;
 	delete PutBlockModel4;
 	delete PutBlockModel5;
+	delete PutBlockModel6;
 	delete EraseBlockModel;
 	PutBlockModel = nullptr;
 	PutBlockModel1 = nullptr;
@@ -133,6 +134,7 @@ void PutBlock::Finalize()
 	PutBlockModel3 = nullptr;
 	PutBlockModel4 = nullptr;
 	PutBlockModel5 = nullptr;
+	PutBlockModel6 = nullptr;
 	EraseBlockModel = nullptr;
 }
 
@@ -157,6 +159,9 @@ void PutBlock::render(const RenderContext& rc, ModelRenderer* renderer)
 		break;	
 	case 5:
 		renderer->Render(rc, transform, PutBlockModel5, ShaderId::Lambert);
+		break;
+	case 6:
+		renderer->Render(rc, transform, PutBlockModel6, ShaderId::Lambert);
 		break;
 	}
 }

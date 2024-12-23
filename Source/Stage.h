@@ -9,7 +9,7 @@ struct  MAPDate
 {
     static const int mapX = 45;
     static const int mapZ = 45;
-    static const int mapY = 20;
+    static const int mapY = 10;
     int  BlockID[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 position[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 angle[mapY][mapX][mapZ] = {};
@@ -66,9 +66,9 @@ private:
     ~Stage() {};
     Model* model = nullptr;
     Model* Putmodel = nullptr;
-    DirectX::XMFLOAT3		position = { 0, -1, 0 };
+    DirectX::XMFLOAT3		position = { 0, -2, 0 };
     DirectX::XMFLOAT3		angle = { 0, 0, 0 };
-    DirectX::XMFLOAT3		scale = { 1, 1, 1 };
+    DirectX::XMFLOAT3		scale = { 2, 2, 2 };
     DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
     MAPDate MapDate;
     int L = 0;
@@ -83,6 +83,7 @@ private:
     Model* Blockmodel3 = nullptr;
     Model* Blockmodel4 = nullptr;
     Model* Blockmodel5 = nullptr;
+    Model* Blockmodel6 = nullptr;
 };
 
 

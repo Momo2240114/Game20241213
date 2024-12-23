@@ -186,13 +186,28 @@ void Character::UpdateVerticalMove(float elapsedTime)
 	int mapX = Stage::Instance().GetMapXsize();
 	int mapZ = Stage::Instance().GetMapZsize();
 	DirectX::XMFLOAT3 Bscale = Stage::Instance().GetBlockscale();
+	int Putx = 0;
+	int	Putz = 0;
+	if ((int)(position.x + 0.5f) > 0)
+	{
+		Putx = static_cast<int>((position.x + 0.5f) / (Blocksize * Bscale.x));
+	}
+	else if ((int)(position.x - 0.5f) < 0)
+	{
+		Putx = static_cast<int>((position.x - 0.5f) / (Blocksize * Bscale.x));
+	}
+	if ((int)(position.z + 0.5f) > 0)
+	{
+		Putz = static_cast<int>((position.z + 0.5f) / (Blocksize * Bscale.z));
+	}
+	else if ((int)(position.z) - 0.5f < 0)
+	{
+		Putz = static_cast<int>((position.z - 0.5f) / (Blocksize * Bscale.z));
+	}
 
-	int Putx = static_cast<int>(position.x / (Blocksize * Bscale.x));
-	int Putz = static_cast<int>(position.z / (Blocksize * Bscale.z));
 
 
-
-	int HitBlock = 0;
+	int HitBlock = -1;
 	float my = Velocity.y * elapsedTime;
 	constexpr float anglepattern = DirectX::XMConvertToRadians(90.0f);
 	bool BackframeisGround = isGround;
@@ -223,7 +238,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 			case 1:
 			case 2:
 				position.y = hitPosition.y;
-
+				StopState = 0;
 				if (!isGround)
 				{
 					OnLanding();
@@ -240,22 +255,24 @@ void Character::UpdateVerticalMove(float elapsedTime)
 				break;
 			case 4:
 				position.y = hitPosition.y;
-				
+				StopState = 0;
 				if (!isGround)
 				{
 					OnLanding();
 				}
 				isGround = true;
 				Velocity.y = 0.0f;
-				OnMovingFloorTime += elapsedTime;
+				OnMovingFloorTime++;
 				//ブロックの端で作動するのを防ぐ
-				if (OnMovingFloorTime > elapsedTime * 10)
+				if (OnMovingFloorTime > 30)
 				{
 					//あたったブロックのAngle.yに応じてVelocity.x,zを変える
 					if (std::abs(HitBlockAngle.y - 0.0f) < 0.01f) {
 						angle.y = HitBlockAngle.y;
 						Velocity.x = 0;
 						Velocity.z = 4;
+						// より近い2の倍数にx位置を補正
+						position.x = static_cast<float>(round(position.x / 2.0f) * 2);
 						OnMovingFloorTime = 0;
 					}
 					else if (std::abs(HitBlockAngle.y - anglepattern) < 0.01f) {
@@ -263,11 +280,15 @@ void Character::UpdateVerticalMove(float elapsedTime)
 						Velocity.x = 4;
 						Velocity.z = 0;
 						OnMovingFloorTime = 0;
+						// より近い2の倍数にz位置を補正
+						position.z = static_cast<float>(round(position.z / 2.0f) * 2);
 					}
 					else if (std::abs(HitBlockAngle.y - anglepattern * 2) < 0.01f) {
 						angle.y = HitBlockAngle.y;
 						Velocity.x = 0;
 						Velocity.z = -4;
+						// より近い2の倍数にx位置を補正
+						position.x = static_cast<float>(round(position.x / 2.0f) * 2);
 						OnMovingFloorTime = 0;
 					}
 					else if (std::abs(HitBlockAngle.y - anglepattern * 3) < 0.01f) {
@@ -275,51 +296,120 @@ void Character::UpdateVerticalMove(float elapsedTime)
 						Velocity.x = -4;
 						Velocity.z = 0;
 						OnMovingFloorTime = 0;
+						// より近い2の倍数にz位置を補正
+						position.z = static_cast<float>(round(position.z / 2.0f) * 2);
 					}
 				}
 				break;
 			case 5:
+				StopState = 0;
 				if (!isGround)
 				{
 					OnLanding();
 				}
 				isGround = true;
 				Velocity.y = 0.0f;
-				OnMovingFloorTime += elapsedTime;
-				//ブロックの端で作動するのを防ぐ
-				if (OnMovingFloorTime > elapsedTime * 8)
-				{
-					Jump(16);
+					Jump(15);
 					//あたったブロックのAngle.yに応じてVelocity.x,zを変える
-					if (std::abs(HitBlockAngle.y) < 0.01f) {
+					if (abs(HitBlockAngle.y) < 0.01f) {
 						angle.y = HitBlockAngle.y;
 						Velocity.x = 0;
 						Velocity.z = 4;
+						// より近い2の倍数にx位置を補正
+						position.x = static_cast<float>(round(position.x / 2.0f) * 2);
 					}
-					else if (std::abs(HitBlockAngle.y - anglepattern) < 0.01f) {
+					else if (abs(HitBlockAngle.y - anglepattern) < 0.01f) {
 						angle.y = HitBlockAngle.y;
 						Velocity.x = 4;
 						Velocity.z = 0;
+						// より近い2の倍数にz位置を補正
+						position.z = static_cast<float>(round(position.z / 2.0f) * 2);
 					}
-					else if (std::abs(HitBlockAngle.y - anglepattern * 2) < 0.01f) {
+					else if (abs(HitBlockAngle.y - anglepattern * 2) < 0.01f) {
 						angle.y = HitBlockAngle.y;
 						Velocity.x = 0;
 						Velocity.z = -4;
-
+						// より近い2の倍数にx位置を補正
+						position.x = static_cast<float>(round(position.x / 2.0f) * 2);
 					}
-					else if (std::abs(HitBlockAngle.y - anglepattern * 3) < 0.01f) {
+					else if (abs(HitBlockAngle.y - anglepattern * 3) < 0.01f) {
 						angle.y = HitBlockAngle.y;
 						Velocity.x = -4;
 						Velocity.z = 0;
+						// より近い2の倍数にz位置を補正
+						position.z = static_cast<float>(round(position.z / 2.0f) * 2);
 					}
 					break;
+
+			case 6:
+				switch (StopState)
+				{
+				case 0: // 停止床に触れた瞬間（初回処理）
+
+					// 初回停止時の速度保存
+					OldVelocity = Velocity;
+					Velocity = { 0.0f, 0.0f, 0.0f }; // 停止状態にする
+					OnMovingFloorTime = 0.0f; // タイマーをリセット
+
+					// 中心へのターゲット座標を設定（2の倍数に補正）
+					TargetPosition.x = static_cast<float>(round(position.x / 2.0f) * 2);
+					TargetPosition.z = static_cast<float>(round(position.z / 2.0f) * 2);
+
+					StopState = 1; // 次の状態へ移行
+					break;
+
+				case 1: // 徐々に停止床の中心へ移動
+					if (std::abs(position.x - TargetPosition.x) > 0.1f ||
+						std::abs(position.z - TargetPosition.z) > 0.1f)
+					{
+						// 少しずつターゲット座標に向かって移動
+						position.x += (TargetPosition.x - position.x) * 0.05f;
+						position.z += (TargetPosition.z - position.z) * 0.05f;
+
+						// 微調整のため、低速で前進
+						Velocity.x = (TargetPosition.x - position.x) * 0.1f;
+						Velocity.z = (TargetPosition.z - position.z) * 0.1f;
+					}
+					else
+					{
+						// 目的地に到達したら位置を固定
+						position.x = TargetPosition.x;
+						position.z = TargetPosition.z;
+						Velocity = { 0.0f, 0.0f, 0.0f }; // 再度停止
+						StopState = 2; // Enterキー待ちへ移行
+					}
+					break;
+
+				case 2: // Enterキー待ち
+
+					if (IsKeyPressed(VK_RETURN)) { // Enterキーが押されたら再開
+						StopState = 3;
+					}
+					break;
+
+				case 3: // 停止解除
+					Velocity = OldVelocity; // 保存しておいた速度を復元
+
+					// 速度がゼロの場合、デフォルトの前進速度を設定
+					if (Velocity.x == 0 && Velocity.z == 0) {
+						Velocity.z = 4.0f; // デフォルトの前進速度
+					}
+
+					StopState = 4; // 完了状態へ移行
+					break;
+
+				case 4: // 完了状態
+					// 完了後、再度停止処理が発生しないように待機
+					break;
 				}
+				break;
 			}
 			
 		}
 		else
 		{
 			OnMovingFloorTime = 0;
+			StopState = 0;
 			position.y += my;
 			isGround = false;
 		}
@@ -587,7 +677,7 @@ void Character::UpdateVelocity(float elapsedTime)
 	//垂直の移動更新
 	UpdateHorizonMove(elapsedTime);
 
-	
+
 
 	{
 

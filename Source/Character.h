@@ -55,8 +55,12 @@ private:
 		//êÇíºÇÃà⁄ìÆçXêV
 	void UpdateHorizonMove(float elapsedTime);
 
+	bool IsKeyPressed(int key) {
+		return (GetAsyncKeyState(key) & 0x8000) != 0;
+	}
 
 protected:
+	DirectX::XMFLOAT3	TargetPosition = {0,0,0};
 	DirectX::XMFLOAT3	position = {0,0,0};
 	DirectX::XMFLOAT3	Previousposition = {0,0,0};
 	DirectX::XMFLOAT3	angle = {0,0,0};
@@ -75,6 +79,8 @@ protected:
 
 	DirectX::XMFLOAT3 Velocity = { 0,0,0 };
 
+	DirectX::XMFLOAT3 OldVelocity = { 0,0,0 };
+
 	DirectX::XMFLOAT3 HitBlockAngle = { 0,0,0 };
 
 	bool isGround = false;
@@ -83,7 +89,7 @@ protected:
 
 	void Jump(float speed);
 
-
+	int StopState = 0;
 
 	void UpdateVelocity(float elapsedTime);
 

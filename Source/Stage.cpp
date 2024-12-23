@@ -12,6 +12,7 @@ void Stage::init()
     Blockmodel3 = new Model("Data/Model/Block/Block3.mdl");
     Blockmodel4 = new Model("Data/Model/Block/Block4.mdl");
     Blockmodel5 = new Model("Data/Model/Block/Block5.mdl");
+    Blockmodel6 = new Model("Data/Model/Block/BlockStop.mdl");
     // 初期化処理
     for (int PY = 0; PY < MAPDate::mapY; ++PY) {
         for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
@@ -57,6 +58,7 @@ bool Stage::BlockRayCast(
                 case 3: blockModel = Blockmodel3; break;
                 case 4: blockModel = Blockmodel4; break;
                 case 5: blockModel = Blockmodel5; break;
+                case 6: blockModel = Blockmodel6; break;
                 }
 
                 //// ブロックモデルが無効な場合はスキップ
@@ -101,6 +103,7 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
                     case 3: blockModel = Blockmodel3; break;
                     case 4: blockModel = Blockmodel4; break;
                     case 5: blockModel = Blockmodel5; break;
+                    case 6: blockModel = Blockmodel6; break;
                     }
 
                     // ブロックモデルが無効な場合はスキップ
@@ -148,7 +151,9 @@ void Stage::Finalize()
     delete Blockmodel4;
     Blockmodel4 = nullptr;   
     delete Blockmodel5;
-    Blockmodel5 = nullptr;
+    Blockmodel5 = nullptr;  
+    delete Blockmodel6;
+    Blockmodel6 = nullptr;
 }
 
 void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX::XMFLOAT3& Angle) 
@@ -174,13 +179,21 @@ void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX:
     int Putz = static_cast<int>((Position.z / MapDate.scale.z) / Blocksize + MAPDate::mapZ / 2);
 
     int SetType = Type;
-
+    DirectX::XMFLOAT3 SetAngle = Angle;
     if ((MapDate.BlockID[Puty][Putx][Putz] == 3 && Type == 4) ||
-        (MapDate.BlockID[Puty][Putx][Putz] == 4 && Type == 3))SetType = 5;
+        (MapDate.BlockID[Puty][Putx][Putz] == 4 && Type == 3)) {
+
+        SetType = 5;
+        if (Type == 3)
+        {
+            SetAngle = MapDate.angle[Puty][Putx][Putz];
+        }
+    }
+    else if (MapDate.BlockID[Puty][Putx][Putz] != 0 && Type!= 0)return;
 
     // ブロックIDと回転角度を設定
     MapDate.BlockID[Puty][Putx][Putz] = SetType;
-    MapDate.angle[Puty][Putx][Putz] = Angle;
+    MapDate.angle[Puty][Putx][Putz] = SetAngle;
 
     // ブロック位置を計算
     MapDate.position[Puty][Putx][Putz] = {
@@ -196,6 +209,7 @@ void Stage::Update(float elapsedTime)
 
 
 }
+
 //真布チップでテスト用
 //void Stage::SetMapdate(int Level)
 //{
@@ -268,6 +282,9 @@ void Stage::BlockRender(const RenderContext& rc, ModelRenderer* renderer)
                         break;            
                     case 5:
                         renderer->Render(rc, MapDate.transform[PY][PX][PZ], Blockmodel5, ShaderId::Lambert);
+                        break;               
+                    case 6:
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], Blockmodel6, ShaderId::Lambert);
                         break;
                     }
                 }
