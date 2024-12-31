@@ -10,12 +10,11 @@ class Player : public Character
 protected:
 	void OnLanding()override;
 
-
-private:
-
+	
+public:
 	Player() {};
 	~Player() override {};
-public:
+
 	static Player& Instance()
 	{
 		static Player instance;

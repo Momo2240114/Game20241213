@@ -132,6 +132,7 @@
     <ClInclude Include="Source\MapDate.h" />
     <ClInclude Include="Source\MathUtiles.h" />
     <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\PlayerManager.h" />
     <ClInclude Include="Source\Projectile.h" />
     <ClInclude Include="Source\ProjectileHoming.h" />
     <ClInclude Include="Source\ProjectileManager.h" />
@@ -184,6 +185,7 @@
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MathUtiles.cpp" />
     <ClCompile Include="Source\Player.cpp" />
+    <ClCompile Include="Source\PlayerManager.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
     <ClCompile Include="Source\ProjectileHoming.cpp" />
     <ClCompile Include="Source\ProjectileManager.cpp" />

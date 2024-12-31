@@ -7,15 +7,16 @@
 
 struct  MAPDate
 {
-    static const int mapX = 45;
-    static const int mapZ = 45;
-    static const int mapY = 10;
+    static const int mapX = 40;
+    static const int mapZ = 40;
+    static const int mapY = 5;
     int  BlockID[mapY][mapX][mapZ] = {};
+    bool moveForward[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 position[mapY][mapX][mapZ] = {};
+    DirectX::XMFLOAT3 orgposition[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 angle[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 scale = { 2.0f,  2.0f, 2.0f };
     DirectX::XMFLOAT4X4 transform[mapY][mapX][mapZ] = {};
-
 };
 
 //ステージ
@@ -31,7 +32,7 @@ public:
     //更新処理
     void Update(float elapsedTime);
     ////ブロックの設置
-    //void SetMapdate(int Level);
+    void SetMapdate(int Level);
     //描画処理
     void Render(const RenderContext& rc, ModelRenderer* renderer);   
     void BlockRender(const RenderContext& rc, ModelRenderer* renderer);   
@@ -61,6 +62,10 @@ public:
     DirectX::XMFLOAT3 GetBlockscale() { return MapDate.scale; }
     int GetMapXsize() { return MAPDate::mapX; }
     int GetMapZsize() { return MAPDate::mapZ; }
+
+    void MoveBlockUpdate(float elapsedTime);
+
+
 private:
     Stage() {};
     ~Stage() {};
@@ -70,7 +75,8 @@ private:
     DirectX::XMFLOAT3		angle = { 0, 0, 0 };
     DirectX::XMFLOAT3		scale = { 2, 2, 2 };
     DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
-    MAPDate MapDate;
+    MAPDate MapDate;//プレイヤーが置くブロック
+    MAPDate StageDate;//ステージに固定されるブロック
     int L = 0;
     int PutType = 0;
     DirectX::XMFLOAT3		PutPos = { 0, -1, 0 };

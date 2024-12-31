@@ -22,6 +22,8 @@ void Stage::init()
             }
         }
     }
+    SetMapdate(0);
+    UpdateBlockTransform();
 }
 
 bool Stage::RayCast(const DirectX::XMFLOAT3& start,
@@ -132,6 +134,93 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
     return false;
 }
 
+void Stage::MoveBlockUpdate(float elapsedTime)
+{
+    constexpr float MoveSpeed = 2.0f;   // 移動速度
+    constexpr float MoveRange = 6.0f;   // 移動範囲
+    constexpr float anglepattern = DirectX::XMConvertToRadians(90.0f);
+
+
+    for (int PY = 0; PY < MAPDate::mapY; ++PY) {
+        for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
+            for (int PX = 0; PX < MAPDate::mapX; ++PX) {
+                if (MapDate.BlockID[PY][PX][PZ] != 7) continue;
+
+                // 移動処理
+                DirectX::XMFLOAT3& pos = MapDate.position[PY][PX][PZ];
+                DirectX::XMFLOAT3& orgPos = MapDate.orgposition[PY][PX][PZ];
+
+                // 移動方向制御
+
+           
+                // 角度に応じた移動方向を変化させ、位置を補正する
+                if (std::abs(MapDate.angle[PY][PX][PZ].y - 0.0f) < 0.01f) {
+                    if (MapDate.moveForward[PY][PX][PZ]) {
+                        pos.z += MoveSpeed * elapsedTime;
+                        if (pos.z >= orgPos.z + MoveRange) {
+                            MapDate.moveForward[PY][PX][PZ] = false; // 範囲に到達したら逆方向へ
+                        }
+                    }
+                    else {
+                        pos.z -= MoveSpeed * elapsedTime;
+                        if (pos.z <= orgPos.z - MoveRange) {
+                            MapDate.moveForward[PY][PX][PZ] = true; // 範囲に到達したら逆方向へ
+                        }
+                    }
+                }
+                else if (std::abs(MapDate.angle[PY][PX][PZ].y - anglepattern) < 0.01f) {
+                    if (MapDate.moveForward[PY][PX][PZ]) {
+                        pos.x += MoveSpeed * elapsedTime;
+                        if (pos.x >= orgPos.x + MoveRange) {
+                            MapDate.moveForward[PY][PX][PZ] = false; // 範囲に到達したら逆方向へ
+                        }
+                    }
+                    else {
+                        pos.x -= MoveSpeed * elapsedTime;
+                        if (pos.x <= orgPos.x - MoveRange) {
+                            MapDate.moveForward[PY][PX][PZ] = true; // 範囲に到達したら逆方向へ
+                        }
+                    }
+                }
+                else if (std::abs(MapDate.angle[PY][PX][PZ].y - anglepattern * 2) < 0.01f) {
+                    if (MapDate.moveForward[PY][PX][PZ]) {
+                        pos.z -= MoveSpeed * elapsedTime;
+                        if (pos.z <= orgPos.z - MoveRange) {
+                            MapDate.moveForward[PY][PX][PZ] = false; // 範囲に到達したら逆方向へ
+                        }
+                    }
+                    else {
+                        pos.z += MoveSpeed * elapsedTime;
+                        if (pos.z >= orgPos.z + MoveRange) {
+                            MapDate.moveForward[PY][PX][PZ] = true; // 範囲に到達したら逆方向へ
+                        }
+                    }
+                }
+                else if (std::abs(MapDate.angle[PY][PX][PZ].y - anglepattern * 3) < 0.01f) {
+                    if (MapDate.moveForward[PY][PX][PZ]) {
+                        pos.x -= MoveSpeed * elapsedTime;
+                        if (pos.x <= orgPos.x - MoveRange) {
+                            MapDate.moveForward[PY][PX][PZ] = false; // 範囲に到達したら逆方向へ
+                        }
+                    }
+                    else {
+                        pos.x += MoveSpeed * elapsedTime;
+                        if (pos.x >= orgPos.x + MoveRange) {
+                            MapDate.moveForward[PY][PX][PZ] = true; // 範囲に到達したら逆方向へ
+                        }
+                    }
+                }
+        
+                // 座標を更新
+                DirectX::XMStoreFloat4x4(
+                    &MapDate.transform[PY][PX][PZ],
+                    DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z)
+                );
+            }
+        }
+    }
+}
+
 Stage& Stage::Instance()
 {
     static Stage instance;
@@ -158,22 +247,7 @@ void Stage::Finalize()
 
 void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX::XMFLOAT3& Angle) 
 {
-    //int Putx = static_cast<int>(Position.x / (Blocksize * MapDate.scale.x) + MAPDate::mapX / 2);
-    //int Puty = static_cast<int>(Position.y / (Blocksize * MapDate.scale.y));
-    //int Putz = static_cast<int>(Position.z / (Blocksize * MapDate.scale.z) + MAPDate::mapZ / 2);
-
-    //if (MapDate.BlockID[Puty][Putx][Putz] != 0)Puty += 1;
-
-    //// ブロックIDと回転角度を設定
-    //MapDate.BlockID[Puty][Putx][Putz] = Type;
-    //MapDate.angle[Puty][Putx][Putz] = Angle;
-    //    // ブロック位置を計算
-    //    MapDate.position[Puty][Putx][Putz] = {
-    //        (Putx) * Blocksize * MapDate.scale.x,
-    //        (Puty) * Blocksize * MapDate.scale.y, // オフセット調整
-    //        (Putz) * Blocksize * MapDate.scale.z
-    //    };
-
+  
     int Putx = static_cast<int>((Position.x / MapDate.scale.x) / Blocksize + MAPDate::mapX / 2);
     int Puty = static_cast<int>((Position.y / MapDate.scale.y) / Blocksize);
     int Putz = static_cast<int>((Position.z / MapDate.scale.z) / Blocksize + MAPDate::mapZ / 2);
@@ -201,54 +275,40 @@ void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX:
         (Puty)*Blocksize * MapDate.scale.y,
         (Putz - MAPDate::mapZ / 2) * Blocksize * MapDate.scale.z
     };
+    MapDate.orgposition[Puty][Putx][Putz] = MapDate.position[Puty][Putx][Putz];
 }
 void Stage::Update(float elapsedTime)
 {
     //今は特にやることはない
     /*UpdateTransform();*/
-
+    MoveBlockUpdate(elapsedTime);
 
 }
 
 //真布チップでテスト用
-//void Stage::SetMapdate(int Level)
-//{
-//    L = Level;
-//    for (int PY = 0; PY < MAPDate::mapY; ++PY) {
-//        for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
-//            for (int PX = 0; PX < MAPDate::mapX; ++PX) {
-//               /* int ID = 0;*/
-//                /*ID = Mapid[L][PY][PZ][PX];*/
-//                 /*MapDate.BlockID[PY][PZ][PX] = ID;*/
-//                 //ブロックIDに対応するモデルを設定
-//                switch (MapDate.BlockID[PY][PZ][PX])
-//                {
-//                case 1:
-//                    MapDate.BlockModels[PY][PZ][PX] = new Model(*Blockmodel1); // 個別のインスタンスを作成
-//                    break;
-//                case 2:
-//                    MapDate.BlockModels[PY][PZ][PX] = new Model(*Blockmodel2);
-//                    break;
-//                case 3:
-//                    MapDate.BlockModels[PY][PZ][PX] = new Model(*Blockmodel3);
-//                    break;
-//                default:
-//                    MapDate.BlockModels[PY][PZ][PX] = nullptr;
-//                    break;
-//                }
-//
-//                 ブロックの位置計算
-//                if (MapDate.BlockID[PY][PX][PZ] != 0) {
-//                    MapDate.position[PY][PX][PZ] = {
-//                        (float)PX,
-//                        (float)PY,
-//                        (float)PZ
-//                    };
-//                }
-//            }
-//        }
-//    }
-//}
+void Stage::SetMapdate(int Level)
+{
+    L = Level;
+    for (int PY = 0; PY < MAPDate::mapY; ++PY) {
+        for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
+            for (int PX = 0; PX < MAPDate::mapX; ++PX) {
+                int ID = 0;
+                ID = Mapid[L][PY][PZ][PX];
+                 MapDate.BlockID[PY][PZ][PX] = ID;
+                 //ブロックIDに対応するモデルを設定
+            
+                //ブロックの位置計算
+                if (MapDate.BlockID[PY][PX][PZ] != 0) {
+                    MapDate.position[PY][PX][PZ] = {
+                       (PX - (MAPDate::mapX / 2)) * Blocksize * MapDate.scale.x,
+                       (PY)* Blocksize* MapDate.scale.y,
+                       (PZ - (MAPDate::mapZ / 2)) * Blocksize* MapDate.scale.z
+                    };
+                }
+            }
+        }
+    }
+}
 
 void Stage::Render(const RenderContext& rc, ModelRenderer* renderer)
 {

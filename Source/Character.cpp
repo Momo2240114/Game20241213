@@ -205,12 +205,14 @@ void Character::UpdateVerticalMove(float elapsedTime)
 		Putz = static_cast<int>((position.z - 0.5f) / (Blocksize * Bscale.z));
 	}
 
+	int HitBlock = -1;//あたったブロックの判別用
 
+	float my = Velocity.y * elapsedTime;//重力の距離
 
-	int HitBlock = -1;
-	float my = Velocity.y * elapsedTime;
-	constexpr float anglepattern = DirectX::XMConvertToRadians(90.0f);
-	bool BackframeisGround = isGround;
+	const float anglepattern = DirectX::XMConvertToRadians(90.0f);//ブロックの回転を90度ごとしらべるよう
+
+	bool BackframeisGround = isGround;   //前のフレームに地面にいたかを判別
+
 	isGround = false;
 
 	if (my < 1.0f) // 下方向の移動（落下）
@@ -222,9 +224,9 @@ void Character::UpdateVerticalMove(float elapsedTime)
 		DirectX::XMFLOAT3 hitNormal;
 		DirectX::XMFLOAT3 BlockAngle;
 
-		if (BackframeisGround)
+		if (BackframeisGround) //前のフレームに地面にいれば
 		{
-			end.y += my * 0.3f;
+			end.y += my * 0.3f;//レイキャストの終点を伸ばして坂道を下れるようにする
 		}
 
 
@@ -247,7 +249,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 				Velocity.y = 0.0f;
 				OnMovingFloorTime = 0;
 				break;
-			case 3:
+			case 3://ジャンプ床
 				position.y = hitPosition.y;
 				isGround = true;
 				Jump(16);
@@ -381,8 +383,8 @@ void Character::UpdateVerticalMove(float elapsedTime)
 					break;
 
 				case 2: // Enterキー待ち
-
-					if (IsKeyPressed(VK_RETURN)) { // Enterキーが押されたら再開
+					OnMovingFloorTime += elapsedTime;
+					if (IsKeyPressed(VK_RETURN) || OnMovingFloorTime > 3) { // Enterキーが押されたら再開
 						StopState = 3;
 					}
 					break;

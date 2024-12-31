@@ -103,7 +103,7 @@ protected:
 	int invincibletimer = 1.0f;
 
 	float friction = 12.0f;
-	float OnMovingFloorTime;
+	float OnMovingFloorTime = 0;
 	// ù‰ñˆ—
 	void Turn(float elapsedTime, float vx, float vz, float speed);
 	// ˆÚ“®ˆ—
