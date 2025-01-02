@@ -6,6 +6,7 @@
 #include "EnemySlime.h"
 #include "Player.h"
 #include "PutBlock.h"
+#include "PlayerManager.h"
 
 // 初期化
 void SceneGame::Initialize()
@@ -20,9 +21,16 @@ void SceneGame::Initialize()
 	//プレイヤー初期化
 	/*player = new Player();*/
 	
-	Player::Instance().Initialize();
-	Player::Instance().SetStaetPos(Stage::Instance().GetStatePos());
+	Player *One = new Player;
 
+	One->Initialize();
+	One->SetStaetPos(Stage::Instance().GetStatePos());
+	PlayerManager::Instance().Register(One);
+	
+	Player *two = new Player;
+
+	two->Initialize();
+	PlayerManager::Instance().Register(two);
 
 
 	//カメラコントローラー初期化
@@ -49,7 +57,7 @@ void SceneGame::Initialize()
 	// エネミー初期化
 	EnemyManager& enemyManager = EnemyManager::Instance();
 	//EnemySlime* slime = new EnemySlime();
-	////slime->SetPosition(DirectX::XMFLOAT3(0, 0, 5));
+	//slime->SetPosition(DirectX::XMFLOAT3(0, 0, 5));
 	//slime->SetPosition(DirectX::XMFLOAT3(1, 0, 3));
 	//enemyManager.Register(slime);
 	//for (int i = 0; i < 3; ++i)
@@ -69,6 +77,7 @@ void SceneGame::Finalize()
 {
 	//エネミーの終了化
 	EnemyManager::Instance().Clear();
+	PlayerManager::Instance().Clear();
 
 	//カメラコントローラー終了化
 	if (cameraController != nullptr)
@@ -83,7 +92,7 @@ void SceneGame::Finalize()
 	//	delete player;
 	//	player = nullptr;
 	//}
-	Player::Instance().Finalize();
+	/*Player::Instance().Finalize();*/
 
 
 	////ステージ終了化
@@ -112,7 +121,8 @@ void SceneGame::Update(float elapsedTime)
 
 	//プレイヤー更新処理
 	/*player->Update(elapsedTime);*/
-	Player::Instance().Update(elapsedTime);
+	//Player::Instance().Update(elapsedTime);
+	PlayerManager::Instance().Update(elapsedTime);
 
 	//エネミー更新処理
 	EnemyManager::Instance().Update(elapsedTime);
@@ -147,7 +157,8 @@ void SceneGame::Render()
 
 		//プレイヤー描画
 		/*player->Render(rc, modelRenderer);*/
-		Player::Instance().Render(rc, modelRenderer);
+		//Player::Instance().Render(rc, modelRenderer);
+		PlayerManager::Instance().Render(rc, modelRenderer);
 
 		// エネミー描画
 		EnemyManager::Instance().Render(rc, modelRenderer);
@@ -157,7 +168,7 @@ void SceneGame::Render()
 	// 3Dデバッグ描画
 	{
 		/*player->RenderDebugPrimitive(rc, shapeRenderer);*/
-		Player::Instance().RenderDebugPrimitive(rc, shapeRenderer);
+		PlayerManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
 		EnemyManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
 	}
 
@@ -173,7 +184,12 @@ void SceneGame::Render()
 void SceneGame::DrawGUI()
 {
 	/*player->DrawDebugGUI();*/
-	Player::Instance().DrawDebugGUI();
+	/*Player::Instance().DrawDebugGUI();*/
+}
+
+void SceneGame::PopPlayer()
+{
+
 }
 
 

@@ -7,7 +7,6 @@ void PlayerManager::Update(float elapsedTime)
 		player->Update(elapsedTime);
 	}
 
-
 	for (Player* Pla: removes)
 	{
 		std::vector<Player*>::iterator it = std::find(players.begin(), players.end(), Pla);

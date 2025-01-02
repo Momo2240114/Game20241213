@@ -53,7 +53,7 @@ private:
 
 	void CollisionPlayerVSEnemys();
 
-
+	void pupCool(float elapsedTime);
 private:
 	Model* model = nullptr;
 	float		moveSpeed = 4.0f;
@@ -62,7 +62,14 @@ private:
 	//float rot = 0.0f;//ImGui‚Å•ÏˆÚ‚ğŒ©‚½‚­Aƒƒ“ƒo•Ï”‚É•ÏX
 	int JumpCount = 0;
 	int JumpLimit = 2;
-	
+
+	bool IsLive = false;
+	bool IsGoal = false;
+	bool IsMove = false;
+
+	float moveStateTimer = 0;
+	const int PopTime = 20;
+
 	ProjectileManager projectileManager;
 };	
 

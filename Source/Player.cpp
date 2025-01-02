@@ -420,6 +420,21 @@ void Player::CollisionPlayerVSEnemys()
 	}
 }
 
+void Player::pupCool(float elapsedTime)
+{
+	if ((Statepos.x != position.x) && (Statepos.y != position.y) && (Statepos.z != position.z))
+	{
+		IsMove = true;
+		
+	}
+
+	if (IsMove)
+	{
+		moveStateTimer += elapsedTime;
+		if (moveStateTimer > PopTime)moveStateTimer = PopTime;
+	}
+}
+
 void Player::SetStaetPos(DirectX::XMFLOAT3 State)
 {
 	Statepos = State;

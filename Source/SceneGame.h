@@ -23,7 +23,8 @@ public:
 	void DrawGUI() override;
 	//デバッグ用GUI描画
 	void DrawDebugGUI() {};
-
+	//プレイヤーの出現
+	void PopPlayer();
 private:
 	//Stage* stage = nullptr;
 
