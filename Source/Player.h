@@ -10,7 +10,6 @@ class Player : public Character
 protected:
 	void OnLanding()override;
 
-	
 public:
 	Player() {};
 	~Player() override {};
