@@ -1,7 +1,4 @@
-﻿  AutoRunCharacter.cpp
-  Character.cpp
-  Enemy.cpp
-  EnemyManager.cpp
+﻿  Character.cpp
   EnemySlime.cpp
   Framework.cpp
   Player.cpp
@@ -11,57 +8,47 @@
   SceneTitle.cpp
   Stage.cpp
 C:\Users\2240045\Desktop\チーム製作\5\Source\Character.h(106,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/AutoRunCharacter.cpp' をコンパイルしています)
-  
-C:\Users\2240045\Desktop\チーム製作\5\Source\Character.h(106,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
   (ソース ファイル 'Source/Character.cpp' をコンパイルしています)
   
 C:\Users\2240045\Desktop\チーム製作\5\Source\character.h(106,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/EnemySlime.cpp' をコンパイルしています)
-  
-C:\Users\2240045\Desktop\チーム製作\5\Source\character.h(106,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
   (ソース ファイル 'Source/Player.cpp' をコンパイルしています)
-  
-C:\Users\2240045\Desktop\チーム製作\5\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル 'Source/EnemySlime.cpp' をコンパイルしています)
-  
-C:\Users\2240045\Desktop\チーム製作\5\Source\character.h(106,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/PutBlock.cpp' をコンパイルしています)
   
 C:\Users\2240045\Desktop\チーム製作\5\Source\character.h(106,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
   (ソース ファイル 'Source/PlayerManager.cpp' をコンパイルしています)
-  
-C:\Users\2240045\Desktop\チーム製作\5\Source\character.h(106,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/Enemy.cpp' をコンパイルしています)
-  
-C:\Users\2240045\Desktop\チーム製作\5\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル 'Source/Player.cpp' をコンパイルしています)
-  
-C:\Users\2240045\Desktop\チーム製作\5\Source\character.h(106,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/EnemyManager.cpp' をコンパイルしています)
   
 C:\Users\2240045\Desktop\チーム製作\5\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
   (ソース ファイル 'Source/PlayerManager.cpp' をコンパイルしています)
   
 C:\Users\2240045\Desktop\チーム製作\5\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  (ソース ファイル 'Source/Player.cpp' をコンパイルしています)
+  
+C:\Users\2240045\Desktop\チーム製作\5\Source\character.h(106,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
   (ソース ファイル 'Source/PutBlock.cpp' をコンパイルしています)
   
 C:\Users\2240045\Desktop\チーム製作\5\Source\character.h(106,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/Stage.cpp' をコンパイルしています)
-  
-C:\Users\2240045\Desktop\チーム製作\5\Source\character.h(106,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/SceneGame.cpp' をコンパイルしています)
+  (ソース ファイル 'Source/EnemySlime.cpp' をコンパイルしています)
   
 C:\Users\2240045\Desktop\チーム製作\5\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル 'Source/Stage.cpp' をコンパイルしています)
+  (ソース ファイル 'Source/PutBlock.cpp' をコンパイルしています)
+  
+C:\Users\2240045\Desktop\チーム製作\5\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  (ソース ファイル 'Source/EnemySlime.cpp' をコンパイルしています)
   
 C:\Users\2240045\Desktop\チーム製作\5\Source\Character.cpp(45,20): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2240045\Desktop\チーム製作\5\Source\Character.cpp(226,21): warning C4101: 'BlockAngle': ローカル変数は 1 度も使われていません。
-C:\Users\2240045\Desktop\チーム製作\5\Source\Character.cpp(730,22): warning C4244: '-=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\2240045\Desktop\チーム製作\5\Source\Character.cpp(731,22): warning C4244: '-=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\2240045\Desktop\チーム製作\5\Source\PutBlock.cpp(60,18): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240045\Desktop\チーム製作\5\Source\character.h(106,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル 'Source/Stage.cpp' をコンパイルしています)
+  
+C:\Users\2240045\Desktop\チーム製作\5\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  (ソース ファイル 'Source/Stage.cpp' をコンパイルしています)
+  
+C:\Users\2240045\Desktop\チーム製作\5\Source\Player.cpp(434,49): warning C4244: '=': 'const int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240045\Desktop\チーム製作\5\Source\character.h(106,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル 'Source/SceneGame.cpp' をコンパイルしています)
+  
 C:\Users\2240045\Desktop\チーム製作\5\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
   (ソース ファイル 'Source/SceneGame.cpp' をコンパイルしています)
   
-C:\Users\2240045\Desktop\チーム製作\5\Source\PutBlock.cpp(59,18): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240045\Desktop\チーム製作\5\Source\Player.cpp(434,49): warning C4244: '=': 'const int' から 'float' への変換です。データが失われる可能性があります。
 C:\Users\2240045\Desktop\チーム製作\5\Source\Stage.cpp(107,1): warning C4715: 'Stage::BlockRayCast': 値を返さないコントロール パスがあります。
   Game.vcxproj -> C:\Users\2240045\Desktop\チーム製作\5\bin\x64\Debug\Game.exe
