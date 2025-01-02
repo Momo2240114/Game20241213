@@ -1,6 +1,6 @@
 #include "Stage.h"
 #include "Collision.h"
-#include "Player.h"
+#include "PlayerManager.h"
 
 void Stage::init()
 {
@@ -108,7 +108,7 @@ bool Stage::BlockRayCast(
 
 bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end,
     DirectX::XMFLOAT3& hitPosition, 
-    DirectX::XMFLOAT3& hitNormal, int& hitBlock, 
+    DirectX::XMFLOAT3& hitNormal, DirectX::XMFLOAT3& HitBlockAngle, int& hitBlock,
     bool isPlayer,bool checkBlocks)
 {
     // ブロックチェックが必要な場合にBlockRayCastを実行
@@ -165,7 +165,7 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
                     // レイキャスト処理
                     if (Collision::RayCast(start, end, blockTransform, blockModel, hitPosition, hitNormal)) {
                         hitBlock = MapDate.BlockID[PY][PX][PZ];
-                      Player::Instance().SetBlockAngle(MapDate.angle[PY][PX][PZ]);
+                        HitBlockAngle = MapDate.angle[PY][PX][PZ];
                         return true; // 衝突があった場合は即座に true を返す
                     }
                 }

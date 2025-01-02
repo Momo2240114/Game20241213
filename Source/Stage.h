@@ -55,7 +55,7 @@ public:
     //最強レイキャスト
     bool UnifiedRayCast(
         const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end,
-        DirectX::XMFLOAT3& hitPosition, DirectX::XMFLOAT3& hitNormal,
+        DirectX::XMFLOAT3& hitPosition, DirectX::XMFLOAT3& hitNormal, DirectX::XMFLOAT3& HitBlockAngle,
         int& hitBlock, bool isPlayer, bool checkBlocks = false);
 
     float GetBlockSize() { return Blocksize; }

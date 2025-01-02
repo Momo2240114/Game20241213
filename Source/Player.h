@@ -14,12 +14,6 @@ public:
 	Player() {};
 	~Player() override {};
 
-	static Player& Instance()
-	{
-		static Player instance;
-		return instance;
-	}
-
 	void Initialize();
 	void Finalize();
 
