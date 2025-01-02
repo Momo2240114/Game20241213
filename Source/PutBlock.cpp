@@ -34,6 +34,7 @@ PutBlock& PutBlock::Instance()
 
 void PutBlock::putBlockOnBlock()
 {
+	DirectX::XMFLOAT3 BlockAngle;
 	performRaycast(RayState, RayEnd);
 		//ステージとのレイキャストを行い配置座標を決める
 		HitPos, HitNor;
@@ -44,7 +45,7 @@ void PutBlock::putBlockOnBlock()
 			UpdateTransform();
 		}*/
 		if(Stage::Instance().UnifiedRayCast(RayState, RayEnd,
-			HitPos, HitNor, HitType, false,true))
+			HitPos, HitNor, BlockAngle, HitType,false,true))
 		{
 			// Typeが0の場合、HitPosをRayEnd方向に少し進める
 			if (Type == 0 || Type == 4)

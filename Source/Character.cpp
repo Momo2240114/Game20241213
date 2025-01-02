@@ -210,7 +210,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 
 	float my = Velocity.y * elapsedTime;//重力の距離
 
-	const float anglepattern = DirectX::XMConvertToRadians(90.0f);//ブロックの回転を90度ごとしらべるよう
+	constexpr float anglepattern = DirectX::XMConvertToRadians(90.0f);//ブロックの回転を90度ごとしらべるよう
 
 	bool BackframeisGround = isGround;   //前のフレームに地面にいたかを判別
 
@@ -223,7 +223,6 @@ void Character::UpdateVerticalMove(float elapsedTime)
 
 		DirectX::XMFLOAT3 hitPosition;
 		DirectX::XMFLOAT3 hitNormal;
-		DirectX::XMFLOAT3 BlockAngle;
 
 		if (BackframeisGround) //前のフレームに地面にいれば
 		{
@@ -232,7 +231,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 
 
 
-		if (Stage::Instance().UnifiedRayCast(start, end, hitPosition, hitNormal, HitBlock,true,true))
+		if (Stage::Instance().UnifiedRayCast(start, end, hitPosition, hitNormal, HitBlockAngle,HitBlock,true,true))
 		{
 			//あたったブロックに応じて処理を変える
 			switch (HitBlock)
@@ -603,13 +602,14 @@ void Character::UpdateHorizonMove(float elapsedTime)
 
 		// 法線ベクトルと交点の保存先
 		DirectX::XMFLOAT3 pFeet, nFeet;
+
 		int HitBlock = 0;
 		//bool shouldRayCast = (position.x != Previousposition.x || position.z != Previousposition.z);
 
 		// 足元の当たり判定だけ行う
 		bool hitFeet = false;
 		bool hitBlockFeet = false;
-		hitFeet = Stage::Instance().UnifiedRayCast(sFeet, eFeet, pFeet, nFeet, HitBlock,true,true);
+		hitFeet = Stage::Instance().UnifiedRayCast(sFeet, eFeet, pFeet, nFeet, HitBlockAngle, HitBlock,true,true);
 
 		if (hitFeet)
 		{
@@ -618,6 +618,7 @@ void Character::UpdateHorizonMove(float elapsedTime)
 			 //足元がヒットした場合、衝突点と法線を取得
 			DirectX::XMFLOAT3 p = pFeet;
 			DirectX::XMFLOAT3 n = nFeet;
+			DirectX::XMFLOAT3 an;
 
 			 //衝突点と現在位置の差分を計算
 			DirectX::XMVECTOR P = DirectX::XMLoadFloat3(&p);
@@ -635,7 +636,7 @@ void Character::UpdateHorizonMove(float elapsedTime)
 			DirectX::XMStoreFloat3(&q, Q);
 
 			 //衝突点で再度レイキャストを行って修正された位置を計算
-			if (Stage::Instance().UnifiedRayCast(sFeet, q, pFeet, nFeet, HitBlock,true))
+			if (Stage::Instance().UnifiedRayCast(sFeet, q, pFeet, nFeet, an, HitBlock,true))
 			{
 				Velocity.x = 0;
 				Velocity.z = 0;

@@ -174,7 +174,7 @@ void EnemySlime::UpdateIdleState(float elapsedTime)
 bool EnemySlime::SearthPlayer()
 {
 	//プレイヤーとの高低差を考慮して３Dでの距離判定
-	const DirectX::XMFLOAT3& playerPos = Player::Instance().GetPosition();
+	const DirectX::XMFLOAT3& playerPos = { 0,0,0 }; //Player::Instance().GetPosition();
 	float vx = playerPos.x - position.x;
 	float vy = playerPos.y - position.y;
 	float vz = playerPos.z - position.z;
@@ -208,35 +208,35 @@ void EnemySlime::SetAttackState()
 
 void EnemySlime::UpdateAttackState(float elapsedTime)
 {
-	//目的地をプレイヤーに
-	targetpos = Player::Instance().GetPosition();
-	//目的地へ移動
-	MoveToTarget(elapsedTime, 0.2f, 1.0f);
+	////目的地をプレイヤーに
+	//targetpos = Player::Instance().GetPosition();
+	////目的地へ移動
+	//MoveToTarget(elapsedTime, 0.2f, 1.0f);
 
-	//タイマー処理
-	statetimer -= elapsedTime;
-	if (statetimer < 0.0f)
-	{
-		DirectX::XMFLOAT3 dir;
-		dir.x = sinf(angle.y);
-		dir.y = 0;
-		dir.z = cosf(angle.y);
+	////タイマー処理
+	//statetimer -= elapsedTime;
+	//if (statetimer < 0.0f)
+	//{
+	//	DirectX::XMFLOAT3 dir;
+	//	dir.x = sinf(angle.y);
+	//	dir.y = 0;
+	//	dir.z = cosf(angle.y);
 
-		//発射位置
-		DirectX::XMFLOAT3 pos = { position.x,position.y,position.z };
-		pos.y += height * 0.5f;
+	//	//発射位置
+	//	DirectX::XMFLOAT3 pos = { position.x,position.y,position.z };
+	//	pos.y += height * 0.5f;
 
 
-		ProjectileStraight* projectile = new ProjectileStraight(&projectileMana);
-		projectile->Launch(dir, pos);
+	//	ProjectileStraight* projectile = new ProjectileStraight(&projectileMana);
+	//	projectile->Launch(dir, pos);
 
-		statetimer = 2.0f;
-	}
+	//	statetimer = 2.0f;
+	//}
 
-	if (!SearthPlayer())
-	{
-		SetIdleState();
-	}
+	//if (!SearthPlayer())
+	//{
+	//	SetIdleState();
+	//}
 }
 
 
