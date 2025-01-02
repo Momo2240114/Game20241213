@@ -19,11 +19,14 @@ void SceneGame::Initialize()
 
 	//プレイヤー初期化
 	/*player = new Player();*/
+	
 	Player::Instance().Initialize();
+	Player::Instance().SetStaetPos(Stage::Instance().GetStatePos());
+
+
 
 	//カメラコントローラー初期化
 	cameraController = new CameraController();
-
 
 	// カメラ初期設定
 	Graphics& graphics = Graphics::Instance();
@@ -39,6 +42,9 @@ void SceneGame::Initialize()
 		0.1f,	//クリップ距離（近）
 		1000.0f	//クリップ距離（遠）
 	);
+
+	target = { 0,0,0 };
+	target.y = 0.5f;
 
 	// エネミー初期化
 	EnemyManager& enemyManager = EnemyManager::Instance();
@@ -92,10 +98,8 @@ void SceneGame::Finalize()
 void SceneGame::Update(float elapsedTime)
 {
 	//カメラコントローラー更新処理
-	//DirectX::XMFLOAT3 target = player->GetPosition();
 	//DirectX::XMFLOAT3 target = Player::Instance().GetPosition();
-	DirectX::XMFLOAT3 target = { 0,0,0 };
-	target.y += 0.5f;
+
 	cameraController->SetTarget(target);
 	cameraController->Update(elapsedTime);
 
@@ -103,17 +107,15 @@ void SceneGame::Update(float elapsedTime)
 	/*stage->Update(elapsedTime);*/
 
 	PutBlock::Instance().Update(elapsedTime);
+
 	Stage::Instance().Update(elapsedTime);
 
 	//プレイヤー更新処理
 	/*player->Update(elapsedTime);*/
 	Player::Instance().Update(elapsedTime);
 
-	
-
 	//エネミー更新処理
 	EnemyManager::Instance().Update(elapsedTime);
-
 }
 
 // 描画処理

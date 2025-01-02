@@ -9,74 +9,8 @@ void CameraController::Update(float elapsedTime)
     float ax = gamePad.GetAxisRX();
     float ay = gamePad.GetAxisRY();
 
-    {
-        // // カメラの回転速度
-        //float speed = rollSpeed * elapsedTime;
+  
 
-        //// スティックの入力値に合わせてX軸とY軸を回転
-        //angle.x += ay * speed; //スティックの前後倒し
-        //angle.y += ax * speed; //スティックの左右倒し
-
-        //// X軸のカメラ回転を制限
-        //if (angle.x < minAngleX)
-        //{
-        //    angle.x = minAngleX;
-        //}
-        //if (angle.x > maxAngleX)
-        //{
-        //    angle.x = maxAngleX;
-        //}
-
-        //// Y軸の回転値を-3.14～3.14に納まるようにする
-        //if (angle.y < -DirectX::XM_PI)
-        //{
-        //    angle.y += DirectX::XM_2PI;
-        //}
-        //if (angle.y > DirectX::XM_PI)
-        //{
-        //    angle.y -= DirectX::XM_2PI;
-        //}
-
-        //// カメラ回転値を回転行列に変換（引数はピッチ、ヨー、ロール）
-        //DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
-
-        //// 回転行列から前方向ベクトルを取り出す（Z軸ベクトル）
-        //DirectX::XMVECTOR Front = Transform.r[2];
-        //DirectX::XMFLOAT3 front;
-        //DirectX::XMStoreFloat3(&front, Front);
-
-        //// 注視点から後ろベクトル方向に一定距離離れたカメラ視点を求める
-        //DirectX::XMFLOAT3 eye;
-        //eye.x = target.x - front.x * range;
-        //eye.y = target.y - front.y * range;
-        //eye.z = target.z - front.z * range;
-
-        //// カメラに視点を注視点を設定（引数：eye , focus , up)
-        //Camera::Instance().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
-
-        //// マウスホイールの入力を取得
-        //wheelDelta = Input::Instance().GetMouse().GetWheel();
-        //const float zoomSpeed = 5.0f; // ホイール感度
-
-        //// 距離をホイールの入力に基づいて変更
-        //range -= wheelDelta * zoomSpeed;
-
-        //// 距離の範囲制限
-        //const float minRange = 5.0f;  // 最小距離
-        //const float maxRange = 1000.0f; // 最大距離
-
-        //if (range < minRange)
-        //{
-        //    range = minRange;
-        //}
-        //if (range > maxRange)
-        //{
-        //    range = maxRange;
-        //}
-
-        ////// UpdateVer4 を呼び出し
-        /////*UpdateVer4(elapsedTime);*/
-    }
     // ボタン入力の確認（例：Aボタンで回転開始）
     {
         if (ax != 0)

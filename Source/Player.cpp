@@ -41,6 +41,7 @@ void Player::Initialize()
 
 	position.y = 5;
 
+	Statepos = position;
 }
 
 // デストラクタの代わり
@@ -52,13 +53,6 @@ void Player::Finalize()
 void Player::Update(float elapsedTime)
 {
 
-	//// 進行ベクトル取得（入力情報を取得の引っ越し先）
-	//DirectX::XMFLOAT3 moveVec = GetMoveVec();
-
-	////移動処理
-	//float moveSpeed = this->moveSpeed * elapsedTime;
-	//position.x += moveVec.x * moveSpeed;
-	//position.z += moveVec.z * moveSpeed;
 
 	// 移動入力処理
 	InputMove(elapsedTime);
@@ -424,6 +418,12 @@ void Player::CollisionPlayerVSEnemys()
 			}
 		}
 	}
+}
+
+void Player::SetStaetPos(DirectX::XMFLOAT3 State)
+{
+	Statepos = State;
+	position = Statepos;
 }
 
 

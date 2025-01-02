@@ -9,7 +9,7 @@ struct  MAPDate
 {
     static const int mapX = 40;
     static const int mapZ = 40;
-    static const int mapY = 5;
+    static const int mapY = 10;
     int  BlockID[mapY][mapX][mapZ] = {};
     bool moveForward[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 position[mapY][mapX][mapZ] = {};
@@ -31,7 +31,7 @@ public:
     void putBlock(int Type,const DirectX::XMFLOAT3& Position, const DirectX::XMFLOAT3& Angle);
     //更新処理
     void Update(float elapsedTime);
-    ////ブロックの設置
+    ////ブロックの初期設置
     void SetMapdate(int Level);
     //描画処理
     void Render(const RenderContext& rc, ModelRenderer* renderer);   
@@ -65,7 +65,9 @@ public:
 
     void MoveBlockUpdate(float elapsedTime);
 
+    DirectX::XMFLOAT3 GetStatePos();
 
+    void BlockChange();
 private:
     Stage() {};
     ~Stage() {};
@@ -84,12 +86,31 @@ private:
     DirectX::XMFLOAT3		Putscale = { 1, 1, 1 };
     DirectX::XMFLOAT4X4		PutTransform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
     const float Blocksize = 1;
-    Model* Blockmodel1 = nullptr;
-    Model* Blockmodel2 = nullptr;
-    Model* Blockmodel3 = nullptr;
-    Model* Blockmodel4 = nullptr;
-    Model* Blockmodel5 = nullptr;
-    Model* Blockmodel6 = nullptr;
+    //設置するブロック
+    Model* Blockmodel1 = nullptr;//何もなし
+    Model* Blockmodel2 = nullptr;//坂
+    Model* Blockmodel3 = nullptr;//ジャンプ
+    Model* Blockmodel4 = nullptr;//方向転換
+    Model* Blockmodel5 = nullptr;//方向転換　＋　ジャンプ
+    Model* Blockmodel6 = nullptr;//停止
+
+    //固定するブロック
+    Model* StatePoint = nullptr;//開始位置
+
+    Model* BlueBlock = nullptr;//ブルーブロック
+    Model* BlueWaku = nullptr;//ブルー枠   
+    Model* RedBlock = nullptr;//レッドブロック
+    Model* RedWaku = nullptr;//レッド枠
+    Model* Switch = nullptr;//スイッチ
+    int OnBlockColer = 0;
+
+    int timer = 0;
 };
 
+
+enum OnBlockColer
+{
+    Blue = 0,
+    Red = 1
+};
 

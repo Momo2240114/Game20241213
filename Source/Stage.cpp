@@ -13,6 +13,12 @@ void Stage::init()
     Blockmodel4 = new Model("Data/Model/Block/Block4.mdl");
     Blockmodel5 = new Model("Data/Model/Block/Block5.mdl");
     Blockmodel6 = new Model("Data/Model/Block/BlockStop.mdl");
+    StatePoint = new Model("Data/Model/Block/StatePoint.mdl");
+    BlueBlock = new Model("Data/Model/Block/BlueBlock.mdl");
+    BlueWaku = new Model("Data/Model/Block/BlueWaku.mdl");   
+    RedBlock = new Model("Data/Model/Block/RedBlock.mdl");
+    RedWaku = new Model("Data/Model/Block/RedWaku.mdl");
+    Switch = new Model("Data/Model/Block/Switch.mdl");
     // 初期化処理
     for (int PY = 0; PY < MAPDate::mapY; ++PY) {
         for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
@@ -61,6 +67,27 @@ bool Stage::BlockRayCast(
                 case 4: blockModel = Blockmodel4; break;
                 case 5: blockModel = Blockmodel5; break;
                 case 6: blockModel = Blockmodel6; break;
+                case 101: blockModel = StatePoint; break;
+                case 102: 
+                    if (OnBlockColer == OnBlockColer::Blue) {
+                        blockModel = BlueBlock;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    break;
+                case 103: 
+                    if (OnBlockColer == OnBlockColer::Red) {
+                        blockModel = RedBlock;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    break;
                 }
 
                 //// ブロックモデルが無効な場合はスキップ
@@ -106,7 +133,29 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
                     case 4: blockModel = Blockmodel4; break;
                     case 5: blockModel = Blockmodel5; break;
                     case 6: blockModel = Blockmodel6; break;
+                    case 101: blockModel = StatePoint; break;
+                    case 102:
+                        if (OnBlockColer == OnBlockColer::Blue) {
+                            blockModel = BlueBlock;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                        break;
+                    case 103:
+                        if (OnBlockColer == OnBlockColer::Red) {
+                            blockModel = RedBlock;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                        break;
+                    case 104:
+                        blockModel = Switch;
                     }
+
 
                     // ブロックモデルが無効な場合はスキップ
                     if (!blockModel) {
@@ -220,6 +269,27 @@ void Stage::MoveBlockUpdate(float elapsedTime)
         }
     }
 }
+//プレイヤーの初期位置
+DirectX::XMFLOAT3 Stage::GetStatePos()
+{
+    for (int PY = 0; PY < MAPDate::mapY; ++PY) {
+        for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
+            for (int PX = 0; PX < MAPDate::mapX; ++PX) {
+                if (MapDate.BlockID[PY][PX][PZ] == 101)
+                {
+                    return MapDate.position[PY][PX][PZ];
+                }
+            }
+        }
+    }
+    return DirectX::XMFLOAT3{0,0,0};
+}
+
+void Stage::BlockChange()
+{
+    OnBlockColer++;
+    if (OnBlockColer > 1)OnBlockColer = 0;
+}
 
 Stage& Stage::Instance()
 {
@@ -242,7 +312,19 @@ void Stage::Finalize()
     delete Blockmodel5;
     Blockmodel5 = nullptr;  
     delete Blockmodel6;
-    Blockmodel6 = nullptr;
+    Blockmodel6 = nullptr;    
+    delete   StatePoint;
+    StatePoint = nullptr;
+    delete BlueBlock;
+    BlueBlock = nullptr;
+    delete BlueWaku;
+    BlueWaku = nullptr;
+    delete RedBlock;
+    RedBlock = nullptr;
+    delete RedWaku;
+    RedWaku = nullptr;  
+    delete Switch;
+    Switch = nullptr;
 }
 
 void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX::XMFLOAT3& Angle) 
@@ -251,6 +333,9 @@ void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX:
     int Putx = static_cast<int>((Position.x / MapDate.scale.x) / Blocksize + MAPDate::mapX / 2);
     int Puty = static_cast<int>((Position.y / MapDate.scale.y) / Blocksize);
     int Putz = static_cast<int>((Position.z / MapDate.scale.z) / Blocksize + MAPDate::mapZ / 2);
+
+    if (MapDate.BlockID[Puty][Putx][Putz] > 100 ||
+        MapDate.BlockID[Puty + 1][Putx][Putz] > 100 ){ return; }
 
     int SetType = Type;
     DirectX::XMFLOAT3 SetAngle = Angle;
@@ -283,6 +368,12 @@ void Stage::Update(float elapsedTime)
     /*UpdateTransform();*/
     MoveBlockUpdate(elapsedTime);
 
+    //timer++;
+    //int Cool = timer % 360;
+    //if (Cool == 0)
+    //{
+    //    BlockChange();
+    //}
 }
 
 //真布チップでテスト用
@@ -292,19 +383,18 @@ void Stage::SetMapdate(int Level)
     for (int PY = 0; PY < MAPDate::mapY; ++PY) {
         for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
             for (int PX = 0; PX < MAPDate::mapX; ++PX) {
+                if (Mapid[L][PY][PX][PZ] == 0) { continue; }
+
                 int ID = 0;
-                ID = Mapid[L][PY][PZ][PX];
-                 MapDate.BlockID[PY][PZ][PX] = ID;
-                 //ブロックIDに対応するモデルを設定
-            
+                ID = Mapid[L][PY][PX][PZ];
+                MapDate.BlockID[PY][PX][PZ] = ID + 100;//+100することで設置ブロックと分けやすくする
+
                 //ブロックの位置計算
-                if (MapDate.BlockID[PY][PX][PZ] != 0) {
-                    MapDate.position[PY][PX][PZ] = {
-                       (PX - (MAPDate::mapX / 2)) * Blocksize * MapDate.scale.x,
-                       (PY)* Blocksize* MapDate.scale.y,
-                       (PZ - (MAPDate::mapZ / 2)) * Blocksize* MapDate.scale.z
-                    };
-                }
+                MapDate.position[PY][PX][PZ] = {
+                   (PX - (MAPDate::mapX / 2)) * Blocksize * MapDate.scale.x,
+                   (PY)*Blocksize * MapDate.scale.y,
+                   (PZ - (MAPDate::mapZ / 2)) * Blocksize * MapDate.scale.z
+                };
             }
         }
     }
@@ -345,6 +435,28 @@ void Stage::BlockRender(const RenderContext& rc, ModelRenderer* renderer)
                         break;               
                     case 6:
                         renderer->Render(rc, MapDate.transform[PY][PX][PZ], Blockmodel6, ShaderId::Lambert);
+                        break;
+                    case 101:
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], StatePoint, ShaderId::Lambert);
+                        break;
+                    case 102:
+                        if (OnBlockColer == OnBlockColer::Blue) {
+                            renderer->Render(rc, MapDate.transform[PY][PX][PZ], BlueBlock, ShaderId::Lambert);
+                        }
+                        else {
+                            renderer->Render(rc, MapDate.transform[PY][PX][PZ], BlueWaku, ShaderId::Lambert);
+                        }
+                    break;
+                    case 103:
+                        if (OnBlockColer == OnBlockColer::Red) {
+                            renderer->Render(rc, MapDate.transform[PY][PX][PZ], RedBlock, ShaderId::Lambert);
+                        }
+                        else {
+                            renderer->Render(rc, MapDate.transform[PY][PX][PZ], RedWaku, ShaderId::Lambert);
+                        }
+                        break;
+                    case 104:
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], Switch, ShaderId::Lambert);
                         break;
                     }
                 }

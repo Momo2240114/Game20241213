@@ -199,7 +199,7 @@ void PutBlock::Update(float elapsedTime)
 
 void PutBlock::performRaycast(DirectX::XMFLOAT3& RayState, DirectX::XMFLOAT3& RayEnd)
 {
-
+	// 画面サイズの更新
 	screenWidth = Graphics::Instance().GetScreenWidth();
 	screenHeight = Graphics::Instance().GetScreenHeight();
 
@@ -208,24 +208,18 @@ void PutBlock::performRaycast(DirectX::XMFLOAT3& RayState, DirectX::XMFLOAT3& Ra
 	::GetCursorPos(&cursor);
 	::ScreenToClient(Graphics::Instance().GetWindowHandle(), &cursor);
 
-	//各行列を取得
+	// 各行列を取得
 	DirectX::XMMATRIX View = DirectX::XMLoadFloat4x4(&Camera::Instance().GetView());
 	DirectX::XMMATRIX Projection = DirectX::XMLoadFloat4x4(&Camera::Instance().GetProjection());
 	DirectX::XMMATRIX World = DirectX::XMMatrixIdentity();
 
-	//スクリーン座標の設定
-	ScreenPosition, WorldPosition;
-	screenPosition;
+	// スクリーン座標の設定
+	screenPosition.x = static_cast<float>(cursor.x);
+	screenPosition.y = static_cast<float>(cursor.y);
 
-	screenPosition.x = static_cast<float> (cursor.x);
-	screenPosition.y = static_cast<float> (cursor.y);
-
-	//スクリーン座標をワールド座標変換し、レイの始点とレイの終点を求める
-	mouseX = static_cast<float>(cursor.x);
-	mouseY = static_cast<float>(cursor.y);
 	// マウスのスクリーン座標 (Z=0.0f はニア平面、Z=1.0f はファーフラスト)
-	DirectX::XMVECTOR ScreenPositionNear = DirectX::XMVectorSet(mouseX, mouseY, 0.0f, 1.0f);
-	DirectX::XMVECTOR ScreenPositionFar = DirectX::XMVectorSet(mouseX, mouseY, 1.0f, 1.0f);
+	DirectX::XMVECTOR ScreenPositionNear = DirectX::XMVectorSet(screenPosition.x, screenPosition.y, 0.0f, 1.0f);
+	DirectX::XMVECTOR ScreenPositionFar = DirectX::XMVectorSet(screenPosition.x, screenPosition.y, 1.0f, 1.0f);
 
 	// スクリーン空間からワールド空間への変換 (ニア平面の点)
 	DirectX::XMVECTOR WorldPositionNear = DirectX::XMVector3Unproject(
@@ -235,13 +229,13 @@ void PutBlock::performRaycast(DirectX::XMFLOAT3& RayState, DirectX::XMFLOAT3& Ra
 	);
 
 	// スクリーン空間からワールド空間への変換 (ファーフラストの点)
-	WorldPositionFar = DirectX::XMVector3Unproject(
+	DirectX::XMVECTOR WorldPositionFar = DirectX::XMVector3Unproject(
 		ScreenPositionFar,
 		0.0f, 0.0f, screenWidth, screenHeight, 0.0f, 1.0f,
 		Projection, View, World
 	);
 
-	//スクリーン座標をワールド座標変換し、レイの始点とレイの終点を求める
+	// レイの始点と終点を格納
 	DirectX::XMStoreFloat3(&RayState, WorldPositionNear);
 	DirectX::XMStoreFloat3(&RayEnd, WorldPositionFar);
 }

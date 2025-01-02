@@ -182,6 +182,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 	//		isGround = false;
 	//	}
 	}
+
 	float Blocksize = Stage::Instance().GetBlockSize();
 	int mapX = Stage::Instance().GetMapXsize();
 	int mapZ = Stage::Instance().GetMapZsize();
@@ -238,7 +239,9 @@ void Character::UpdateVerticalMove(float elapsedTime)
 			{
 			case 0:
 			case 1:
-			case 2:
+			case 2:		
+			case 102:
+			case 103:
 				position.y = hitPosition.y;
 				StopState = 0;
 				if (!isGround)
@@ -266,7 +269,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 				Velocity.y = 0.0f;
 				OnMovingFloorTime++;
 				//ブロックの端で作動するのを防ぐ
-				if (OnMovingFloorTime > 30)
+				if (OnMovingFloorTime > 10)
 				{
 					//あたったブロックのAngle.yに応じてVelocity.x,zを変える
 					if (std::abs(HitBlockAngle.y - 0.0f) < 0.01f) {
@@ -382,7 +385,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 					}
 					break;
 
-				case 2: // Enterキー待ち
+				case 2: // Enterキー若しくは一定時間待ち
 					OnMovingFloorTime += elapsedTime;
 					if (IsKeyPressed(VK_RETURN) || OnMovingFloorTime > 3) { // Enterキーが押されたら再開
 						StopState = 3;
@@ -402,6 +405,17 @@ void Character::UpdateVerticalMove(float elapsedTime)
 
 				case 4: // 完了状態
 					// 完了後、再度停止処理が発生しないように待機
+					break;
+				}
+				break;
+			case 104:
+				switch (StopState)
+				{
+				case 0:
+					Stage::Instance().BlockChange();
+					StopState++;
+				case 1:
+
 					break;
 				}
 				break;

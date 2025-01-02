@@ -55,6 +55,7 @@ private:
 		//垂直の移動更新
 	void UpdateHorizonMove(float elapsedTime);
 
+	//キーが押されたときの検知用
 	bool IsKeyPressed(int key) {
 		return (GetAsyncKeyState(key) & 0x8000) != 0;
 	}
@@ -62,6 +63,7 @@ private:
 protected:
 	DirectX::XMFLOAT3	TargetPosition = {0,0,0};
 	DirectX::XMFLOAT3	position = {0,0,0};
+	DirectX::XMFLOAT3	Statepos = {0,0,0};
 	DirectX::XMFLOAT3	Previousposition = {0,0,0};
 	DirectX::XMFLOAT3	angle = {0,0,0};
 	DirectX::XMFLOAT3	scale = {1,1,1};
@@ -76,6 +78,7 @@ protected:
 	virtual void OnDead() {};
 
 	float gravity = -30.0f;
+
 
 	DirectX::XMFLOAT3 Velocity = { 0,0,0 };
 

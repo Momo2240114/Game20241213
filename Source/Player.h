@@ -35,6 +35,7 @@ public:
 
 	void RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)override;
 
+	void SetStaetPos(DirectX::XMFLOAT3 State);
 private:
 	// スティック入力値から移動ベクトルを取得
 	DirectX::XMFLOAT3 GetMoveVec() const;
@@ -52,6 +53,7 @@ private:
 	void InputProjectile();
 
 	void CollisionPlayerVSEnemys();
+
 
 private:
 	Model* model = nullptr;
