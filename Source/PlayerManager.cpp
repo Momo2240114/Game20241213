@@ -52,3 +52,20 @@ void PlayerManager::Remove(Player* player)
 {
 	removes.insert(player);
 }
+
+//プレイヤーの再出現の管理用
+bool PlayerManager::PopCool(float elapsedTime)
+{
+	const int PlayerMax = 5;
+
+	if (!players.empty() && players.back()->pupCool() && PopPlayerNum() < PlayerMax)
+	{
+		moveStateTimer += elapsedTime;
+		if (PopTime < moveStateTimer)
+		{
+			moveStateTimer = 0.0f; // タイマーをリセット
+			return true;
+		}
+	}
+	return false;
+}
