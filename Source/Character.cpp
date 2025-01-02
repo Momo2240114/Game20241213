@@ -123,7 +123,6 @@ void Character::UpdateHorizonVelocity(float elapsedTime)
 	//MoveVecZ = 0.0f;
 }
 
-
 void Character::UpdateVerticalMove(float elapsedTime)
 {
 	//‘O‚Ì‚â‚Â
@@ -510,9 +509,6 @@ void Character::UpdateVerticalMove(float elapsedTime)
 	//		}
 	//	}
 	//}
-
-
-
 }
 
 void Character::UpdateHorizonMove(float elapsedTime)

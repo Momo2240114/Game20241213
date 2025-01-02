@@ -278,7 +278,10 @@ void Player::InputMove(float elapsedTime)
 	// ù‰ñˆ—
 	Turn(elapsedTime, moveVec.x, moveVec.z, turnSpeed);
 
-
+	if ((Statepos.x != position.x) || (Statepos.y != position.y) || (Statepos.z != position.z))
+	{
+		IsMove = true;
+	}
 }
 
 void Player::InputJump()
@@ -420,22 +423,8 @@ void Player::CollisionPlayerVSEnemys()
 	}
 }
 
-void Player::pupCool(float elapsedTime)
-{
-	if ((Statepos.x != position.x) && (Statepos.y != position.y) && (Statepos.z != position.z))
-	{
-		IsMove = true;
-		
-	}
 
-	if (IsMove)
-	{
-		moveStateTimer += elapsedTime;
-		if (moveStateTimer > PopTime)moveStateTimer = PopTime;
-	}
-}
-
-void Player::SetStaetPos(DirectX::XMFLOAT3 State)
+void Player::SetStartPos(DirectX::XMFLOAT3 State)
 {
 	Statepos = State;
 	position = Statepos;

@@ -20,17 +20,14 @@ void SceneGame::Initialize()
 
 	//プレイヤー初期化
 	/*player = new Player();*/
-	
+
+	//いったいめ
 	Player *One = new Player;
 
 	One->Initialize();
-	One->SetStaetPos(Stage::Instance().GetStatePos());
+	One->SetStartPos(Stage::Instance().GetStatePos());
 	PlayerManager::Instance().Register(One);
 	
-	Player *two = new Player;
-
-	two->Initialize();
-	PlayerManager::Instance().Register(two);
 
 
 	//カメラコントローラー初期化
@@ -124,6 +121,8 @@ void SceneGame::Update(float elapsedTime)
 	//Player::Instance().Update(elapsedTime);
 	PlayerManager::Instance().Update(elapsedTime);
 
+	PopPlayer(elapsedTime);
+
 	//エネミー更新処理
 	EnemyManager::Instance().Update(elapsedTime);
 }
@@ -187,9 +186,17 @@ void SceneGame::DrawGUI()
 	/*Player::Instance().DrawDebugGUI();*/
 }
 
-void SceneGame::PopPlayer()
+void SceneGame::PopPlayer(float elapsedTime)
 {
 
+	if (PlayerManager::Instance().PopCool(elapsedTime))
+	{
+		Player* PlayerPuls = new Player;
+
+		PlayerPuls->Initialize();
+		PlayerPuls->SetStartPos(Stage::Instance().GetStatePos());
+		PlayerManager::Instance().Register(PlayerPuls);
+	}
 }
 
 

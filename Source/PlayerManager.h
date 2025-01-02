@@ -38,8 +38,14 @@ public:
 
 	void Remove(Player* player);
 
+	bool PopCool(float elapsedTime);
+
+	int PopPlayerNum() { return players.size(); }
 private:
 	std::vector<Player*>		players;
 	std::set<Player*>		removes;
+
+	float moveStateTimer = 0;
+	const int PopTime = 20;
 };
 

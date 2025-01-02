@@ -28,7 +28,9 @@ public:
 
 	void RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)override;
 
-	void SetStaetPos(DirectX::XMFLOAT3 State);
+	void SetStartPos(DirectX::XMFLOAT3 State);
+
+	bool pupCool() { return IsMove; };
 private:
 	// スティック入力値から移動ベクトルを取得
 	DirectX::XMFLOAT3 GetMoveVec() const;
@@ -47,7 +49,6 @@ private:
 
 	void CollisionPlayerVSEnemys();
 
-	void pupCool(float elapsedTime);
 private:
 	Model* model = nullptr;
 	float		moveSpeed = 4.0f;
@@ -61,8 +62,7 @@ private:
 	bool IsGoal = false;
 	bool IsMove = false;
 
-	float moveStateTimer = 0;
-	const int PopTime = 20;
+
 
 	ProjectileManager projectileManager;
 };	
