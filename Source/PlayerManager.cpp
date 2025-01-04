@@ -31,6 +31,7 @@ void PlayerManager::Render(const RenderContext& rc, ModelRenderer* renderer)
 
 void PlayerManager::Register(Player* player)
 {
+	playerNo++;
 	players.emplace_back(player);
 }
 
@@ -57,15 +58,26 @@ void PlayerManager::Remove(Player* player)
 bool PlayerManager::PopCool(float elapsedTime)
 {
 	const int PlayerMax = 5;
-
-	if (!players.empty() && players.back()->pupCool() && PopPlayerNum() < PlayerMax)
-	{
-		moveStateTimer += elapsedTime;
-		if (PopTime < moveStateTimer)
+		if (!players.empty() && players.back()->pupCool())
 		{
-			moveStateTimer = 0.0f; // タイマーをリセット
-			return true;
+			moveStateTimer += elapsedTime;
+			if (PopTime < moveStateTimer && PopPlayerNum() <= PlayerMax)
+			{
+				moveStateTimer = 0.0f; // タイマーをリセット
+				return true;
+			}
 		}
-	}
+		for (Player* player : players)
+		{
+			if (player->ISGoal())
+			{
+				Remove(player);
+				if (PopPlayerNum() <= PlayerMax)
+				{
+					moveStateTimer = 0.0f; // タイマーをリセット
+					return true;
+				}
+			}
+		}
 	return false;
 }

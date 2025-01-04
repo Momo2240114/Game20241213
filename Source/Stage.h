@@ -95,7 +95,8 @@ private:
     Model* Blockmodel6 = nullptr;//停止
 
     //固定するブロック
-    Model* StatePoint = nullptr;//開始位置
+    Model* StartPoint = nullptr;//開始位置
+    Model* GoalPoint = nullptr;//開始位置
 
     Model* BlueBlock = nullptr;//ブルーブロック
     Model* BlueWaku = nullptr;//ブルー枠   

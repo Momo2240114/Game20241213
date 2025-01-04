@@ -13,7 +13,8 @@ void Stage::init()
     Blockmodel4 = new Model("Data/Model/Block/Block4.mdl");
     Blockmodel5 = new Model("Data/Model/Block/Block5.mdl");
     Blockmodel6 = new Model("Data/Model/Block/BlockStop.mdl");
-    StatePoint = new Model("Data/Model/Block/StatePoint.mdl");
+    StartPoint = new Model("Data/Model/Block/StatePoint.mdl");
+    GoalPoint = new Model("Data/Model/Block/Goal.mdl");
     BlueBlock = new Model("Data/Model/Block/BlueBlock.mdl");
     BlueWaku = new Model("Data/Model/Block/BlueWaku.mdl");   
     RedBlock = new Model("Data/Model/Block/RedBlock.mdl");
@@ -67,7 +68,7 @@ bool Stage::BlockRayCast(
                 case 4: blockModel = Blockmodel4; break;
                 case 5: blockModel = Blockmodel5; break;
                 case 6: blockModel = Blockmodel6; break;
-                case 101: blockModel = StatePoint; break;
+                case 101: blockModel = StartPoint; break;
                 case 102: 
                     if (OnBlockColer == OnBlockColer::Blue) {
                         blockModel = BlueBlock;
@@ -87,6 +88,9 @@ bool Stage::BlockRayCast(
                         continue;
                     }
 
+                    break;
+                case 105:
+                    blockModel = GoalPoint; break;
                     break;
                 }
 
@@ -133,7 +137,8 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
                     case 4: blockModel = Blockmodel4; break;
                     case 5: blockModel = Blockmodel5; break;
                     case 6: blockModel = Blockmodel6; break;
-                    case 101: blockModel = StatePoint; break;
+                    case 101: blockModel = StartPoint; break;
+                    case 105: blockModel = GoalPoint; break;
                     case 102:
                         if (OnBlockColer == OnBlockColer::Blue) {
                             blockModel = BlueBlock;
@@ -313,8 +318,10 @@ void Stage::Finalize()
     Blockmodel5 = nullptr;  
     delete Blockmodel6;
     Blockmodel6 = nullptr;    
-    delete   StatePoint;
-    StatePoint = nullptr;
+    delete   StartPoint;
+    StartPoint = nullptr;   
+    delete  GoalPoint;
+    GoalPoint = nullptr;
     delete BlueBlock;
     BlueBlock = nullptr;
     delete BlueWaku;
@@ -437,7 +444,10 @@ void Stage::BlockRender(const RenderContext& rc, ModelRenderer* renderer)
                         renderer->Render(rc, MapDate.transform[PY][PX][PZ], Blockmodel6, ShaderId::Lambert);
                         break;
                     case 101:
-                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], StatePoint, ShaderId::Lambert);
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], StartPoint, ShaderId::Lambert);
+                        break;               
+                    case 105:
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ],GoalPoint, ShaderId::Lambert);
                         break;
                     case 102:
                         if (OnBlockColer == OnBlockColer::Blue) {

@@ -45,7 +45,12 @@ public:
 	bool ApplyDamage(int damage ,float invincibletime);
 
 	void HandleBlockCollision(int blockID, const DirectX::XMFLOAT3& hitPosition, const DirectX::XMFLOAT3& hitNormal);
+
+
+	static int ISGoalNum() { return GoalNum; }
 private:
+	static int GoalNum;
+
 	//垂直の速力更新
 	void UpdateVerticalVelocity(float elapsedTime);	
 	//水平の速力更新
@@ -55,15 +60,11 @@ private:
 		//垂直の移動更新
 	void UpdateHorizonMove(float elapsedTime);
 
-	//キーが押されたときの検知用
-	bool IsKeyPressed(int key) {
-		return (GetAsyncKeyState(key) & 0x8000) != 0;
-	}
 
 protected:
 	DirectX::XMFLOAT3	TargetPosition = {0,0,0};
 	DirectX::XMFLOAT3	position = {0,0,0};
-	DirectX::XMFLOAT3	Statepos = {0,0,0};
+	DirectX::XMFLOAT3	Startpos = {0,0,0};
 	DirectX::XMFLOAT3	Previousposition = {0,0,0};
 	DirectX::XMFLOAT3	angle = {0,0,0};
 	DirectX::XMFLOAT3	scale = {1,1,1};
@@ -76,9 +77,17 @@ protected:
 
 	virtual void OnDamaged() {};
 	virtual void OnDead() {};
+	//キーが押されたときの検知用
+	bool IsKeyPressed(int key) {
+		return (GetAsyncKeyState(key) & 0x8000) != 0;
+	}
+
 
 	float gravity = -30.0f;
 
+	bool IsLive = false;
+	bool IsGoal = false;
+	bool IsMove = false;
 
 	DirectX::XMFLOAT3 Velocity = { 0,0,0 };
 
@@ -98,7 +107,7 @@ protected:
 
 	void Updateinvincibletimer(float elapsedTime);
 
-	float height = 2.0f;
+	float height = 4.0f;
 	float radius = 0.5f;
 
 	int Health = 5;
@@ -117,7 +126,7 @@ protected:
 	float MaxMoveSpeed = 0.1f;
 	float MoveVecX = 0.0f;
 	float MoveVecZ = 0.0f;
-
+	float moveSpeed = 3.0f;
 	float airControl = 1.3f;
 
 	float stepOffset = 1.0f;

@@ -40,12 +40,14 @@ public:
 
 	bool PopCool(float elapsedTime);
 
-	int PopPlayerNum() { return players.size(); }
+	int PopPlayerNum() { return playerNo; }
+
 private:
 	std::vector<Player*>		players;
 	std::set<Player*>		removes;
 
+	int playerNo = 0;
 	float moveStateTimer = 0;
-	const int PopTime = 20;
+	const int PopTime = 30;
 };
 
