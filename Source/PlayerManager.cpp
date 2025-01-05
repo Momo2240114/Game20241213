@@ -57,6 +57,7 @@ void PlayerManager::Remove(Player* player)
 //プレイヤーの再出現の管理用
 bool PlayerManager::PopCool(float elapsedTime)
 {
+
 	const int PlayerMax = 5;
 		if (!players.empty() && players.back()->pupCool())
 		{
@@ -80,4 +81,12 @@ bool PlayerManager::PopCool(float elapsedTime)
 			}
 		}
 	return false;
+}
+
+void PlayerManager::DrawDebugGUI()
+{
+	for (Player* player : players)
+	{
+		player->DrawDebugGUI();
+	}
 }

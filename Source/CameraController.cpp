@@ -9,8 +9,6 @@ void CameraController::Update(float elapsedTime)
     float ax = gamePad.GetAxisRX();
     float ay = gamePad.GetAxisRY();
 
-  
-
     // ボタン入力の確認（例：Aボタンで回転開始）
     {
         if (ax != 0)
@@ -102,6 +100,70 @@ void CameraController::Update(float elapsedTime)
         Camera::Instance().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
 
     }
+}
+
+DirectX::XMFLOAT3 CameraController::moveTarget(float elapsedTime)
+{
+    Input& input = Input::Instance();
+
+    // マウスの移動量を取得
+    static int lastMouseX = input.GetMouse().GetPositionX();
+    static int lastMouseY = input.GetMouse().GetPositionY();
+
+    int currentMouseX = input.GetMouse().GetPositionX();
+    int currentMouseY = input.GetMouse().GetPositionY();
+
+    float deltaX = static_cast<float>(currentMouseX - lastMouseX);
+    float deltaY = static_cast<float>(currentMouseY - lastMouseY);
+
+    lastMouseX = currentMouseX;
+    lastMouseY = currentMouseY;
+
+    if (!(input.GetMouse().GetButton() & Mouse::BTN_LEFT))
+    {
+        return target; // 左クリックされていない場合は何もしない
+    }
+
+    // マウス感度の設定
+    const float mouseSensitivity = 0.05f;
+
+    // カメラの向きを取得
+    Camera& camera = Camera::Instance();
+    DirectX::XMFLOAT3 cameraRight = camera.GetRight(); // カメラの右方向
+    DirectX::XMFLOAT3 cameraFront = camera.GetFront(); // カメラの前方向
+
+    // XZ平面上にベクトルを投影して単位ベクトル化
+    DirectX::XMFLOAT2 rightVec = { cameraRight.x, cameraRight.z };
+    DirectX::XMFLOAT2 frontVec = { cameraFront.x, cameraFront.z };
+
+    float rightLength = sqrtf(rightVec.x * rightVec.x + rightVec.y * rightVec.y);
+    float frontLength = sqrtf(frontVec.x * frontVec.x + frontVec.y * frontVec.y);
+
+    if (rightLength > 0.0f)
+    {
+        rightVec.x /= rightLength;
+        rightVec.y /= rightLength;
+    }
+    if (frontLength > 0.0f)
+    {
+        frontVec.x /= frontLength;
+        frontVec.y /= frontLength;
+    }
+
+    // マウスの移動をカメラの向きに合わせる
+    float moveX = (rightVec.x * -deltaX + frontVec.x * deltaY) * mouseSensitivity;
+    float moveZ = (rightVec.y * -deltaX + frontVec.y * deltaY) * mouseSensitivity;
+
+    // ターゲットの位置を更新
+    target.x += moveX;
+    target.z += moveZ;
+
+    if (target.x > 35)target.x = 35;
+    if (target.x < -35)target.x = -35;   
+    if (target.z > 35)target.z = 35;
+    if (target.z < -35)target.z = -35;
+
+    return target;
 }
 
 

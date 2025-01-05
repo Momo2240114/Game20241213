@@ -58,20 +58,17 @@ void Player::Update(float elapsedTime)
 		// 移動入力処理
 		InputMove(elapsedTime);
 		//InputJump();
-
-		
 		UpdateVelocity(elapsedTime);
-		projectileManager.Update(elapsedTime);
-		// オブジェクト行列を更新
-		UpdateTransform();
-		// モデル行列更新
-		model->UpdateTransform();
-
-		CollisionPlayerVSEnemys();
-
-		CollisionProjectileVsEnemies();
 	}
+	projectileManager.Update(elapsedTime);
+	// オブジェクト行列を更新
+	UpdateTransform();
+	// モデル行列更新
+	model->UpdateTransform();
 
+	CollisionPlayerVSEnemys();
+
+	CollisionProjectileVsEnemies();
 }
 
 void Player::Render(const RenderContext& rc, ModelRenderer* renderer)

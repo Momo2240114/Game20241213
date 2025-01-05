@@ -11,22 +11,35 @@ class PutBlock
 {
 public:
 	static PutBlock& Instance();
+	//ブロックの設置
 	void putBlockOnBlock();
+	//ブロックの種類角度を変える
 	void SetBlock();
+
 	void Initialize();
 	void Finalize();
+
 	void render(const RenderContext& rc, ModelRenderer* renderer);
+
 	void UpdateTransform();
+
 	void Update(float elapsedTime);
+
+	//カメラの目線からレイキャスト
 	void performRaycast(DirectX::XMFLOAT3& RayState, DirectX::XMFLOAT3& RayEnd);
-	
+
+	//ブロックを置くTypeが-1の時だけtrueカメラ移動用
+	bool PutOff() {
+		if (Type == -1)return true;
+		return false;
+	}
 
 private:
 	PutBlock() {};
 	~PutBlock() {};
 
 	const int maxType = 6;
-	const int minType = 0;
+	const int minType = -1;
 
 	Model* PutBlockModel = nullptr;
 	Model* EraseBlockModel = nullptr;

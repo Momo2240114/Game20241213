@@ -47,7 +47,6 @@ private:
 	// ƒWƒƒƒ“ƒv“ü—Íˆ—
 	void InputJump();
 
-	void InputRotate();
 
 	// ’eŠÛ“ü—Íˆ—
 	void InputProjectile();

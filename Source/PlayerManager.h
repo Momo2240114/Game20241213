@@ -42,6 +42,10 @@ public:
 
 	int PopPlayerNum() { return playerNo; }
 
+	//デバッグ用GUI描画
+	void DrawDebugGUI();
+
+
 private:
 	std::vector<Player*>		players;
 	std::set<Player*>		removes;
