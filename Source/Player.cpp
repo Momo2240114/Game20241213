@@ -60,6 +60,8 @@ void Player::Update(float elapsedTime)
 		//InputJump();
 		UpdateVelocity(elapsedTime);
 	}
+
+	DeadTime(elapsedTime);
 	projectileManager.Update(elapsedTime);
 	// オブジェクト行列を更新
 	UpdateTransform();
@@ -69,6 +71,11 @@ void Player::Update(float elapsedTime)
 	CollisionPlayerVSEnemys();
 
 	CollisionProjectileVsEnemies();
+
+	if (Velocity.x > 0)Velocity.x = moveSpeed;
+	if(Velocity.x < 0)Velocity.x = -moveSpeed;
+	if(Velocity.z > 0)Velocity.z = moveSpeed;
+	if(Velocity.z < 0)Velocity.z = -moveSpeed;
 }
 
 void Player::Render(const RenderContext& rc, ModelRenderer* renderer)
@@ -120,6 +127,18 @@ void Player::DrawDebugGUI()
 void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)
 {
 	projectileManager.RenderDebugPrimitive(rc, renderer);
+}
+
+void Player::DeadTime(float elapsedTime)
+{
+	if (IsMove && Velocity.x == 0 && Velocity.z == 0)
+	{
+		DeadTimer += elapsedTime;
+		if (DeadTimer > 3)
+		{
+			IsLive = true;
+		}
+	}
 }
 
 DirectX::XMFLOAT3 Player::GetMoveVec() const
@@ -265,22 +284,20 @@ void Player::CollisionProjectileVsEnemies()
 void Player::InputMove(float elapsedTime)
 {
 	// 進行ベクトル取得
-	DirectX::XMFLOAT3 moveVec = GetMoveVec();
+	DirectX::XMFLOAT3 moveVec = {0,0,0};
+	if (!IsMove)
+	{
+		moveVec = GetMoveVec();
+	}
 	//moveVec = {0,0,0};
 	// 移動処理
 	if(moveState == 1)
 	{
-		if (Velocity.x != 0 || Velocity.z != 0 && !IsMove)  moveVec = Velocity;
-		if (moveState == 2)
-		{
-			moveVec = { 0,0,0 };
-		}
+		if (Velocity.x != 0 || Velocity.z != 0 && !IsMove) moveVec = Velocity;
 		Move(elapsedTime, moveVec.x, moveVec.z, moveSpeed);
 	}
-	if (moveState != 2) {
-		// 旋回処理
-		Turn(elapsedTime, moveVec.x, moveVec.z, turnSpeed);
-	}
+	// 旋回処理
+	Turn(elapsedTime, moveVec.x, moveVec.z, turnSpeed);
 
 	if (Startpos.x != position.x || Startpos.z != position.z)
 	{

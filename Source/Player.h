@@ -32,6 +32,9 @@ public:
 
 	bool pupCool() { return IsMove; };
 	bool ISGoal() { return IsGoal; };
+	bool IsDead() { return IsLive; };
+
+	void DeadTime(float elapsedTime);
 
 private:
 	// スティック入力値から移動ベクトルを取得
@@ -64,7 +67,7 @@ private:
 
 	bool IsControllable = true; // 初期状態では操作可能
 
-
+	float DeadTimer = 0;
 
 	ProjectileManager projectileManager;
 };	

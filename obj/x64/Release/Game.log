@@ -1,13 +1,15 @@
-﻿  Character.cpp
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.h(115,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/Character.cpp' をコンパイルしています)
+﻿  Player.cpp
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(115,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル 'Source/Player.cpp' をコンパイルしています)
   
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.cpp(45,20): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.cpp(739,22): warning C4244: '-=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  (ソース ファイル 'Source/Player.cpp' をコンパイルしています)
+  
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Player.cpp(13,13): warning C4356: 'Character::GoalNum': 静的データ メンバーは派生クラスを使って初期化できません。
      ライブラリ bin\x64\Release\Game.lib とオブジェクト bin\x64\Release\Game.exp を作成中
   コード生成しています。
-  2 of 4967 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  0 of 4969 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    32 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Game.vcxproj -> C:\Users\2240114\Desktop\チーム制作３\GitHub\bin\x64\Release\Game.exe

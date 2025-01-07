@@ -46,6 +46,10 @@ public:
 	void DrawDebugGUI();
 
 
+	bool EndGame() {
+		if (GoalNum + DeadNum >= PlayerMax)return true;
+		return false;
+	}
 private:
 	std::vector<Player*>		players;
 	std::set<Player*>		removes;
@@ -53,5 +57,9 @@ private:
 	int playerNo = 0;
 	float moveStateTimer = 0;
 	const int PopTime = 10;
+
+	const int PlayerMax = 15;
+	int GoalNum = 0;
+	int DeadNum = 0;
 };
 

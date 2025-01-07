@@ -58,7 +58,6 @@ void PlayerManager::Remove(Player* player)
 bool PlayerManager::PopCool(float elapsedTime)
 {
 
-	const int PlayerMax = 15;
 		if (!players.empty() && players.back()->pupCool())
 		{
 			moveStateTimer += elapsedTime;
@@ -73,6 +72,17 @@ bool PlayerManager::PopCool(float elapsedTime)
 			if (player->ISGoal())
 			{
 				Remove(player);
+				GoalNum++;
+				if (PopPlayerNum() <= PlayerMax)
+				{
+					moveStateTimer = 0.0f; // タイマーをリセット
+					return true;
+				}
+			}
+			if (player->IsDead())
+			{
+				Remove(player);
+				DeadNum++;
 				if (PopPlayerNum() <= PlayerMax)
 				{
 					moveStateTimer = 0.0f; // タイマーをリセット
