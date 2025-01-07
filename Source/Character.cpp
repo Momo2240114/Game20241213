@@ -563,8 +563,6 @@ void Character::UpdateHorizonMove(float elapsedTime)
 		hitHead = Stage::Instance().UnifiedRayCast(sHead, eHead, pHead, nHead, HitBlockAngle, HitBlock, true, true);
 		if (hitFeet)
 		{
-			moveState = 2;
-
 			Velocity.x = 0;
 			Velocity.z = 0;
 			 //足元がヒットした場合、衝突点と法線を取得
