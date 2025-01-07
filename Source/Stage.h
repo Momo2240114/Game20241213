@@ -95,14 +95,15 @@ private:
     Model* Blockmodel6 = nullptr;//停止
 
     //固定するブロック
-    Model* StatePoint = nullptr;//開始位置
+    Model* StartPoint = nullptr;//開始位置
+    Model* GoalPoint = nullptr;//開始位置
 
     Model* BlueBlock = nullptr;//ブルーブロック
     Model* BlueWaku = nullptr;//ブルー枠   
     Model* RedBlock = nullptr;//レッドブロック
     Model* RedWaku = nullptr;//レッド枠
     Model* Switch = nullptr;//スイッチ
-    int OnBlockColer = 0;
+    int OnBlockColer = 0;//色ブロックの管理用色が増えてもいいようにintで
 
     int timer = 0;
 };

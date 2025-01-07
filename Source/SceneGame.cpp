@@ -48,7 +48,7 @@ void SceneGame::Initialize()
 		1000.0f	//クリップ距離（遠）
 	);
 
-	target = { 0,0,0 };
+	target = { 0,-3,0 };
 	target.y = 0.5f;
 
 	// エネミー初期化
@@ -64,7 +64,6 @@ void SceneGame::Initialize()
 	//	slime->SetTerritory(slime->GetPosition(), 10.0f);
 	//	enemyManager.Register(slime);
 	//}
-
 
 	this->SetReady();
 }
@@ -106,7 +105,12 @@ void SceneGame::Update(float elapsedTime)
 	//カメラコントローラー更新処理
 	//DirectX::XMFLOAT3 target = Player::Instance().GetPosition();
 
-	cameraController->SetTarget(target);
+	if (PutBlock::Instance().PutOff())
+	{
+		DirectX::XMFLOAT3 target = cameraController->moveTarget(elapsedTime);
+	}
+
+	//cameraController->SetTarget(target);
 	cameraController->Update(elapsedTime);
 
 	//ステージ更新処理
@@ -183,12 +187,11 @@ void SceneGame::Render()
 void SceneGame::DrawGUI()
 {
 	/*player->DrawDebugGUI();*/
-	/*Player::Instance().DrawDebugGUI();*/
+	PlayerManager::Instance().DrawDebugGUI();
 }
 
 void SceneGame::PopPlayer(float elapsedTime)
 {
-
 	if (PlayerManager::Instance().PopCool(elapsedTime))
 	{
 		Player* PlayerPuls = new Player;

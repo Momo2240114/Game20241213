@@ -10,6 +10,7 @@
 #include "System/Graphics.h"
 #include "Stage.h"
 
+int Player::GoalNum = 0;
 
 void Player::OnLanding()
 {
@@ -34,14 +35,14 @@ void Player::OnLanding()
 // コンストラクタの代わり
 void Player::Initialize()
 {
-	model = new Model("Data/Model/Mr.Incredible/Mr.Incredible.mdl");
+	model = new Model("Data/Model/Player/Player.mdl");
 
 	// モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.02f;
+	scale.x = scale.y = scale.z = 0.2f;
 
 	position.y = 5;
 
-	Statepos = position;
+	Startpos = position;
 }
 
 // デストラクタの代わり
@@ -52,29 +53,22 @@ void Player::Finalize()
 
 void Player::Update(float elapsedTime)
 {
-
-
-	// 移動入力処理
-	InputMove(elapsedTime);
-
-	InputJump();
-
-	InputProjectile();
-
-	UpdateVelocity(elapsedTime);
-
+	if (!IsGoal)
+	{
+		// 移動入力処理
+		InputMove(elapsedTime);
+		//InputJump();
+		UpdateVelocity(elapsedTime);
+	}
 	projectileManager.Update(elapsedTime);
-
 	// オブジェクト行列を更新
 	UpdateTransform();
-
 	// モデル行列更新
 	model->UpdateTransform();
 
 	CollisionPlayerVSEnemys();
 
 	CollisionProjectileVsEnemies();
-
 }
 
 void Player::Render(const RenderContext& rc, ModelRenderer* renderer)
@@ -130,6 +124,7 @@ void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* render
 
 DirectX::XMFLOAT3 Player::GetMoveVec() const
 {
+
 	// 入力情報を取得
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	float ax = gamePad.GetAxisLX();
@@ -175,6 +170,7 @@ DirectX::XMFLOAT3 Player::GetMoveVec() const
 	vec.y = 0.0f;
 
 	return vec;
+
 	//   // 入力情報を取得
 	//GamePad& gamePad = Input::Instance().GetGamePad();
 	//float ax = gamePad.GetAxisLX();
@@ -271,16 +267,28 @@ void Player::InputMove(float elapsedTime)
 	// 進行ベクトル取得
 	DirectX::XMFLOAT3 moveVec = GetMoveVec();
 	//moveVec = {0,0,0};
-
 	// 移動処理
-	Move(elapsedTime, moveVec.x, moveVec.z, moveSpeed);
+	if(moveState == 1)
+	{
+		if (Velocity.x != 0 || Velocity.z != 0 && !IsMove)  moveVec = Velocity;
+		if (moveState == 2)
+		{
+			moveVec = { 0,0,0 };
+		}
+		Move(elapsedTime, moveVec.x, moveVec.z, moveSpeed);
+	}
+	if (moveState != 2) {
+		// 旋回処理
+		Turn(elapsedTime, moveVec.x, moveVec.z, turnSpeed);
+	}
 
-	// 旋回処理
-	Turn(elapsedTime, moveVec.x, moveVec.z, turnSpeed);
-
-	if ((Statepos.x != position.x) || (Statepos.y != position.y) || (Statepos.z != position.z))
+	if (Startpos.x != position.x || Startpos.z != position.z)
 	{
 		IsMove = true;
+	}
+	if (IsKeyPressed(VK_RETURN))
+	{
+		moveState = 1;
 	}
 }
 
@@ -426,8 +434,8 @@ void Player::CollisionPlayerVSEnemys()
 
 void Player::SetStartPos(DirectX::XMFLOAT3 State)
 {
-	Statepos = State;
-	position = Statepos;
+	Startpos = State;
+	position = Startpos;
 }
 
 

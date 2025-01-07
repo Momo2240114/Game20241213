@@ -31,9 +31,12 @@ public:
 	void SetStartPos(DirectX::XMFLOAT3 State);
 
 	bool pupCool() { return IsMove; };
+	bool ISGoal() { return IsGoal; };
+
 private:
 	// スティック入力値から移動ベクトルを取得
 	DirectX::XMFLOAT3 GetMoveVec() const;
+	DirectX::XMFLOAT3 LastVec;
 
 	//弾丸Vsエネミー当たり判定
 	void CollisionProjectileVsEnemies();
@@ -44,6 +47,7 @@ private:
 	// ジャンプ入力処理
 	void InputJump();
 
+
 	// 弾丸入力処理
 	void InputProjectile();
 
@@ -51,16 +55,14 @@ private:
 
 private:
 	Model* model = nullptr;
-	float		moveSpeed = 4.0f;
+
 	float		turnSpeed = DirectX::XMConvertToRadians(720);
 	float jumpSpeed = 8.0f;
 	//float rot = 0.0f;//ImGuiで変移を見たく、メンバ変数に変更
 	int JumpCount = 0;
 	int JumpLimit = 2;
 
-	bool IsLive = false;
-	bool IsGoal = false;
-	bool IsMove = false;
+	bool IsControllable = true; // 初期状態では操作可能
 
 
 

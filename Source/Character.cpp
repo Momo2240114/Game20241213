@@ -148,38 +148,38 @@ void Character::UpdateVerticalMove(float elapsedTime)
 	}
 	//頭なし
 	{
-	//	float my = Velocity.y * elapsedTime;
+		//	float my = Velocity.y * elapsedTime;
 
-	//	if (my < 1.0f)
-	//	{
-	//		DirectX::XMFLOAT3 start = { position.x,position.y + stepOffset,position.z };
-	//		DirectX::XMFLOAT3 end = { position.x,position.y + my,position.z };
+		//	if (my < 1.0f)
+		//	{
+		//		DirectX::XMFLOAT3 start = { position.x,position.y + stepOffset,position.z };
+		//		DirectX::XMFLOAT3 end = { position.x,position.y + my,position.z };
 
-	//		DirectX::XMFLOAT3 hitPosition;
-	//		DirectX::XMFLOAT3 hitNormal;
+		//		DirectX::XMFLOAT3 hitPosition;
+		//		DirectX::XMFLOAT3 hitNormal;
 
-	//		if (Stage::Instance().RayCast(start, end, hitPosition, hitNormal))
-	//		{
-	//			position.y = hitPosition.y;
+		//		if (Stage::Instance().RayCast(start, end, hitPosition, hitNormal))
+		//		{
+		//			position.y = hitPosition.y;
 
-	//			if (!isGround)
-	//			{
-	//				OnLanding();
-	//			}
-	//			isGround = true;
-	//			Velocity.y = 0.0f;
-	//		}
-	//		else
-	//		{
-	//			position.y += my;
-	//			isGround = false;
-	//		}
-	//	}
-	//	else if (my > 0.0f)
-	//	{
-	//		position.y += my;
-	//		isGround = false;
-	//	}
+		//			if (!isGround)
+		//			{
+		//				OnLanding();
+		//			}
+		//			isGround = true;
+		//			Velocity.y = 0.0f;
+		//		}
+		//		else
+		//		{
+		//			position.y += my;
+		//			isGround = false;
+		//		}
+		//	}
+		//	else if (my > 0.0f)
+		//	{
+		//		position.y += my;
+		//		isGround = false;
+		//	}
 	}
 
 	float Blocksize = Stage::Instance().GetBlockSize();
@@ -230,14 +230,14 @@ void Character::UpdateVerticalMove(float elapsedTime)
 
 
 
-		if (Stage::Instance().UnifiedRayCast(start, end, hitPosition, hitNormal, HitBlockAngle,HitBlock,true,true))
+		if (Stage::Instance().UnifiedRayCast(start, end, hitPosition, hitNormal, HitBlockAngle, HitBlock, true, true))
 		{
 			//あたったブロックに応じて処理を変える
 			switch (HitBlock)
 			{
 			case 0:
 			case 1:
-			case 2:		
+			case 2:
 			case 102:
 			case 103:
 				position.y = hitPosition.y;
@@ -273,14 +273,14 @@ void Character::UpdateVerticalMove(float elapsedTime)
 					if (std::abs(HitBlockAngle.y - 0.0f) < 0.01f) {
 						angle.y = HitBlockAngle.y;
 						Velocity.x = 0;
-						Velocity.z = 4;
+						Velocity.z = moveSpeed;
 						// より近い2の倍数にx位置を補正
 						position.x = static_cast<float>(round(position.x / 2.0f) * 2);
 						OnMovingFloorTime = 0;
 					}
 					else if (std::abs(HitBlockAngle.y - anglepattern) < 0.01f) {
 						angle.y = HitBlockAngle.y;
-						Velocity.x = 4;
+						Velocity.x = moveSpeed;
 						Velocity.z = 0;
 						OnMovingFloorTime = 0;
 						// より近い2の倍数にz位置を補正
@@ -289,14 +289,14 @@ void Character::UpdateVerticalMove(float elapsedTime)
 					else if (std::abs(HitBlockAngle.y - anglepattern * 2) < 0.01f) {
 						angle.y = HitBlockAngle.y;
 						Velocity.x = 0;
-						Velocity.z = -4;
+						Velocity.z = -moveSpeed;
 						// より近い2の倍数にx位置を補正
 						position.x = static_cast<float>(round(position.x / 2.0f) * 2);
 						OnMovingFloorTime = 0;
 					}
 					else if (std::abs(HitBlockAngle.y - anglepattern * 3) < 0.01f) {
 						angle.y = HitBlockAngle.y;
-						Velocity.x = -4;
+						Velocity.x = -moveSpeed;
 						Velocity.z = 0;
 						OnMovingFloorTime = 0;
 						// より近い2の倍数にz位置を補正
@@ -312,37 +312,37 @@ void Character::UpdateVerticalMove(float elapsedTime)
 				}
 				isGround = true;
 				Velocity.y = 0.0f;
-					Jump(15);
-					//あたったブロックのAngle.yに応じてVelocity.x,zを変える
-					if (abs(HitBlockAngle.y) < 0.01f) {
-						angle.y = HitBlockAngle.y;
-						Velocity.x = 0;
-						Velocity.z = 4;
-						// より近い2の倍数にx位置を補正
-						position.x = static_cast<float>(round(position.x / 2.0f) * 2);
-					}
-					else if (abs(HitBlockAngle.y - anglepattern) < 0.01f) {
-						angle.y = HitBlockAngle.y;
-						Velocity.x = 4;
-						Velocity.z = 0;
-						// より近い2の倍数にz位置を補正
-						position.z = static_cast<float>(round(position.z / 2.0f) * 2);
-					}
-					else if (abs(HitBlockAngle.y - anglepattern * 2) < 0.01f) {
-						angle.y = HitBlockAngle.y;
-						Velocity.x = 0;
-						Velocity.z = -4;
-						// より近い2の倍数にx位置を補正
-						position.x = static_cast<float>(round(position.x / 2.0f) * 2);
-					}
-					else if (abs(HitBlockAngle.y - anglepattern * 3) < 0.01f) {
-						angle.y = HitBlockAngle.y;
-						Velocity.x = -4;
-						Velocity.z = 0;
-						// より近い2の倍数にz位置を補正
-						position.z = static_cast<float>(round(position.z / 2.0f) * 2);
-					}
-					break;
+				Jump(15);
+				//あたったブロックのAngle.yに応じてVelocity.x,zを変える
+				if (abs(HitBlockAngle.y) < 0.01f) {
+					angle.y = HitBlockAngle.y;
+					Velocity.x = 0;
+					Velocity.z = moveSpeed;
+					// より近い2の倍数にx位置を補正
+					position.x = static_cast<float>(round(position.x / 2.0f) * 2);
+				}
+				else if (abs(HitBlockAngle.y - anglepattern) < 0.01f) {
+					angle.y = HitBlockAngle.y;
+					Velocity.x = moveSpeed;
+					Velocity.z = 0;
+					// より近い2の倍数にz位置を補正
+					position.z = static_cast<float>(round(position.z / 2.0f) * 2);
+				}
+				else if (abs(HitBlockAngle.y - anglepattern * 2) < 0.01f) {
+					angle.y = HitBlockAngle.y;
+					Velocity.x = 0;
+					Velocity.z = -moveSpeed;
+					// より近い2の倍数にx位置を補正
+					position.x = static_cast<float>(round(position.x / 2.0f) * 2);
+				}
+				else if (abs(HitBlockAngle.y - anglepattern * 3) < 0.01f) {
+					angle.y = HitBlockAngle.y;
+					Velocity.x = -moveSpeed;
+					Velocity.z = 0;
+					// より近い2の倍数にz位置を補正
+					position.z = static_cast<float>(round(position.z / 2.0f) * 2);
+				}
+				break;
 
 			case 6:
 				switch (StopState)
@@ -392,12 +392,6 @@ void Character::UpdateVerticalMove(float elapsedTime)
 
 				case 3: // 停止解除
 					Velocity = OldVelocity; // 保存しておいた速度を復元
-
-					// 速度がゼロの場合、デフォルトの前進速度を設定
-					if (Velocity.x == 0 && Velocity.z == 0) {
-						Velocity.z = 4.0f; // デフォルトの前進速度
-					}
-
 					StopState = 4; // 完了状態へ移行
 					break;
 
@@ -412,13 +406,24 @@ void Character::UpdateVerticalMove(float elapsedTime)
 				case 0:
 					Stage::Instance().BlockChange();
 					StopState++;
+					break;
 				case 1:
 
 					break;
 				}
 				break;
+			case 105:
+				OnMovingFloorTime += elapsedTime;
+				if (OnMovingFloorTime > 1)
+				{
+					IsGoal = true;
+					Velocity = { 0.0f, 0.0f, 0.0f }; //停止
+					
+				}
+
+				break;
 			}
-			
+
 		}
 		else
 		{
@@ -428,88 +433,32 @@ void Character::UpdateVerticalMove(float elapsedTime)
 			isGround = false;
 		}
 	}
+	if (my > 0.0f) // 上方向の移動（ジャンプ）
+	{
+		// 足元基準でレイを発射
+		DirectX::XMFLOAT3 start = { position.x, position.y + height - stepOffset, position.z }; // 頭+オフセット
+		DirectX::XMFLOAT3 end = { position.x, position.y + my + height, position.z }; // ジャンプ先の足元位置
 
+		DirectX::XMFLOAT3 hitPosition;
+		DirectX::XMFLOAT3 hitNormal;
 
-	//{
-	//	if (my < 1.0f) // 下方向の移動（落下）
-	//	{
-	//		DirectX::XMFLOAT3 start = { position.x, position.y + stepOffset/2, position.z };
-	//		DirectX::XMFLOAT3 end = { position.x, position.y + my, position.z };
+		if (Stage::Instance().UnifiedRayCast(start, end, hitPosition, hitNormal, HitBlockAngle, HitBlock, true, true))
+		{
+			// 天井に衝突した場合、足元のY座標を天井の衝突位置からキャラクターの高さ分引く
+			position.y = hitPosition.y - height;
 
-	//		DirectX::XMFLOAT3 hitPosition;
-	//		DirectX::XMFLOAT3 hitNormal;
-
-	//		if (Stage::Instance().RayCast(start, end, hitPosition, hitNormal))
-	//		{
-	//			position.y = hitPosition.y;
-
-	//			if (!isGround)
-	//			{
-	//				OnLanding();
-	//			}
-	//			isGround = true;
-	//			Velocity.y = 0.0f;
-	//		}
-	//		else
-	//		{
-	//			position.y += my;
-	//			isGround = false;
-	//		}
-	//	}
-	//	if (my < 1.0f) // 下方向の移動（落下）
-	//	{
-	//		DirectX::XMFLOAT3 start = { position.x, position.y + stepOffset, position.z };
-	//		DirectX::XMFLOAT3 end = { position.x, position.y + my, position.z };
-
-	//		DirectX::XMFLOAT3 hitPosition;
-	//		DirectX::XMFLOAT3 hitNormal;
-	//		if (Stage::Instance().BlockRayCast(start, end, hitPosition, hitNormal, HitBlock))
-	//		{
-	//			switch (HitBlock)
-	//			{
-	//			case 1:
-	//			case 2:
-	//				position.y = hitPosition.y;
-
-	//				if (!isGround)
-	//				{
-	//					OnLanding();
-	//				}
-	//				isGround = true;
-	//				Velocity.y = 0.0f;
-	//				break;
-	//			case 3:
-	//				position.y = hitPosition.y;
-	//				isGround = true;
-	//				Jump(16);
-	//				break;
-	//			}
-
-	//		}
-	//	}
-	//	else if (my > 0.0f) // 上方向の移動（ジャンプ）
-	//	{
-	//		DirectX::XMFLOAT3 start = { position.x, position.y + height - stepOffset, position.z };
-	//		DirectX::XMFLOAT3 end = { position.x, position.y + height + my, position.z };
-
-	//		DirectX::XMFLOAT3 hitPosition;
-	//		DirectX::XMFLOAT3 hitNormal;
-
-	//		if (Stage::Instance().RayCast(start, end, hitPosition, hitNormal))
-	//		{
-	//			position.y = hitPosition.y - height - my; // 頭が天井に接触した場合、頭の高さ分調整
-
-	//			isGround = false;
-	//			Velocity.y = 0.0f; // 上方向の速度をゼロにする
-	//		}
-	//		else
-	//		{
-	//			position.y += my;
-	//			isGround = false;
-	//		}
-	//	}
-	//}
+			isGround = false;
+			Velocity.y = 0.0f; // 上方向の速度をゼロにする
+		}
+		else
+		{
+			// 衝突しない場合は通常通りY座標を加算
+			position.y += my;
+			isGround = false;
+		}
+	}
 }
+
 
 void Character::UpdateHorizonMove(float elapsedTime)
 {
@@ -596,19 +545,26 @@ void Character::UpdateHorizonMove(float elapsedTime)
 		const DirectX::XMFLOAT3 sFeet = { position.x, position.y + stepOffset, position.z };
 		const DirectX::XMFLOAT3 eFeet = { position.x + moveX * 2, position.y + stepOffset, position.z + moveZ * 2 };
 
+		DirectX::XMFLOAT3 sHead = { position.x, position.y + height, position.z }; // 頭+オフセット
+		DirectX::XMFLOAT3 eHead = { position.x + moveX * 2, position.y + height, position.z + moveZ * 2 }; // ジャンプ先の足元位置
+
 		// 法線ベクトルと交点の保存先
 		DirectX::XMFLOAT3 pFeet, nFeet;
+		DirectX::XMFLOAT3 pHead, nHead;
 
 		int HitBlock = 0;
 		//bool shouldRayCast = (position.x != Previousposition.x || position.z != Previousposition.z);
 
 		// 足元の当たり判定だけ行う
 		bool hitFeet = false;
+		bool hitHead = false;
 		bool hitBlockFeet = false;
 		hitFeet = Stage::Instance().UnifiedRayCast(sFeet, eFeet, pFeet, nFeet, HitBlockAngle, HitBlock,true,true);
-
+		hitHead = Stage::Instance().UnifiedRayCast(sHead, eHead, pHead, nHead, HitBlockAngle, HitBlock, true, true);
 		if (hitFeet)
 		{
+			moveState = 2;
+
 			Velocity.x = 0;
 			Velocity.z = 0;
 			 //足元がヒットした場合、衝突点と法線を取得
@@ -642,6 +598,8 @@ void Character::UpdateHorizonMove(float elapsedTime)
 
 				position.x = correctedPositionFloat3.x;
 				position.z = correctedPositionFloat3.z;
+
+				
 			}
 			else
 			{
@@ -651,6 +609,62 @@ void Character::UpdateHorizonMove(float elapsedTime)
 			if (Stage::Instance().RayCast(sFeet, q, pFeet, nFeet))
 			{
 				DirectX::XMVECTOR correctedPosition = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&pFeet), DirectX::XMVectorScale(N, 0.05f));
+				DirectX::XMFLOAT3 correctedPositionFloat3;
+				DirectX::XMStoreFloat3(&correctedPositionFloat3, correctedPosition);
+
+				position.x = correctedPositionFloat3.x;
+				position.z = correctedPositionFloat3.z;
+			}
+			else
+			{
+				position.x = q.x;
+				position.z = q.z;
+			}
+		}
+		else if(hitHead)
+		{
+			Velocity.x = 0;
+			Velocity.z = 0;
+			//足元がヒットした場合、衝突点と法線を取得
+			DirectX::XMFLOAT3 p = pHead;
+			DirectX::XMFLOAT3 n = nHead;
+			DirectX::XMFLOAT3 an;
+
+			//衝突点と現在位置の差分を計算
+			DirectX::XMVECTOR P = DirectX::XMLoadFloat3(&p);
+			DirectX::XMVECTOR E = DirectX::XMLoadFloat3(&eHead);
+			DirectX::XMVECTOR PE = DirectX::XMVectorSubtract(E, P);
+
+			DirectX::XMVECTOR N = DirectX::XMLoadFloat3(&n);
+			DirectX::XMVECTOR A = DirectX::XMVector3Dot(PE, N);
+
+			float a = DirectX::XMVectorGetX(A) - 0.09f; // めり込みを広く取る
+			DirectX::XMVECTOR R = DirectX::XMVectorSubtract(PE, DirectX::XMVectorScale(N, a));
+			DirectX::XMVECTOR Q = DirectX::XMVectorAdd(P, R);
+
+			DirectX::XMFLOAT3 q;
+			DirectX::XMStoreFloat3(&q, Q);
+
+			//衝突点で再度レイキャストを行って修正された位置を計算
+			if (Stage::Instance().UnifiedRayCast(sHead, q, pHead, nHead, an, HitBlock, true))
+			{
+				Velocity.x = 0;
+				Velocity.z = 0;
+				DirectX::XMVECTOR correctedPosition = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&pHead), DirectX::XMVectorScale(N, 0.05f));
+				DirectX::XMFLOAT3 correctedPositionFloat3;
+				DirectX::XMStoreFloat3(&correctedPositionFloat3, correctedPosition);
+
+				position.x = correctedPositionFloat3.x;
+				position.z = correctedPositionFloat3.z;
+			}
+			else
+			{
+				position.x = q.x;
+				position.z = q.z;
+			}
+			if (Stage::Instance().RayCast(sHead, q, pHead, nHead))
+			{
+				DirectX::XMVECTOR correctedPosition = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&pHead), DirectX::XMVectorScale(N, 0.05f));
 				DirectX::XMFLOAT3 correctedPositionFloat3;
 				DirectX::XMStoreFloat3(&correctedPositionFloat3, correctedPosition);
 

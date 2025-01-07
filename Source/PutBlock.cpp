@@ -85,8 +85,6 @@ void PutBlock::putBlockOnBlock()
 
 void PutBlock::SetBlock()
 {
-
-
 	if (Input::Instance().GetMouse().GetButtonDown() & Mouse::BTN_MIDDLE)
 	{
 		Angle.y += DirectX::XMConvertToRadians(90.0f);
@@ -192,10 +190,13 @@ void PutBlock::UpdateTransform()
 
 void PutBlock::Update(float elapsedTime)
 {
+
 	SetBlock();
-	//putBlock();
-	putBlockOnBlock();
-	UpdateTransform();
+	if (Type != -1)
+	{
+		putBlockOnBlock();
+		UpdateTransform();
+	}
 }
 
 void PutBlock::performRaycast(DirectX::XMFLOAT3& RayState, DirectX::XMFLOAT3& RayEnd)
