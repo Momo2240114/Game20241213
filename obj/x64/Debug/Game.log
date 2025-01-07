@@ -1,1 +1,2 @@
-﻿  Game.vcxproj -> C:\Users\2240045\Desktop\チーム製作\5\bin\x64\Debug\Game.exe
+﻿  Main.cpp
+C:\Users\2240045\Desktop\チーム製作\5\Source\Main.cpp(58,43): error C2065: '_CRTDBG_LzEAK_CHECK_DF': 定義されていない識別子です。
