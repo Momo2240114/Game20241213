@@ -52,6 +52,6 @@ private:
 
 	int playerNo = 0;
 	float moveStateTimer = 0;
-	const int PopTime = 30;
+	const int PopTime = 10;
 };
 

@@ -129,6 +129,8 @@ protected:
 	float moveSpeed = 3.0f;
 	float airControl = 1.3f;
 
+	int moveState = 0;
+
 	float stepOffset = 1.0f;
 };
 

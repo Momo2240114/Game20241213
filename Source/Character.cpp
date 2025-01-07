@@ -392,12 +392,6 @@ void Character::UpdateVerticalMove(float elapsedTime)
 
 				case 3: // 停止解除
 					Velocity = OldVelocity; // 保存しておいた速度を復元
-
-					// 速度がゼロの場合、デフォルトの前進速度を設定
-					if (Velocity.x == 0 && Velocity.z == 0) {
-						Velocity.z = moveSpeed; // デフォルトの前進速度
-					}
-
 					StopState = 4; // 完了状態へ移行
 					break;
 
@@ -569,6 +563,8 @@ void Character::UpdateHorizonMove(float elapsedTime)
 		hitHead = Stage::Instance().UnifiedRayCast(sHead, eHead, pHead, nHead, HitBlockAngle, HitBlock, true, true);
 		if (hitFeet)
 		{
+			moveState = 2;
+
 			Velocity.x = 0;
 			Velocity.z = 0;
 			 //足元がヒットした場合、衝突点と法線を取得
@@ -602,6 +598,8 @@ void Character::UpdateHorizonMove(float elapsedTime)
 
 				position.x = correctedPositionFloat3.x;
 				position.z = correctedPositionFloat3.z;
+
+				
 			}
 			else
 			{

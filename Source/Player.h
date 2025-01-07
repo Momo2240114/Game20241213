@@ -64,7 +64,7 @@ private:
 
 	bool IsControllable = true; // ‰Šúó‘Ô‚Å‚Í‘€ì‰Â”\
 
-	int moveState = 0;
+
 
 	ProjectileManager projectileManager;
 };	

@@ -35,10 +35,10 @@ void Player::OnLanding()
 // コンストラクタの代わり
 void Player::Initialize()
 {
-	model = new Model("Data/Model/Mr.Incredible/Mr.Incredible.mdl");
+	model = new Model("Data/Model/Player/Player.mdl");
 
 	// モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.02f;
+	scale.x = scale.y = scale.z = 0.2f;
 
 	position.y = 5;
 
@@ -270,13 +270,17 @@ void Player::InputMove(float elapsedTime)
 	// 移動処理
 	if(moveState == 1)
 	{
-		if (Velocity.x != 0 || Velocity.z != 0)  moveVec = Velocity;
+		if (Velocity.x != 0 || Velocity.z != 0 && !IsMove)  moveVec = Velocity;
+		if (moveState == 2)
+		{
+			moveVec = { 0,0,0 };
+		}
 		Move(elapsedTime, moveVec.x, moveVec.z, moveSpeed);
-
 	}
-
-	// 旋回処理
-	Turn(elapsedTime, moveVec.x, moveVec.z, turnSpeed);
+	if (moveState != 2) {
+		// 旋回処理
+		Turn(elapsedTime, moveVec.x, moveVec.z, turnSpeed);
+	}
 
 	if (Startpos.x != position.x || Startpos.z != position.z)
 	{

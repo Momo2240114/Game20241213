@@ -58,7 +58,7 @@ void PlayerManager::Remove(Player* player)
 bool PlayerManager::PopCool(float elapsedTime)
 {
 
-	const int PlayerMax = 5;
+	const int PlayerMax = 15;
 		if (!players.empty() && players.back()->pupCool())
 		{
 			moveStateTimer += elapsedTime;

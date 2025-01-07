@@ -103,7 +103,7 @@ private:
     Model* RedBlock = nullptr;//レッドブロック
     Model* RedWaku = nullptr;//レッド枠
     Model* Switch = nullptr;//スイッチ
-    int OnBlockColer = 0;
+    int OnBlockColer = 0;//色ブロックの管理用色が増えてもいいようにintで
 
     int timer = 0;
 };
