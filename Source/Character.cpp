@@ -71,6 +71,7 @@ void Character::UpdateVerticalVelocity(float elapsedTime)
 
 void Character::UpdateHorizonVelocity(float elapsedTime)
 {
+	if (WarpCool > 0)WarpCool -= elapsedTime;
 	////XZ平面の速力を減速する
 	float Length = sqrtf(Velocity.x * Velocity.x + Velocity.z * Velocity.z);
 	if (Length > 0.0f)
@@ -239,7 +240,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 			case 1:
 			case 2:
 			case 102:
-			case 103:
+			case 103:					
 				position.y = hitPosition.y;
 				StopState = 0;
 				if (!isGround)
@@ -305,6 +306,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 				}
 				break;
 			case 5:
+				
 				StopState = 0;
 				if (!isGround)
 				{
@@ -315,6 +317,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 				Jump(15);
 				//あたったブロックのAngle.yに応じてVelocity.x,zを変える
 				if (abs(HitBlockAngle.y) < 0.01f) {
+					
 					angle.y = HitBlockAngle.y;
 					Velocity.x = 0;
 					Velocity.z = moveSpeed;
@@ -400,6 +403,9 @@ void Character::UpdateVerticalMove(float elapsedTime)
 					break;
 				}
 				break;
+			case 7:
+				accel = 3;
+				break;
 			case 104:
 				switch (StopState)
 				{
@@ -413,6 +419,14 @@ void Character::UpdateVerticalMove(float elapsedTime)
 				}
 				break;
 			case 105:
+				position.y = hitPosition.y;
+				StopState = 0;
+				if (!isGround)
+				{
+					OnLanding();
+				}
+				isGround = true;
+				Velocity.y = 0.0f;
 				OnMovingFloorTime += elapsedTime;
 				if (OnMovingFloorTime > 1)
 				{
@@ -420,13 +434,90 @@ void Character::UpdateVerticalMove(float elapsedTime)
 					Velocity = { 0.0f, 0.0f, 0.0f }; //停止
 					
 				}
+				break;
+			case 110:
+			case 111:
+			case 112:
+			case 113:
+			case 114:
+				if (WarpCool <= 0)
+				{
+					switch (StopState)
+					{
+					case 0: // 停止床に触れた瞬間（初回処理）
 
+						// 初回停止時の速度保存
+						OldVelocity = Velocity;
+						Velocity = { 0.0f, 0.0f, 0.0f }; // 停止状態にする
+						OnMovingFloorTime = 0.0f; // タイマーをリセット
+
+						// 中心へのターゲット座標を設定（2の倍数に補正）
+						TargetPosition.x = static_cast<float>(round(position.x / 2.0f) * 2);
+						TargetPosition.z = static_cast<float>(round(position.z / 2.0f) * 2);
+
+						StopState = 1; // 次の状態へ移行
+						break;
+
+					case 1: // 徐々に停止床の中心へ移動
+						if (std::abs(position.x - TargetPosition.x) > 0.1f ||
+							std::abs(position.z - TargetPosition.z) > 0.1f)
+						{
+							// 少しずつターゲット座標に向かって移動
+							position.x += (TargetPosition.x - position.x) * 0.05f;
+							position.z += (TargetPosition.z - position.z) * 0.05f;
+
+							// 微調整のため、低速で前進
+							Velocity.x = (TargetPosition.x - position.x) * 0.1f;
+							Velocity.z = (TargetPosition.z - position.z) * 0.1f;
+						}
+						else
+						{
+							// 目的地に到達したら位置を固定
+							position.x = TargetPosition.x;
+							position.z = TargetPosition.z;
+							Velocity = { 0.0f, 0.0f, 0.0f }; // 再度停止
+							StopState = 2; // Enterキー待ちへ移行
+						}
+						break;
+
+					case 2: // Enterキー若しくは一定時間待ち
+						OnMovingFloorTime += elapsedTime;
+						angle.y += DirectX::XMConvertToRadians(720) * elapsedTime;
+						if (OnMovingFloorTime > 2) { // Enterキーが押されたら再開
+							StopState = 3;
+						}
+						break;
+
+					case 3: // 停止解除
+						//あったたワープ床に応じて対になるワープ床にワープ
+							// ワープ先を探す
+						DirectX::XMFLOAT3 targetPos = Stage::Instance().SearchPairPoint(HitBlock, position);
+
+						// 位置をワープ先に設定
+						position = targetPos;
+
+
+						angle.y = ((int)(angle.y + 45) / 90) * 90;
+
+						Velocity = OldVelocity; // 保存しておいた速度を復元
+						StopState = 4; // 完了状態へ移行
+						break;
+
+					case 4: // 完了状態
+						
+						// 完了後、再度停止処理が発生しないように待機
+						WarpCool = 3;
+						break;
+					}
+				}
 				break;
 			}
 
 		}
 		else
 		{
+			accel -= 0.02f;
+			if (accel < 1.0f)accel = 1.0f;
 			OnMovingFloorTime = 0;
 			StopState = 0;
 			position.y += my;
@@ -578,7 +669,7 @@ void Character::UpdateHorizonMove(float elapsedTime)
 			DirectX::XMVECTOR N = DirectX::XMLoadFloat3(&n);
 			DirectX::XMVECTOR A = DirectX::XMVector3Dot(PE, N);
 
-			float a = DirectX::XMVectorGetX(A) - 0.09f; // めり込みを広く取る
+			float a = DirectX::XMVectorGetX(A) - 0.2f; // めり込みを広く取る
 			DirectX::XMVECTOR R = DirectX::XMVectorSubtract(PE, DirectX::XMVectorScale(N, a));
 			DirectX::XMVECTOR Q = DirectX::XMVectorAdd(P, R);
 

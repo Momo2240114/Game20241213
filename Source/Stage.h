@@ -47,11 +47,11 @@ public:
 		const DirectX::XMFLOAT3& end,
 		DirectX::XMFLOAT3& hitPosition,
 		DirectX::XMFLOAT3& hitNormal);
-    bool BlockRayCast(const DirectX::XMFLOAT3& start,
+   /* bool BlockRayCast(const DirectX::XMFLOAT3& start,
 		const DirectX::XMFLOAT3& end,
 		DirectX::XMFLOAT3& hitPosition,
 		DirectX::XMFLOAT3& hitNormal
-        ,int& HitBlok);
+        ,int& HitBlok);*/
     //最強レイキャスト
     bool UnifiedRayCast(
         const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end,
@@ -68,6 +68,8 @@ public:
     DirectX::XMFLOAT3 GetStatePos();
 
     void BlockChange();
+
+    DirectX::XMFLOAT3 SearchPairPoint(int currentBlockID, const DirectX::XMFLOAT3& currentPosition);
 private:
     Stage() {};
     ~Stage() {};
@@ -75,7 +77,7 @@ private:
     Model* Putmodel = nullptr;
     DirectX::XMFLOAT3		position = { 0, -2, 0 };
     DirectX::XMFLOAT3		angle = { 0, 0, 0 };
-    DirectX::XMFLOAT3		scale = { 2, 2, 2 };
+    DirectX::XMFLOAT3		scale = { 2,2,2 };
     DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
     MAPDate MapDate;//プレイヤーが置くブロック
     MAPDate StageDate;//ステージに固定されるブロック
@@ -93,6 +95,7 @@ private:
     Model* Blockmodel4 = nullptr;//方向転換
     Model* Blockmodel5 = nullptr;//方向転換　＋　ジャンプ
     Model* Blockmodel6 = nullptr;//停止
+    Model* Blockmodel7 = nullptr;//加速
 
     //固定するブロック
     Model* StartPoint = nullptr;//開始位置
@@ -104,6 +107,12 @@ private:
     Model* RedWaku = nullptr;//レッド枠
     Model* Switch = nullptr;//スイッチ
     int OnBlockColer = 0;//色ブロックの管理用色が増えてもいいようにintで
+
+    Model* Warpmdl1 = nullptr;//ワープ1
+    Model* Warpmdl2 = nullptr;//ワープ2
+    Model* Warpmdl3 = nullptr;//ワープ3
+    Model* Warpmdl4 = nullptr;//ワープ4
+    Model* Warpmdl5 = nullptr;//ワープ5
 
     int timer = 0;
 };

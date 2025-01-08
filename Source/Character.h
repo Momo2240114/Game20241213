@@ -109,6 +109,7 @@ protected:
 
 	float height = 4.0f;
 	float radius = 0.5f;
+	float WarpCool = 0;
 
 	int Health = 5;
 
@@ -123,6 +124,7 @@ protected:
 	void Move(float elapsedTime, float vx, float vz, float speed);
 
 	float acceleration = 50.0f;
+	float accel = 1.0f;
 	float MaxMoveSpeed = 0.1f;
 	float MoveVecX = 0.0f;
 	float MoveVecZ = 0.0f;

@@ -59,6 +59,7 @@ private:
 	const int PopTime = 10;
 
 	const int PlayerMax = 15;
+
 	int GoalNum = 0;
 	int DeadNum = 0;
 };

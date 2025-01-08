@@ -13,6 +13,7 @@ void Stage::init()
     Blockmodel4 = new Model("Data/Model/Block/Block4.mdl");
     Blockmodel5 = new Model("Data/Model/Block/Block5.mdl");
     Blockmodel6 = new Model("Data/Model/Block/BlockStop.mdl");
+    Blockmodel7 = new Model("Data/Model/Block/AccelBlock.mdl");
     StartPoint = new Model("Data/Model/Block/StatePoint.mdl");
     GoalPoint = new Model("Data/Model/Block/Goal.mdl");
     BlueBlock = new Model("Data/Model/Block/BlueBlock.mdl");
@@ -20,6 +21,11 @@ void Stage::init()
     RedBlock = new Model("Data/Model/Block/RedBlock.mdl");
     RedWaku = new Model("Data/Model/Block/RedWaku.mdl");
     Switch = new Model("Data/Model/Block/Switch.mdl");
+    Warpmdl1 = new Model("Data/Model/Block/Warp/WarpPoint1.mdl");
+    Warpmdl2 = new Model("Data/Model/Block/Warp/WarpPoint2.mdl");
+    Warpmdl3 = new Model("Data/Model/Block/Warp/WarpPoint3.mdl");
+    Warpmdl4 = new Model("Data/Model/Block/Warp/WarpPoint4.mdl");
+    Warpmdl5 = new Model("Data/Model/Block/Warp/WarpPoint5.mdl");
     // 初期化処理
     for (int PY = 0; PY < MAPDate::mapY; ++PY) {
         for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
@@ -40,75 +46,82 @@ bool Stage::RayCast(const DirectX::XMFLOAT3& start,
 {
     return Collision::RayCast(start, end, transform, model, hitPosition, hitNormal);
 }
-
-bool Stage::BlockRayCast(
-    const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end,
-    DirectX::XMFLOAT3& hitPosition, DirectX::XMFLOAT3& hitNormal,
-    int& HitBlok)
-{
-    // ブロック全体をループ
-    for (int PY = 0; PY < MAPDate::mapY; ++PY) {
-        for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
-            for (int PX = 0; PX < MAPDate::mapX; ++PX) {
-                // ブロックが存在しない場合はスキップ
-                if (MapDate.BlockID[PY][PX][PZ] == 0)
-                {
-                    continue;
-                }
-
-                // 各ブロックのトランスフォームを取得
-                DirectX::XMFLOAT4X4 blockTransform = MapDate.transform[PY][PX][PZ];
-
-                // 使用するブロックモデルを決定
-                Model* blockModel = nullptr;
-                switch (MapDate.BlockID[PY][PX][PZ]) {
-                case 1: blockModel = Blockmodel1; break;
-                case 2: blockModel = Blockmodel2; break;
-                case 3: blockModel = Blockmodel3; break;
-                case 4: blockModel = Blockmodel4; break;
-                case 5: blockModel = Blockmodel5; break;
-                case 6: blockModel = Blockmodel6; break;
-                case 101: blockModel = StartPoint; break;
-                case 102: 
-                    if (OnBlockColer == OnBlockColer::Blue) {
-                        blockModel = BlueBlock;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-
-                    break;
-                case 103: 
-                    if (OnBlockColer == OnBlockColer::Red) {
-                        blockModel = RedBlock;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-
-                    break;
-                case 105:
-                    blockModel = GoalPoint; break;
-                    break;
-                }
-
-                //// ブロックモデルが無効な場合はスキップ
-                if (!blockModel) {
-                    continue;
-                }
-
-                // レイキャスト処理
-                if (Collision::RayCast(start, end, blockTransform, blockModel, hitPosition, hitNormal)) {
-                    HitBlok = MapDate.BlockID[PY][PX][PZ];
-                   
-                    return true; // 衝突があった場合は即座に true を返す
-                }
-            }
-        }
-    }
-}
+//
+//bool Stage::BlockRayCast(
+//    const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end,
+//    DirectX::XMFLOAT3& hitPosition, DirectX::XMFLOAT3& hitNormal,
+//    int& HitBlok)
+//{
+//    // ブロック全体をループ
+//    for (int PY = 0; PY < MAPDate::mapY; ++PY) {
+//        for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
+//            for (int PX = 0; PX < MAPDate::mapX; ++PX) {
+//                // ブロックが存在しない場合はスキップ
+//                if (MapDate.BlockID[PY][PX][PZ] == 0)
+//                {
+//                    continue;
+//                }
+//
+//                // 各ブロックのトランスフォームを取得
+//                DirectX::XMFLOAT4X4 blockTransform = MapDate.transform[PY][PX][PZ];
+//
+//                // 使用するブロックモデルを決定
+//                Model* blockModel = nullptr;
+//                switch (MapDate.BlockID[PY][PX][PZ]) {
+//                case 1: blockModel = Blockmodel1; break;
+//                case 2: blockModel = Blockmodel2; break;
+//                case 3: blockModel = Blockmodel3; break;
+//                case 4: blockModel = Blockmodel4; break;
+//                case 5: blockModel = Blockmodel5; break;
+//                case 6: blockModel = Blockmodel6; break;
+//                case 101: blockModel = StartPoint; break;
+//                case 102: 
+//                    if (OnBlockColer == OnBlockColer::Blue) {
+//                        blockModel = BlueBlock;
+//                    }
+//                    else
+//                    {
+//                        continue;
+//                    }
+//
+//                    break;
+//                case 103: 
+//                    if (OnBlockColer == OnBlockColer::Red) {
+//                        blockModel = RedBlock;
+//                    }
+//                    else
+//                    {
+//                        continue;
+//                    }
+//
+//                    break;
+//                case 105:
+//                    blockModel = GoalPoint; break;
+//                    break;
+//                case 110:   blockModel = Warpmdl1; break;
+//                case 111:blockModel = Warpmdl2; break;
+//                case 112:blockModel = Warpmdl3; break;
+//                case 113:blockModel = Warpmdl4; break;
+//                case 114:blockModel = Warpmdl5; break;
+//
+//                }
+//
+//                //// ブロックモデルが無効な場合はスキップ
+//                if (!blockModel) {
+//                    continue;
+//                }
+//
+//                // レイキャスト処理
+//                if (Collision::RayCast(start, end, blockTransform, blockModel, hitPosition, hitNormal)) {
+//                    HitBlok = MapDate.BlockID[PY][PX][PZ];
+//                   
+//                    return true; // 衝突があった場合は即座に true を返す
+//                }
+//
+//            }
+//        }
+//    }
+//}
 
 bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end,
     DirectX::XMFLOAT3& hitPosition, 
@@ -137,6 +150,7 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
                     case 4: blockModel = Blockmodel4; break;
                     case 5: blockModel = Blockmodel5; break;
                     case 6: blockModel = Blockmodel6; break;
+                    case 7: blockModel = Blockmodel7; break;
                     case 101: blockModel = StartPoint; break;
                     case 105: blockModel = GoalPoint; break;
                     case 102:
@@ -159,6 +173,12 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
                         break;
                     case 104:
                         blockModel = Switch;
+                        break;
+                    case 110:blockModel = Warpmdl1; break;
+                    case 111:blockModel = Warpmdl2; break;
+                    case 112:blockModel = Warpmdl3; break;
+                    case 113:blockModel = Warpmdl4; break;
+                    case 114:blockModel = Warpmdl5; break;
                     }
 
 
@@ -171,6 +191,7 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
                     if (Collision::RayCast(start, end, blockTransform, blockModel, hitPosition, hitNormal)) {
                         hitBlock = MapDate.BlockID[PY][PX][PZ];
                         HitBlockAngle = MapDate.angle[PY][PX][PZ];
+
                         return true; // 衝突があった場合は即座に true を返す
                     }
                 }
@@ -198,7 +219,7 @@ void Stage::MoveBlockUpdate(float elapsedTime)
     for (int PY = 0; PY < MAPDate::mapY; ++PY) {
         for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
             for (int PX = 0; PX < MAPDate::mapX; ++PX) {
-                if (MapDate.BlockID[PY][PX][PZ] != 7) continue;
+                if (MapDate.BlockID[PY][PX][PZ] != 8) continue;
 
                 // 移動処理
                 DirectX::XMFLOAT3& pos = MapDate.position[PY][PX][PZ];
@@ -296,6 +317,35 @@ void Stage::BlockChange()
     if (OnBlockColer > 1)OnBlockColer = 0;
 }
 
+DirectX::XMFLOAT3 Stage::SearchPairPoint(int currentBlockID, const DirectX::XMFLOAT3& currentPosition)
+{
+    int currentPutx = static_cast<int>((currentPosition.x / MapDate.scale.x) / Blocksize + MAPDate::mapX / 2);
+    int currentPuty = static_cast<int>((currentPosition.y / MapDate.scale.y) / Blocksize);
+    int currentPutz = static_cast<int>((currentPosition.z / MapDate.scale.z) / Blocksize + MAPDate::mapZ / 2);
+
+    for (int y = 0; y < MAPDate::mapY; ++y) {
+        for (int x = 0; x < MAPDate::mapX; ++x) {
+            for (int z = 0; z < MAPDate::mapZ; ++z) {
+                if (MapDate.BlockID[y][x][z] == currentBlockID) {
+                    // 現在位置と異なるブロックを対象にする
+                    if (x != currentPutx || y != currentPuty || z != currentPutz) {
+                        // 新しい座標を計算して返す
+                        DirectX::XMFLOAT3 targetPosition;
+                        targetPosition.x = (x - MAPDate::mapX / 2) * Blocksize * MapDate.scale.x;
+                        targetPosition.y = y * Blocksize * MapDate.scale.y;
+                        targetPosition.z = (z - MAPDate::mapZ / 2) * Blocksize * MapDate.scale.z;
+                        return targetPosition;
+                    }
+                }
+            }
+        }
+    }
+
+    // 対になるワープ床が見つからなかった場合は現在位置を返す
+    return currentPosition;
+}
+
+
 Stage& Stage::Instance()
 {
     static Stage instance;
@@ -317,7 +367,9 @@ void Stage::Finalize()
     delete Blockmodel5;
     Blockmodel5 = nullptr;  
     delete Blockmodel6;
-    Blockmodel6 = nullptr;    
+    Blockmodel6 = nullptr;     
+    delete Blockmodel7;
+    Blockmodel7 = nullptr;    
     delete   StartPoint;
     StartPoint = nullptr;   
     delete  GoalPoint;
@@ -332,6 +384,16 @@ void Stage::Finalize()
     RedWaku = nullptr;  
     delete Switch;
     Switch = nullptr;
+    delete Warpmdl1;
+    Warpmdl1 = nullptr;   
+    delete Warpmdl2;
+    Warpmdl2= nullptr;   
+    delete Warpmdl3;
+    Warpmdl3 = nullptr;   
+    delete Warpmdl4;
+    Warpmdl4 = nullptr;   
+    delete Warpmdl5;
+    Warpmdl5 = nullptr;
 }
 
 void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX::XMFLOAT3& Angle) 
@@ -371,16 +433,7 @@ void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX:
 }
 void Stage::Update(float elapsedTime)
 {
-    //今は特にやることはない
-    /*UpdateTransform();*/
     MoveBlockUpdate(elapsedTime);
-
-    //timer++;
-    //int Cool = timer % 360;
-    //if (Cool == 0)
-    //{
-    //    BlockChange();
-    //}
 }
 
 //真布チップでテスト用
@@ -442,6 +495,9 @@ void Stage::BlockRender(const RenderContext& rc, ModelRenderer* renderer)
                         break;               
                     case 6:
                         renderer->Render(rc, MapDate.transform[PY][PX][PZ], Blockmodel6, ShaderId::Lambert);
+                        break; 
+                    case 7:
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], Blockmodel7, ShaderId::Lambert);
                         break;
                     case 101:
                         renderer->Render(rc, MapDate.transform[PY][PX][PZ], StartPoint, ShaderId::Lambert);
@@ -467,6 +523,21 @@ void Stage::BlockRender(const RenderContext& rc, ModelRenderer* renderer)
                         break;
                     case 104:
                         renderer->Render(rc, MapDate.transform[PY][PX][PZ], Switch, ShaderId::Lambert);
+                        break;
+                    case 110:
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], Warpmdl1, ShaderId::Lambert);
+                        break;                    
+                    case 111:
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], Warpmdl2, ShaderId::Lambert);
+                        break;                    
+                    case 112:
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], Warpmdl3, ShaderId::Lambert);
+                        break;                    
+                    case 113:
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], Warpmdl4, ShaderId::Lambert);
+                        break;                    
+                    case 114:
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], Warpmdl5, ShaderId::Lambert);
                         break;
                     }
                 }

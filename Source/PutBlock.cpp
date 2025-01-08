@@ -114,6 +114,7 @@ void PutBlock::Initialize()
 	PutBlockModel4 = new Model("Data/Model/Block/Block4.mdl");
 	PutBlockModel5 = new Model("Data/Model/Block/Block5.mdl");
 	PutBlockModel6 = new Model("Data/Model/Block/BlockStop.mdl");
+	PutBlockModel7 = new Model("Data/Model/Block/AccelBlock.mdl");
 	EraseBlockModel = new Model("Data/Model/Block/Erase.mdl");
 }
 
@@ -126,6 +127,7 @@ void PutBlock::Finalize()
 	delete PutBlockModel4;
 	delete PutBlockModel5;
 	delete PutBlockModel6;
+	delete PutBlockModel7;
 	delete EraseBlockModel;
 	PutBlockModel = nullptr;
 	PutBlockModel1 = nullptr;
@@ -134,6 +136,7 @@ void PutBlock::Finalize()
 	PutBlockModel4 = nullptr;
 	PutBlockModel5 = nullptr;
 	PutBlockModel6 = nullptr;
+	PutBlockModel7 = nullptr;
 	EraseBlockModel = nullptr;
 }
 
@@ -161,6 +164,9 @@ void PutBlock::render(const RenderContext& rc, ModelRenderer* renderer)
 		break;
 	case 6:
 		renderer->Render(rc, transform, PutBlockModel6, ShaderId::Lambert);
+		break;	
+	case 7:
+		renderer->Render(rc, transform, PutBlockModel7, ShaderId::Lambert);
 		break;
 	}
 }

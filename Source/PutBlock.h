@@ -38,7 +38,7 @@ private:
 	PutBlock() {};
 	~PutBlock() {};
 
-	const int maxType = 6;
+	const int maxType = 7;
 	const int minType = -1;
 
 	Model* PutBlockModel = nullptr;
@@ -49,6 +49,7 @@ private:
 	Model* PutBlockModel4 = nullptr;
 	Model* PutBlockModel5 = nullptr;
 	Model* PutBlockModel6 = nullptr;
+	Model* PutBlockModel7 = nullptr;
 	DirectX::XMFLOAT3 RayState = { 0,0,0 };
 	DirectX::XMFLOAT3 RayEnd = { 0,0,0 };
 	DirectX::XMVECTOR WorldPositionFar = {};

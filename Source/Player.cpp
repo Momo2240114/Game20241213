@@ -72,10 +72,39 @@ void Player::Update(float elapsedTime)
 
 	CollisionProjectileVsEnemies();
 
-	if (Velocity.x > 0)Velocity.x = moveSpeed;
-	if(Velocity.x < 0)Velocity.x = -moveSpeed;
-	if(Velocity.z > 0)Velocity.z = moveSpeed;
-	if(Velocity.z < 0)Velocity.z = -moveSpeed;
+	if (Velocity.x > 0)
+	{
+		if (Velocity.x >= Velocity.z)
+		{
+			Velocity.z = 0;
+			Velocity.x = moveSpeed * accel;
+		}
+	}
+	if (Velocity.x < 0)
+	{
+		if (Velocity.x < Velocity.z)
+		{
+			Velocity.z = 0;
+			Velocity.x = -moveSpeed * accel;
+		}
+	}
+	if(Velocity.z > 0)
+	{
+		if (Velocity.x <= Velocity.z)
+		{
+			Velocity.x = 0;
+			Velocity.z = moveSpeed * accel;
+		}
+	}
+	if(Velocity.z < 0)
+	{
+		if (Velocity.x > Velocity.z)
+		{
+			Velocity.x = 0;
+			Velocity.z = -moveSpeed * accel;
+		}
+	}
+
 }
 
 void Player::Render(const RenderContext& rc, ModelRenderer* renderer)

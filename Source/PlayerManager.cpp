@@ -69,26 +69,27 @@ bool PlayerManager::PopCool(float elapsedTime)
 		}
 		for (Player* player : players)
 		{
-			if (player->ISGoal())
-			{
-				Remove(player);
-				GoalNum++;
-				if (PopPlayerNum() <= PlayerMax)
+			
+				if (player->ISGoal())
 				{
-					moveStateTimer = 0.0f; // タイマーをリセット
-					return true;
+					Remove(player);
+					GoalNum++;
+					if (PopPlayerNum() <= PlayerMax && players.back()->pupCool())
+					{
+						moveStateTimer = 0.0f; // タイマーをリセット
+						return true;
+					}
 				}
-			}
-			if (player->IsDead())
-			{
-				Remove(player);
-				DeadNum++;
-				if (PopPlayerNum() <= PlayerMax)
+				if (player->IsDead())
 				{
-					moveStateTimer = 0.0f; // タイマーをリセット
-					return true;
+					Remove(player);
+					DeadNum++;
+					if (PopPlayerNum() <= PlayerMax && players.back()->pupCool())
+					{
+						moveStateTimer = 0.0f; // タイマーをリセット
+						return true;
+					}
 				}
-			}
 		}
 	return false;
 }

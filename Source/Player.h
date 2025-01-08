@@ -50,7 +50,6 @@ private:
 	// ƒWƒƒƒ“ƒv“ü—Íˆ—
 	void InputJump();
 
-
 	// ’eŠÛ“ü—Íˆ—
 	void InputProjectile();
 
