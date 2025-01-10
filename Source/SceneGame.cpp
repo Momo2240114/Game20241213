@@ -89,6 +89,7 @@ void SceneGame::Finalize()
 void SceneGame::Update(float elapsedTime)
 {
 
+
 	if (PutBlock::Instance().PutOff())
 	{
 		cameraController->moveTarget(elapsedTime);

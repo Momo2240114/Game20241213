@@ -105,6 +105,7 @@ void Player::Update(float elapsedTime)
 		}
 	}
 
+	if (position.y < -50)IsLive = true;
 }
 
 void Player::Render(const RenderContext& rc, ModelRenderer* renderer)

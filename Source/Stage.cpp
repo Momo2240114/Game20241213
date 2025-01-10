@@ -7,7 +7,15 @@ void Stage::init()
     //ステージモデルを読み込み
     /*model = new Model("Data/Model/Stage/ExampleStage.mdl");*/
     //model = new Model("Data/Model/Stage/stagekari2.mdl");
-    model = new Model("Data/Model/Stage/StageGrassland.mdl");
+    switch (L)
+    {
+    case 0:
+        model = new Model("Data/Model/Stage/StageGrassland.mdl");
+        break;   
+    case 1:
+        model = new Model("Data/Model/Stage/SatageDesert.mdl");
+        break;
+    }
     Blockmodel1 = new Model("Data/Model/Block/Block1.mdl");
     Blockmodel2 = new Model("Data/Model/Block/Block2.mdl");
     Blockmodel3 = new Model("Data/Model/Block/Block3.mdl");

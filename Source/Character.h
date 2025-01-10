@@ -132,6 +132,7 @@ protected:
 	float airControl = 1.3f;
 
 	int moveState = 0;
+	int EvolutionType = 0;
 
 	float stepOffset = 1.0f;
 };

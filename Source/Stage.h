@@ -23,7 +23,6 @@ struct  MAPDate
 class Stage
 {
 public:
-
     static Stage& Instance();
 
     void Finalize();
@@ -70,6 +69,8 @@ public:
     void BlockChange();
 
     DirectX::XMFLOAT3 SearchPairPoint(int currentBlockID, const DirectX::XMFLOAT3& currentPosition);
+
+    int SetstageLevel(int SetLevel) { L = SetLevel; };
 private:
     Stage() {};
     ~Stage() {};
@@ -82,7 +83,7 @@ private:
     MAPDate MapDate;//プレイヤーが置くブロック
     int L = 0;
     int PutType = 0;
-    DirectX::XMFLOAT3		PutPos = { 0, -1, 0 };
+    DirectX::XMFLOAT3		PutPos = { 0,0,0};
     DirectX::XMFLOAT3		PutAng = { 0, 0, 0 };
     DirectX::XMFLOAT3		Putscale = { 1, 1, 1 };
     DirectX::XMFLOAT4X4		PutTransform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
