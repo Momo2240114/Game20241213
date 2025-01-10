@@ -107,7 +107,7 @@ protected:
 
 	void Updateinvincibletimer(float elapsedTime);
 
-	float height = 2.2f;
+	float height = 2.0f;
 	float radius = 0.25f;
 	float WarpCool = 0;
 
