@@ -15,7 +15,7 @@ struct  MAPDate
     DirectX::XMFLOAT3 position[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 orgposition[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 angle[mapY][mapX][mapZ] = {};
-    DirectX::XMFLOAT3 scale = { 2.0f,  2.0f, 2.0f };
+    DirectX::XMFLOAT3 scale = {1.0f,  1.0f, 1.0f };
     DirectX::XMFLOAT4X4 transform[mapY][mapX][mapZ] = {};
 };
 
@@ -75,9 +75,9 @@ private:
     ~Stage() {};
     Model* model = nullptr;
     Model* Putmodel = nullptr;
-    DirectX::XMFLOAT3		position = { 0, -2, 0 };
+    DirectX::XMFLOAT3		position = {-0.5, -20, -0.5 };
     DirectX::XMFLOAT3		angle = { 0, 0, 0 };
-    DirectX::XMFLOAT3		scale = { 2,2,2 };
+    DirectX::XMFLOAT3		scale = { 0.1f,0.1f,0.1f };
     DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
     MAPDate MapDate;//プレイヤーが置くブロック
     int L = 0;

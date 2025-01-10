@@ -1,11 +1,10 @@
-﻿  PutBlock.cpp
+﻿  Stage.cpp
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(116,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/PutBlock.cpp' をコンパイルしています)
+  (ソース ファイル 'Source/Stage.cpp' をコンパイルしています)
   
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル 'Source/PutBlock.cpp' をコンパイルしています)
+  (ソース ファイル 'Source/Stage.cpp' をコンパイルしています)
   
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\PutBlock.cpp(60,18): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
      ライブラリ bin\x64\Release\Game.lib とオブジェクト bin\x64\Release\Game.exp を作成中
   コード生成しています。
   0 of 4929 functions ( 0.0%) were compiled, the rest were copied from previous compilation.

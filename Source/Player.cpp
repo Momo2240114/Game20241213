@@ -38,7 +38,7 @@ void Player::Initialize()
 	model = new Model("Data/Model/Player/Player.mdl");
 
 	// モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.2f;
+	scale.x = scale.y = scale.z = 0.1f;
 
 	position.y = 5;
 

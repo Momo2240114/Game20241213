@@ -27,8 +27,8 @@ private:
 	float maxAngleX = DirectX::XMConvertToRadians(45);
 	float minAngleX = DirectX::XMConvertToRadians(45);
 	float rangeChangeSpeed = 25;
-	float minRange = 30;
-	float maxRange = 130;
+	float minRange = 10;
+	float maxRange = 40;
 	float wheelDelta;
 	void UpdateVer1(float elapsedTime);
 	void UpdateVer2(float elapsedTime);

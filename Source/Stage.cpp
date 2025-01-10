@@ -6,7 +6,8 @@ void Stage::init()
 {
     //ステージモデルを読み込み
     /*model = new Model("Data/Model/Stage/ExampleStage.mdl");*/
-    model = new Model("Data/Model/Stage/stagekari2.mdl");
+    //model = new Model("Data/Model/Stage/stagekari2.mdl");
+    model = new Model("Data/Model/Stage/StageGrassland.mdl");
     Blockmodel1 = new Model("Data/Model/Block/Block1.mdl");
     Blockmodel2 = new Model("Data/Model/Block/Block2.mdl");
     Blockmodel3 = new Model("Data/Model/Block/Block3.mdl");
@@ -260,9 +261,9 @@ void Stage::BlockChange()
 
 DirectX::XMFLOAT3 Stage::SearchPairPoint(int currentBlockID, const DirectX::XMFLOAT3& currentPosition)
 {
-    int currentPutx = static_cast<int>((currentPosition.x / MapDate.scale.x) / Blocksize + MAPDate::mapX / 2);
+    int currentPutx = static_cast<int>((currentPosition.x / MapDate.scale.x) / Blocksize);
     int currentPuty = static_cast<int>((currentPosition.y / MapDate.scale.y) / Blocksize);
-    int currentPutz = static_cast<int>((currentPosition.z / MapDate.scale.z) / Blocksize + MAPDate::mapZ / 2);
+    int currentPutz = static_cast<int>((currentPosition.z / MapDate.scale.z) / Blocksize);
 
     for (int y = 0; y < MAPDate::mapY; ++y) {
         for (int x = 0; x < MAPDate::mapX; ++x) {
@@ -347,9 +348,9 @@ void Stage::Finalize()
 
 void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX::XMFLOAT3& Angle) 
 {
-    int Putx = static_cast<int>((Position.x / MapDate.scale.x) / Blocksize + MAPDate::mapX / 2);
+    int Putx = static_cast<int>((Position.x / MapDate.scale.x) / Blocksize);
     int Puty = static_cast<int>((Position.y / MapDate.scale.y) / Blocksize);
-    int Putz = static_cast<int>((Position.z / MapDate.scale.z) / Blocksize + MAPDate::mapZ / 2);
+    int Putz = static_cast<int>((Position.z / MapDate.scale.z) / Blocksize);
 
     if (MapDate.BlockID[Puty][Putx][Putz] > 100 ||
         MapDate.BlockID[Puty + 1][Putx][Putz] > 100 ){ return; }
@@ -373,9 +374,9 @@ void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX:
 
     // ブロック位置を計算
     MapDate.position[Puty][Putx][Putz] = {
-        (Putx - MAPDate::mapX / 2) * Blocksize * MapDate.scale.x,
+        (Putx) * Blocksize * MapDate.scale.x,
         (Puty)*Blocksize * MapDate.scale.y,
-        (Putz - MAPDate::mapZ / 2) * Blocksize * MapDate.scale.z
+        (Putz) * Blocksize * MapDate.scale.z
     };
     MapDate.orgposition[Puty][Putx][Putz] = MapDate.position[Puty][Putx][Putz];
 }
@@ -400,9 +401,9 @@ void Stage::SetMapdate(int Level)
 
                 //ブロックの位置計算
                 MapDate.position[PY][PX][PZ] = {
-                   (PX - (MAPDate::mapX / 2)) * Blocksize * MapDate.scale.x,
-                   (PY)*Blocksize * MapDate.scale.y,
-                   (PZ - (MAPDate::mapZ / 2)) * Blocksize * MapDate.scale.z
+                   (PX) * Blocksize * MapDate.scale.x,
+                   (PY) * Blocksize * MapDate.scale.y,
+                   (PZ) * Blocksize * MapDate.scale.z
                 };
             }
         }

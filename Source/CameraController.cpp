@@ -158,10 +158,12 @@ DirectX::XMFLOAT3 CameraController::moveTarget(float elapsedTime)
     target.x += moveX;
     target.z += moveZ;
 
-    if (target.x > 35)target.x = 35;
-    if (target.x < -35)target.x = -35;   
-    if (target.z > 35)target.z = 35;
-    if (target.z < -35)target.z = -35;
+   const  int MapMax = 40;
+
+    if (target.x > MapMax)target.x = MapMax;
+    if (target.x < 0)target.x = 0;
+    if (target.z > MapMax)target.z = MapMax;
+    if (target.z < 0)target.z = 0;
 
     return target;
 }
