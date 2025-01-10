@@ -80,7 +80,6 @@ private:
     DirectX::XMFLOAT3		scale = { 2,2,2 };
     DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
     MAPDate MapDate;//プレイヤーが置くブロック
-    MAPDate StageDate;//ステージに固定されるブロック
     int L = 0;
     int PutType = 0;
     DirectX::XMFLOAT3		PutPos = { 0, -1, 0 };
@@ -99,7 +98,7 @@ private:
 
     //固定するブロック
     Model* StartPoint = nullptr;//開始位置
-    Model* GoalPoint = nullptr;//開始位置
+    Model* GoalPoint =  nullptr;//開始位置
 
     Model* BlueBlock = nullptr;//ブルーブロック
     Model* BlueWaku = nullptr;//ブルー枠   
@@ -114,7 +113,13 @@ private:
     Model* Warpmdl4 = nullptr;//ワープ4
     Model* Warpmdl5 = nullptr;//ワープ5
 
+    Model* SpikeMdl = nullptr;//スパイクブロック
+    Model* SpikeHit = nullptr;//スパイクブロック当たり判定    
+    Model* SpikeFloorMdl = nullptr;//スパイク床ブロック
+    Model* SpikeFloorHit = nullptr;//スパイク床ブロック当たり判定
+
     int timer = 0;
+
 };
 
 

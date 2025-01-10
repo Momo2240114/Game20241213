@@ -26,6 +26,10 @@ void Stage::init()
     Warpmdl3 = new Model("Data/Model/Block/Warp/WarpPoint3.mdl");
     Warpmdl4 = new Model("Data/Model/Block/Warp/WarpPoint4.mdl");
     Warpmdl5 = new Model("Data/Model/Block/Warp/WarpPoint5.mdl");
+    SpikeMdl = new Model("Data/Model/Block/SpikeBlockMdl.mdl");
+    SpikeHit = new Model("Data/Model/Block/SpikeBlockHit.mdl");    
+    SpikeFloorMdl = new Model("Data/Model/Block/SpikeBlockFloorMdl.mdl");
+    SpikeFloorHit = new Model("Data/Model/Block/SpikeBlockFloorHit.mdl");
     // 初期化処理
     for (int PY = 0; PY < MAPDate::mapY; ++PY) {
         for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
@@ -46,82 +50,6 @@ bool Stage::RayCast(const DirectX::XMFLOAT3& start,
 {
     return Collision::RayCast(start, end, transform, model, hitPosition, hitNormal);
 }
-//
-//bool Stage::BlockRayCast(
-//    const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end,
-//    DirectX::XMFLOAT3& hitPosition, DirectX::XMFLOAT3& hitNormal,
-//    int& HitBlok)
-//{
-//    // ブロック全体をループ
-//    for (int PY = 0; PY < MAPDate::mapY; ++PY) {
-//        for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
-//            for (int PX = 0; PX < MAPDate::mapX; ++PX) {
-//                // ブロックが存在しない場合はスキップ
-//                if (MapDate.BlockID[PY][PX][PZ] == 0)
-//                {
-//                    continue;
-//                }
-//
-//                // 各ブロックのトランスフォームを取得
-//                DirectX::XMFLOAT4X4 blockTransform = MapDate.transform[PY][PX][PZ];
-//
-//                // 使用するブロックモデルを決定
-//                Model* blockModel = nullptr;
-//                switch (MapDate.BlockID[PY][PX][PZ]) {
-//                case 1: blockModel = Blockmodel1; break;
-//                case 2: blockModel = Blockmodel2; break;
-//                case 3: blockModel = Blockmodel3; break;
-//                case 4: blockModel = Blockmodel4; break;
-//                case 5: blockModel = Blockmodel5; break;
-//                case 6: blockModel = Blockmodel6; break;
-//                case 101: blockModel = StartPoint; break;
-//                case 102: 
-//                    if (OnBlockColer == OnBlockColer::Blue) {
-//                        blockModel = BlueBlock;
-//                    }
-//                    else
-//                    {
-//                        continue;
-//                    }
-//
-//                    break;
-//                case 103: 
-//                    if (OnBlockColer == OnBlockColer::Red) {
-//                        blockModel = RedBlock;
-//                    }
-//                    else
-//                    {
-//                        continue;
-//                    }
-//
-//                    break;
-//                case 105:
-//                    blockModel = GoalPoint; break;
-//                    break;
-//                case 110:   blockModel = Warpmdl1; break;
-//                case 111:blockModel = Warpmdl2; break;
-//                case 112:blockModel = Warpmdl3; break;
-//                case 113:blockModel = Warpmdl4; break;
-//                case 114:blockModel = Warpmdl5; break;
-//
-//                }
-//
-//                //// ブロックモデルが無効な場合はスキップ
-//                if (!blockModel) {
-//                    continue;
-//                }
-//
-//                // レイキャスト処理
-//                if (Collision::RayCast(start, end, blockTransform, blockModel, hitPosition, hitNormal)) {
-//                    HitBlok = MapDate.BlockID[PY][PX][PZ];
-//                   
-//                    return true; // 衝突があった場合は即座に true を返す
-//                }
-//
-//            }
-//        }
-//    }
-//}
 
 bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end,
     DirectX::XMFLOAT3& hitPosition, 
@@ -179,6 +107,8 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
                     case 112:blockModel = Warpmdl3; break;
                     case 113:blockModel = Warpmdl4; break;
                     case 114:blockModel = Warpmdl5; break;
+                    case 106:blockModel = SpikeHit; break;
+                    case 107:blockModel = SpikeFloorHit; break;
                     }
 
 
@@ -211,15 +141,15 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
 
 void Stage::MoveBlockUpdate(float elapsedTime)
 {
-    constexpr float MoveSpeed = 2.0f;   // 移動速度
-    constexpr float MoveRange = 6.0f;   // 移動範囲
+    constexpr float MoveSpeed = 4.0f;   // 移動速度
+    constexpr float MoveRange = 3.0f;   // 移動範囲
     constexpr float anglepattern = DirectX::XMConvertToRadians(90.0f);
 
 
     for (int PY = 0; PY < MAPDate::mapY; ++PY) {
         for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
             for (int PX = 0; PX < MAPDate::mapX; ++PX) {
-                if (MapDate.BlockID[PY][PX][PZ] != 8) continue;
+                if (MapDate.BlockID[PY][PX][PZ] != 106) continue;
 
                 // 移動処理
                 DirectX::XMFLOAT3& pos = MapDate.position[PY][PX][PZ];
@@ -286,11 +216,22 @@ void Stage::MoveBlockUpdate(float elapsedTime)
                     }
                 }
         
-                // 座標を更新
-                DirectX::XMStoreFloat4x4(
-                    &MapDate.transform[PY][PX][PZ],
-                    DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z)
+                DirectX::XMMATRIX BS = DirectX::XMMatrixScaling(
+                    MapDate.scale.x * 2, MapDate.scale.y * 2, MapDate.scale.z * 2
                 );
+                DirectX::XMMATRIX BR = DirectX::XMMatrixRotationRollPitchYaw(
+                    MapDate.angle[PY][PX][PZ].x,
+                    MapDate.angle[PY][PX][PZ].y,
+                    MapDate.angle[PY][PX][PZ].z
+                );
+                DirectX::XMMATRIX BT = DirectX::XMMatrixTranslation(
+                    MapDate.position[PY][PX][PZ].x,
+                    MapDate.position[PY][PX][PZ].y,
+                    MapDate.position[PY][PX][PZ].z
+                );
+                DirectX::XMMATRIX BWorldTransform = BS * BR * BT;
+                DirectX::XMStoreFloat4x4(&MapDate.transform[PY][PX][PZ], BWorldTransform);
+
             }
         }
     }
@@ -394,11 +335,18 @@ void Stage::Finalize()
     Warpmdl4 = nullptr;   
     delete Warpmdl5;
     Warpmdl5 = nullptr;
+    delete SpikeMdl;
+    SpikeMdl = nullptr;   
+    delete SpikeHit;
+    SpikeHit = nullptr;   
+    delete SpikeFloorMdl;
+    SpikeFloorMdl = nullptr;
+    delete SpikeFloorHit;
+    SpikeFloorHit = nullptr;
 }
 
 void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX::XMFLOAT3& Angle) 
 {
-  
     int Putx = static_cast<int>((Position.x / MapDate.scale.x) / Blocksize + MAPDate::mapX / 2);
     int Puty = static_cast<int>((Position.y / MapDate.scale.y) / Blocksize);
     int Putz = static_cast<int>((Position.z / MapDate.scale.z) / Blocksize + MAPDate::mapZ / 2);
@@ -431,9 +379,10 @@ void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX:
     };
     MapDate.orgposition[Puty][Putx][Putz] = MapDate.position[Puty][Putx][Putz];
 }
+
 void Stage::Update(float elapsedTime)
 {
-    MoveBlockUpdate(elapsedTime);
+    //MoveBlockUpdate(elapsedTime);
 }
 
 //真布チップでテスト用
@@ -524,6 +473,12 @@ void Stage::BlockRender(const RenderContext& rc, ModelRenderer* renderer)
                     case 104:
                         renderer->Render(rc, MapDate.transform[PY][PX][PZ], Switch, ShaderId::Lambert);
                         break;
+                    case 106:
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], SpikeMdl, ShaderId::Lambert);
+                        break;     
+                    case 107:
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], SpikeFloorMdl, ShaderId::Lambert);
+                        break;
                     case 110:
                         renderer->Render(rc, MapDate.transform[PY][PX][PZ], Warpmdl1, ShaderId::Lambert);
                         break;                    
@@ -538,7 +493,7 @@ void Stage::BlockRender(const RenderContext& rc, ModelRenderer* renderer)
                         break;                    
                     case 114:
                         renderer->Render(rc, MapDate.transform[PY][PX][PZ], Warpmdl5, ShaderId::Lambert);
-                        break;
+                        break;                                       
                     }
                 }
             }
@@ -554,40 +509,6 @@ void Stage::UpdateTransform()
     DirectX::XMMATRIX WorldTransform = S * R * T;
     DirectX::XMStoreFloat4x4(&transform, WorldTransform);
 }
-//
-//void Stage::UpdateBlockTransform()
-//{
-//    for (int PY = 0; PY < MAPDate::mapY; ++PY) {
-//        for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
-//            for (int PX = 0; PX < MAPDate::mapX; ++PX) {
-//                if (MapDate.BlockID[PY][PX][PZ] != 0)
-//                {
-//                    DirectX::XMMATRIX BS = DirectX::XMMatrixScaling(MapDate.scale.x, MapDate.scale.y, MapDate.scale.z);
-//                    DirectX::XMMATRIX BR = DirectX::XMMatrixRotationRollPitchYaw(
-//                        MapDate.angle[PY][PX][PZ].x,
-//                        MapDate.angle[PY][PX][PZ].y,
-//                        MapDate.angle[PY][PX][PZ].z
-//                    );
-//
-//                        DirectX::XMMATRIX BT = DirectX::XMMatrixTranslation(
-//                            MapDate.position[PY][PX][PZ].x - MAPDate::mapX / 2,
-//                            MapDate.position[PY][PX][PZ].y,
-//                            MapDate.position[PY][PX][PZ].z - MAPDate::mapZ / 2
-//                        );
-//                        if (MapDate.BlockID[PY][PX][PZ] == 3 || MapDate.BlockID[PY][PX][PZ] == 4)
-//                        {
-//                            BT = DirectX::XMMatrixTranslation(
-//                                MapDate.position[PY][PX][PZ].x - MAPDate::mapX / 2,
-//                                MapDate.position[PY][PX][PZ].y - 0.98f,
-//                                MapDate.position[PY][PX][PZ].z - MAPDate::mapZ / 2);
-//                        }
-//                    DirectX::XMMATRIX BWorldTransform = BS * BR * BT;
-//                    DirectX::XMStoreFloat4x4(&MapDate.transform[PY][PX][PZ], BWorldTransform);
-//                }
-//            }
-//        }
-//    }
-//}
 
 void Stage::UpdateBlockTransform()
 {

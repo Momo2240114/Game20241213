@@ -511,6 +511,10 @@ void Character::UpdateVerticalMove(float elapsedTime)
 					}
 				}
 				break;
+			case 106:
+			case 107:
+				IsLive = true;
+				break;
 			}
 
 		}
@@ -654,6 +658,12 @@ void Character::UpdateHorizonMove(float elapsedTime)
 		hitHead = Stage::Instance().UnifiedRayCast(sHead, eHead, pHead, nHead, HitBlockAngle, HitBlock, true, true);
 		if (hitFeet)
 		{
+			if (HitBlock == 106 || HitBlock == 107)
+			{
+				IsLive = true;
+			}
+
+
 			Velocity.x = 0;
 			Velocity.z = 0;
 			 //足元がヒットした場合、衝突点と法線を取得
@@ -679,6 +689,7 @@ void Character::UpdateHorizonMove(float elapsedTime)
 			 //衝突点で再度レイキャストを行って修正された位置を計算
 			if (Stage::Instance().UnifiedRayCast(sFeet, q, pFeet, nFeet, an, HitBlock,true))
 			{
+
 				Velocity.x = 0;
 				Velocity.z = 0;
 				DirectX::XMVECTOR correctedPosition = DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&pFeet), DirectX::XMVectorScale(N, 0.05f));
@@ -712,6 +723,12 @@ void Character::UpdateHorizonMove(float elapsedTime)
 		}
 		else if(hitHead)
 		{
+			if (HitBlock == 106 || HitBlock == 107)
+			{
+				IsLive = true;
+			}
+
+
 			Velocity.x = 0;
 			Velocity.z = 0;
 			//足元がヒットした場合、衝突点と法線を取得

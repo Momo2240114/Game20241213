@@ -140,13 +140,14 @@ void PutBlock::Finalize()
 	EraseBlockModel = nullptr;
 }
 
-void PutBlock::render(const RenderContext& rc, ModelRenderer* renderer)
-{
+void PutBlock::render(const RenderContext& rc, ModelRenderer* renderer) {
+
+	// ƒ‚ƒfƒ‹‚ÌƒŒƒ“ƒ_ƒŠƒ“ƒO
 	switch (Type)
 	{
 	case 0:
 		renderer->Render(rc, transform, EraseBlockModel, ShaderId::Lambert);
-		break; 
+		break;
 	case 1:
 		renderer->Render(rc, transform, PutBlockModel1, ShaderId::Lambert);
 		break;
@@ -158,18 +159,20 @@ void PutBlock::render(const RenderContext& rc, ModelRenderer* renderer)
 		break;
 	case 4:
 		renderer->Render(rc, transform, PutBlockModel4, ShaderId::Lambert);
-		break;	
+		break;
 	case 5:
 		renderer->Render(rc, transform, PutBlockModel5, ShaderId::Lambert);
 		break;
 	case 6:
 		renderer->Render(rc, transform, PutBlockModel6, ShaderId::Lambert);
-		break;	
+		break;
 	case 7:
 		renderer->Render(rc, transform, PutBlockModel7, ShaderId::Lambert);
 		break;
 	}
+
 }
+
 
 void PutBlock::UpdateTransform()
 {

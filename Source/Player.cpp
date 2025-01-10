@@ -312,13 +312,36 @@ void Player::CollisionProjectileVsEnemies()
 // 移動入力処理
 void Player::InputMove(float elapsedTime)
 {
+	//移動フラグの管理
+	if (Startpos.x != position.x || Startpos.z != position.z)
+	{
+		IsMove = true;
+	}
+
+	//移動開始OK　Enter　OR　Second3↑
+	if (IsKeyPressed(VK_RETURN) || OnMovingFloorTime > 3)
+	{
+		if (moveState == 0)
+		{
+			angle.y = round(angle.y / 90.0) * 90; // 90度単位で丸める
+			if (angle.y > 360) {
+				angle.y -= 360;
+			}
+			else if (angle.y < -0) {
+				angle.y += 360;
+			}
+		}
+		moveState = 1;
+	
+	}
+
 	// 進行ベクトル取得
-	DirectX::XMFLOAT3 moveVec = {0,0,0};
+	DirectX::XMFLOAT3 moveVec = { 0,0,0 };
 	if (!IsMove)
 	{
 		moveVec = GetMoveVec();
+		OnMovingFloorTime += elapsedTime;
 	}
-	//moveVec = {0,0,0};
 	// 移動処理
 	if(moveState == 1)
 	{
@@ -328,14 +351,7 @@ void Player::InputMove(float elapsedTime)
 	// 旋回処理
 	Turn(elapsedTime, moveVec.x, moveVec.z, turnSpeed);
 
-	if (Startpos.x != position.x || Startpos.z != position.z)
-	{
-		IsMove = true;
-	}
-	if (IsKeyPressed(VK_RETURN))
-	{
-		moveState = 1;
-	}
+
 }
 
 void Player::InputJump()

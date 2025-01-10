@@ -74,7 +74,7 @@ protected:
 		0,0,1,0,
 		0,0,0,1
 	};
-
+	void revisionVelocity();
 	virtual void OnDamaged() {};
 	virtual void OnDead() {};
 	//キーが押されたときの検知用
