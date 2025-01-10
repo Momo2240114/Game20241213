@@ -45,7 +45,7 @@ void SceneGame::Initialize()
 		1000.0f	//クリップ距離（遠）
 	);
 
-	target = { 0,-3,0 };
+	target = { 20,-3,20 };
 	target.y = 0.5f;
 
 	// エネミー初期化
@@ -91,7 +91,7 @@ void SceneGame::Update(float elapsedTime)
 
 	if (PutBlock::Instance().PutOff())
 	{
-		DirectX::XMFLOAT3 target = cameraController->moveTarget(elapsedTime);
+		cameraController->moveTarget(elapsedTime);
 	}
 	cameraController->Update(elapsedTime);
 	PutBlock::Instance().Update(elapsedTime);

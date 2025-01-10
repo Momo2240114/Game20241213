@@ -273,9 +273,9 @@ DirectX::XMFLOAT3 Stage::SearchPairPoint(int currentBlockID, const DirectX::XMFL
                     if (x != currentPutx || y != currentPuty || z != currentPutz) {
                         // êVÇµÇ¢ç¿ïWÇåvéZÇµÇƒï‘Ç∑
                         DirectX::XMFLOAT3 targetPosition;
-                        targetPosition.x = (x - MAPDate::mapX / 2) * Blocksize * MapDate.scale.x;
+                        targetPosition.x = (x ) * Blocksize * MapDate.scale.x;
                         targetPosition.y = y * Blocksize * MapDate.scale.y;
-                        targetPosition.z = (z - MAPDate::mapZ / 2) * Blocksize * MapDate.scale.z;
+                        targetPosition.z = (z) * Blocksize * MapDate.scale.z;
                         return targetPosition;
                     }
                 }
