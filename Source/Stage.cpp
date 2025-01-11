@@ -7,15 +7,9 @@ void Stage::init()
     //ステージモデルを読み込み
     /*model = new Model("Data/Model/Stage/ExampleStage.mdl");*/
     //model = new Model("Data/Model/Stage/stagekari2.mdl");
-    switch (L)
-    {
-    case 0:
-        model = new Model("Data/Model/Stage/StageGrassland.mdl");
-        break;   
-    case 1:
-        model = new Model("Data/Model/Stage/SatageDesert.mdl");
-        break;
-    }
+ 
+    model = new Model("Data/Model/Stage/StageGrassland.mdl");
+ 
     Blockmodel1 = new Model("Data/Model/Block/Block1.mdl");
     Blockmodel2 = new Model("Data/Model/Block/Block2.mdl");
     Blockmodel3 = new Model("Data/Model/Block/Block3.mdl");
@@ -50,6 +44,7 @@ void Stage::init()
     }
     SetMapdate(0);
     UpdateBlockTransform();
+    UpdateTransform();
 }
 
 bool Stage::RayCast(const DirectX::XMFLOAT3& start,
@@ -80,6 +75,7 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
 
                     // 使用するブロックモデルを決定
                     Model* blockModel = nullptr;
+
                     switch (MapDate.BlockID[PY][PX][PZ]) {
                     case 1: blockModel = Blockmodel1; break;
                     case 2: blockModel = Blockmodel2; break;
@@ -253,7 +249,9 @@ DirectX::XMFLOAT3 Stage::GetStatePos()
             for (int PX = 0; PX < MAPDate::mapX; ++PX) {
                 if (MapDate.BlockID[PY][PX][PZ] == 101)
                 {
-                    return MapDate.position[PY][PX][PZ];
+                    DirectX::XMFLOAT3 pos = MapDate.position[PY][PX][PZ];
+                    pos.y += 1;
+                    return pos ;
                 }
             }
         }

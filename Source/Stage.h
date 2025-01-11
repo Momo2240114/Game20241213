@@ -70,13 +70,14 @@ public:
 
     DirectX::XMFLOAT3 SearchPairPoint(int currentBlockID, const DirectX::XMFLOAT3& currentPosition);
 
-    int SetstageLevel(int SetLevel) { L = SetLevel; };
+    void SetstageLevel(int SetLevel) { L = SetLevel; };
 private:
     Stage() {};
     ~Stage() {};
     Model* model = nullptr;
     Model* Putmodel = nullptr;
-    DirectX::XMFLOAT3		position = {-1, -10, -1 };
+
+    DirectX::XMFLOAT3		position = {-1, -10,-1 };
     DirectX::XMFLOAT3		angle = { 0, 0, 0 };
     DirectX::XMFLOAT3		scale = { 0.2f,0.2f,0.2f };
     DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
@@ -89,6 +90,7 @@ private:
     DirectX::XMFLOAT4X4		PutTransform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
     const float Blocksize = 1;
     //設置するブロック
+
     Model* Blockmodel1 = nullptr;//何もなし
     Model* Blockmodel2 = nullptr;//坂
     Model* Blockmodel3 = nullptr;//ジャンプ

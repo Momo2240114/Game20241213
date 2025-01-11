@@ -1,39 +1,18 @@
-﻿  Block.cpp
-  Player.cpp
-  PutBlock.cpp
-  SceneGame.cpp
-  Stage.cpp
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(116,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/Player.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(116,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/PutBlock.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル 'Source/Player.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル 'Source/PutBlock.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(116,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/Stage.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(116,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
-  (ソース ファイル 'Source/SceneGame.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル 'Source/Stage.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  (ソース ファイル 'Source/SceneGame.cpp' をコンパイルしています)
-  
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\PutBlock.cpp(60,18): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Player.cpp(13,13): warning C4356: 'Character::GoalNum': 静的データ メンバーは派生クラスを使って初期化できません。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Player.cpp(327,36): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+﻿  SceneStageSelect.cpp
+  SceneTitle.cpp
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(24,13): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(201,26): warning C4244: '引数': 'const int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(201,7): warning C4244: '引数': 'const int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(199,18): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(198,18): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(209,23): warning C4244: '引数': 'const int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(209,7): warning C4244: '引数': 'const int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(208,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(208,7): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
      ライブラリ bin\x64\Release\Game.lib とオブジェクト bin\x64\Release\Game.exp を作成中
   コード生成しています。
-  1 of 4929 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  2 of 5008 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    32 functions had inline decision re-evaluated but remain unchanged
+    31 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   Game.vcxproj -> C:\Users\2240114\Desktop\チーム制作３\GitHub\bin\x64\Release\Game.exe

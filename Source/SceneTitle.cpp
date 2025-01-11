@@ -1,10 +1,10 @@
 #include"System/Graphics.h"
 #include"System/Input.h"
 #include "SceneTitle.h"
+#include "SceneManager.h"
 #include "SceneGame.h"
 #include "SceneLoading.h"
-#include "SceneManager.h"
-
+#include "SceneStageSelect.h"
 
 void SceneTitle::Initialize()
 {
@@ -30,10 +30,7 @@ void SceneTitle::Update(float elapsedTime)
 		GamePad::BTN_Y;
 	if (gamepad.GetButtonDown() & anyButton)
 	{
-		SceneManager& sceneManager = SceneManager::Instance();
-		/*sceneManager.ChangeScene(new SceneGame());*/
-		sceneManager.ChangeScene(new SceneLoading(new SceneGame()));
-	
+		SceneManager::Instance().ChangeScene(new SceneStageSelect);
 	}
 }
 

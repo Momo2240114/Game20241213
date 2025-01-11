@@ -41,6 +41,7 @@ public:
 		float r, float g, float b, float a	// êF
 	) const;
 
+
 private:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader>			vertexShader;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader>			pixelShader;

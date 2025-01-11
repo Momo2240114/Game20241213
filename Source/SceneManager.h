@@ -6,7 +6,9 @@ class SceneManager
 {
 private:
 	SceneManager() {};
+	SceneManager(const SceneManager* Copy) {};
 	~SceneManager() {};
+	void operator=(SceneManager* Copy) {}
 public:
 	static SceneManager& Instance()
 	{
