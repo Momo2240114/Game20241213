@@ -2,6 +2,8 @@
 #include "System/Input.h"
 #include "CameraController.h"
 #include "Camera.h"
+#include "KeyPut.h"
+
 
 void CameraController::Update(float elapsedTime)
 {
@@ -11,40 +13,45 @@ void CameraController::Update(float elapsedTime)
 
     // ボタン入力の確認（例：Aボタンで回転開始）
     {
-        if (ax != 0)
-        {
+        if (ax != 0) {
             if (!isRotating)
             {
                 isRotating = true; // 回転開始
                 currentTime = 0.0f; // 経過時間をリセット
-                if (ax != 0)
-                {
-                    if (ax < 0) AddAng = +45;
-                    else if (ax > 0) AddAng = -45;
-                }
-              
+                if (ax < 0) AddAng = +45;
+                else if (ax > 0) AddAng = -45;
+
+             
 
                 targetAngle.x = angle.x; // X軸はそのまま
                 targetAngle.y = angle.y + DirectX::XMConvertToRadians(AddAng); // 45度回転
                 targetAngle.z = angle.z; // Z軸はそのまま
 
                 // Y軸角度を-π～πの範囲に収める（ここだけ調整）
-                if (targetAngle.y < -DirectX::XM_PI)
+                if (targetAngle.y < 0)
                 {
-                    targetAngle.y += DirectX::XM_2PI;
+                    targetAngle.y = 0;
                 }
-                if (targetAngle.y > DirectX::XM_PI)
+                if (targetAngle.y > DirectX::XMConvertToRadians(45))
                 {
-                    targetAngle.y -= DirectX::XM_2PI;
+                    targetAngle.y = DirectX::XMConvertToRadians(45);
                 }
             }
         }
-        if (ay != 0)
+
+        if (ay != 0 && targetAngle.y == 0)
         {
             range += ay * rangeChangeSpeed * elapsedTime; // ayの値でrangeを増減
             if (range < minRange) range = minRange;      // 最小値制限
             if (range > maxRange) range = maxRange;      // 最大値制限
         }
+        else if (targetAngle.y != 0)
+        {
+            range += 7 * rangeChangeSpeed * elapsedTime;
+            if(range > maxRange) range = maxRange;
+
+        }
+     
 
         // 回転中の処理
         if (isRotating)
@@ -86,6 +93,9 @@ void CameraController::Update(float elapsedTime)
         {
             angle.x = maxAngleX;
         }
+
+
+
         // 回転行列やカメラ位置の計算はそのまま
         DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
         DirectX::XMVECTOR Front = Transform.r[2];

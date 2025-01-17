@@ -13,7 +13,6 @@ void SceneManager::Update(float elapsedTime)
 			NowScene->Initialize();
 		}
 	}
-
 	if (NowScene)
 	{
 		NowScene->Update(elapsedTime);

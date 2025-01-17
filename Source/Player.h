@@ -68,6 +68,8 @@ private:
 
 	float DeadTimer = 0;
 
+	static DirectX::XMFLOAT3 StartVec;
+
 	ProjectileManager projectileManager;
 };	
 

@@ -3,12 +3,14 @@
 #include <imgui.h>
 
 #include "Framework.h"
+#include "System/Audio.h"
 #include "System/Input.h"
 #include "System/Graphics.h"
 #include "System/ImGuiRenderer.h"
 #include "SceneGame.h"
 #include "SceneManager.h"
 #include "SceneTitle.h"
+#include "AudioManager.h"
 
 // 垂直同期間隔設定
 static const int syncInterval = 1;
@@ -19,6 +21,8 @@ static const int syncInterval = 1;
 Framework::Framework(HWND hWnd)
 	: hWnd(hWnd)
 {
+	Audio::Instance().Initialize();
+
 	hDC = GetDC(hWnd);
 
 	// インプット初期化
@@ -30,8 +34,11 @@ Framework::Framework(HWND hWnd)
 	// IMGUI初期化
 	ImGuiRenderer::Initialize(hWnd, Graphics::Instance().GetDevice(), Graphics::Instance().GetDeviceContext());
 
+
+
+	AudioManager::Instance().LoadFile();
 	//// シーン初期化
-	//sceneGame.Initialize();
+//sceneGame.Initialize();
 	SceneManager::Instance().ChangeScene(new SceneTitle);
 }
 
@@ -41,10 +48,15 @@ Framework::~Framework()
 	// シーン終了化
 	SceneManager::Instance().Clear();
 
+	Audio::Instance().Finalize();
+
 	// IMGUI終了化
 	ImGuiRenderer::Finalize();
 
 	ReleaseDC(hWnd, hDC);
+
+
+
 }
 
 // 更新処理

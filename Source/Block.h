@@ -9,6 +9,7 @@ class BlockManager {
 public:
     struct BlockData {
         int id;
+        int hp;
         DirectX::XMFLOAT3 position;
         DirectX::XMFLOAT3 orgPosition;
         DirectX::XMFLOAT3 angle;

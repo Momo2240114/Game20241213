@@ -5,7 +5,6 @@
 
 void SceneLoading::Initialize()
 {
-
 	sprite = new Sprite("Data/Sprite/LoadingIcon.png");
 
 	// スレッド開始

@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "System/ModelRenderer.h"
 #include "MapDate.h"
 #include <vector>
@@ -11,23 +10,27 @@ struct  MAPDate
     static const int mapZ = 40;
     static const int mapY = 10;
     int  BlockID[mapY][mapX][mapZ] = {};
+    int  BlockEnergy[mapY][mapX][mapZ] = {};
     bool moveForward[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 position[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 orgposition[mapY][mapX][mapZ] = {};
     DirectX::XMFLOAT3 angle[mapY][mapX][mapZ] = {};
-    DirectX::XMFLOAT3 scale = {2.0f,  2.0f, 2.0f };
+    DirectX::XMFLOAT3 scale = {
+       0.2f,  0.2f,  0.2f};
     DirectX::XMFLOAT4X4 transform[mapY][mapX][mapZ] = {};
 };
-
+struct BlockInfo {
+    DirectX::XMFLOAT3 Position;
+    float Timer;
+};
 //ステージ
 class Stage
 {
 public:
     static Stage& Instance();
-
     void Finalize();
     //ブロックの設置
-    void putBlock(int Type,const DirectX::XMFLOAT3& Position, const DirectX::XMFLOAT3& Angle);
+    bool putBlock(int Type,const DirectX::XMFLOAT3& Position, const DirectX::XMFLOAT3& Angle,int cost);
     //更新処理
     void Update(float elapsedTime);
     ////ブロックの初期設置
@@ -57,27 +60,44 @@ public:
         DirectX::XMFLOAT3& hitPosition, DirectX::XMFLOAT3& hitNormal, DirectX::XMFLOAT3& HitBlockAngle,
         int& hitBlock, bool isPlayer, bool checkBlocks = false);
 
+    //ブロック関係の値の取得
     float GetBlockSize() { return Blocksize; }
     DirectX::XMFLOAT3 GetBlockscale() { return MapDate.scale; }
     int GetMapXsize() { return MAPDate::mapX; }
     int GetMapZsize() { return MAPDate::mapZ; }
 
+    //動くブロック（あれば）更新
     void MoveBlockUpdate(float elapsedTime);
 
     DirectX::XMFLOAT3 GetStatePos();
-
+    //赤と青のブロックの切り替え
     void BlockChange();
-
+    //対になるワープブロックの座標の取得
     DirectX::XMFLOAT3 SearchPairPoint(int currentBlockID, const DirectX::XMFLOAT3& currentPosition);
-
+    //レベルを設定
     void SetstageLevel(int SetLevel) { L = SetLevel; };
+    int GetLevel() { return L; }
+    //コストの増減
+    void AddCost(int Type);
+    void SubCost(int DeleteType, DirectX::XMFLOAT3 Position);
+    int GetUseCost() { return  UseCost; };
+    int GetNowCost() { return NowCost; };
+    //float GetLastPutTimer() { return CostTimer; };
+
+    void DamageBlock(DirectX::XMFLOAT3 pos);//位置に応じたブロックのエネルギーを減少させる
+
+    bool BlockEnergy(DirectX::XMFLOAT3 pos);//位置に応じたブロックのエネルギーが0かをチェック
+    int GetEnergy(DirectX::XMFLOAT3 pos);//位置に応じたブロックの残エネルギーを取得
+
+    DirectX::XMFLOAT3 GetNextStartPos(); // 順番に取得する関数
+    void FindAllStartPositions();       // 初期位置をすべて探す関数
 private:
     Stage() {};
     ~Stage() {};
     Model* model = nullptr;
     Model* Putmodel = nullptr;
 
-    DirectX::XMFLOAT3		position = {-1, -10,-1 };
+    DirectX::XMFLOAT3		position = {-1, -11,-1 };
     DirectX::XMFLOAT3		angle = { 0, 0, 0 };
     DirectX::XMFLOAT3		scale = { 0.2f,0.2f,0.2f };
     DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
@@ -88,8 +108,16 @@ private:
     DirectX::XMFLOAT3		PutAng = { 0, 0, 0 };
     DirectX::XMFLOAT3		Putscale = { 1, 1, 1 };
     DirectX::XMFLOAT4X4		PutTransform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
-    const float Blocksize = 1;
-    //設置するブロック
+    const float Blocksize = 10;
+
+    //設置するブロックの履歴
+    std::vector<BlockInfo> LastPutPositions;
+    const int MaxStoredPositions = 10; // 保存できる最大数
+    void SavingPutPosUpdateTimers(float deltaTime);
+    void SaveLastPutPos(DirectX::XMFLOAT3 Position);
+    int UseCost = 0;
+    int NowCost = 0;
+    const int Max_Cost = 100;
 
     Model* Blockmodel1 = nullptr;//何もなし
     Model* Blockmodel2 = nullptr;//坂
@@ -108,6 +136,9 @@ private:
     Model* RedBlock = nullptr;//レッドブロック
     Model* RedWaku = nullptr;//レッド枠
     Model* Switch = nullptr;//スイッチ
+    Model* OnSwitch = nullptr;//オンスイッチ    
+    Model* Lever = nullptr;//レバー
+    Model* OnLever = nullptr;//オンレバー
     int OnBlockColer = 0;//色ブロックの管理用色が増えてもいいようにintで
 
     Model* Warpmdl1 = nullptr;//ワープ1
@@ -116,13 +147,14 @@ private:
     Model* Warpmdl4 = nullptr;//ワープ4
     Model* Warpmdl5 = nullptr;//ワープ5
 
-    Model* SpikeMdl = nullptr;//スパイクブロック
-    Model* SpikeHit = nullptr;//スパイクブロック当たり判定    
+    Model* BlockFixed = nullptr;//スパイクブロック当たり判定    
     Model* SpikeFloorMdl = nullptr;//スパイク床ブロック
     Model* SpikeFloorHit = nullptr;//スパイク床ブロック当たり判定
 
     int timer = 0;
 
+    std::vector<DirectX::XMFLOAT3> startPositions; // 初期位置のリスト
+    size_t currentStartIndex = 0;                  // 現在の初期位置のインデックス
 };
 
 

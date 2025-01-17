@@ -42,32 +42,34 @@ public:
 
 	bool IsGround()const { return isGround; };
 
-	bool ApplyDamage(int damage ,float invincibletime);
+	bool ApplyDamage(int damage, float invincibletime);
 
 	void HandleBlockCollision(int blockID, const DirectX::XMFLOAT3& hitPosition, const DirectX::XMFLOAT3& hitNormal);
 
 
 	static int ISGoalNum() { return GoalNum; }
+
 private:
 	static int GoalNum;
 
 	//垂直の速力更新
-	void UpdateVerticalVelocity(float elapsedTime);	
+	void UpdateVerticalVelocity(float elapsedTime);
 	//水平の速力更新
 	void UpdateHorizonVelocity(float elapsedTime);
 	//垂直の移動更新
 	void UpdateVerticalMove(float elapsedTime);
-		//垂直の移動更新
+	//垂直の移動更新
 	void UpdateHorizonMove(float elapsedTime);
 
 
+	void HitAngleCheck(float HitAngle);
 protected:
-	DirectX::XMFLOAT3	TargetPosition = {0,0,0};
-	DirectX::XMFLOAT3	position = {0,0,0};
-	DirectX::XMFLOAT3	Startpos = {0,0,0};
-	DirectX::XMFLOAT3	Previousposition = {0,0,0};
-	DirectX::XMFLOAT3	angle = {0,0,0};
-	DirectX::XMFLOAT3	scale = {1,1,1};
+	DirectX::XMFLOAT3	TargetPosition = { 0,0,0 };
+	DirectX::XMFLOAT3	position = { 0,0,0 };
+	DirectX::XMFLOAT3	Startpos = { 0,0,0 };
+	DirectX::XMFLOAT3	Previousposition = { 0,0,0 };
+	DirectX::XMFLOAT3	angle = { 0,0,0 };
+	DirectX::XMFLOAT3	scale = { 1,1,1 };
 	DirectX::XMFLOAT4X4	transform = {
 		1,0,0,0,
 		0,1,0,0,
@@ -77,10 +79,7 @@ protected:
 	void revisionVelocity() {};
 	virtual void OnDamaged() {};
 	virtual void OnDead() {};
-	//キーが押されたときの検知用
-	bool IsKeyPressed(int key) {
-		return (GetAsyncKeyState(key) & 0x8000) != 0;
-	}
+
 
 
 	float gravity = -30.0f;
@@ -94,6 +93,8 @@ protected:
 	DirectX::XMFLOAT3 OldVelocity = { 0,0,0 };
 
 	DirectX::XMFLOAT3 HitBlockAngle = { 0,0,0 };
+
+	DirectX::XMFLOAT3 LastHitPos = {0,0,0}; // 前回踏んだブロックの情報
 
 	bool isGround = false;
 

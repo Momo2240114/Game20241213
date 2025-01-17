@@ -1,50 +1,65 @@
 #include "Stage.h"
 #include "Collision.h"
 #include "PlayerManager.h"
+#include "PutBlock.h"
 
 void Stage::init()
 {
     //ステージモデルを読み込み
     /*model = new Model("Data/Model/Stage/ExampleStage.mdl");*/
     //model = new Model("Data/Model/Stage/stagekari2.mdl");
+    switch (L)
+    {
+    case 0:
+        model = new Model("Data/Model/Stage/StageGrassland.mdl");
+        break;
+    case 1:
+        model = new Model("Data/Model/Stage/StageGrassland.mdl");
+        break;
+    }
  
-    model = new Model("Data/Model/Stage/StageGrassland.mdl");
- 
-    Blockmodel1 = new Model("Data/Model/Block/Block1.mdl");
-    Blockmodel2 = new Model("Data/Model/Block/Block2.mdl");
-    Blockmodel3 = new Model("Data/Model/Block/Block3.mdl");
-    Blockmodel4 = new Model("Data/Model/Block/Block4.mdl");
+    Blockmodel1 = new Model("Data/Model/Block/field_dirt_asset.mdl");
+    Blockmodel2 = new Model("Data/Model/Block/gimmick_stairs_asset.mdl");
+    Blockmodel3 = new Model("Data/Model/Block/gimmick_jump_asset.mdl");
+    Blockmodel4 = new Model("Data/Model/Block/gimmick_direction_asset.mdl");
     Blockmodel5 = new Model("Data/Model/Block/Block5.mdl");
-    Blockmodel6 = new Model("Data/Model/Block/BlockStop.mdl");
-    Blockmodel7 = new Model("Data/Model/Block/AccelBlock.mdl");
-    StartPoint = new Model("Data/Model/Block/StatePoint.mdl");
+    Blockmodel6 = new Model("Data/Model/Block/gimmick_stop_asset.mdl");
+    Blockmodel7 = new Model("Data/Model/Block/gimmick_axel_asset.mdl");
+    StartPoint = new Model("Data/Model/Block/StartPoint.mdl");
     GoalPoint = new Model("Data/Model/Block/Goal.mdl");
-    BlueBlock = new Model("Data/Model/Block/BlueBlock.mdl");
+    BlueBlock = new Model("Data/Model/Block/gimmick_lever_block_blue_ground_asset.mdl");
     BlueWaku = new Model("Data/Model/Block/BlueWaku.mdl");   
-    RedBlock = new Model("Data/Model/Block/RedBlock.mdl");
-    RedWaku = new Model("Data/Model/Block/RedWaku.mdl");
-    Switch = new Model("Data/Model/Block/Switch.mdl");
+    RedBlock = new Model("Data/Model/Block/gimmick_lever_block_Red_ground_asset.mdl");
+    RedWaku = new Model("Data/Model/Block/RedWaku.mdl"); 
+    Switch = new Model("Data/Model/Block/gimmick_lever_block_blue_asset.mdl");
+    OnSwitch = new Model("Data/Model/Block/gimmick_lever_block_red_asset.mdl");
+    Lever = new Model("Data/Model/Block/gimmick_lever_switching_asset.mdl");//レバー
+    OnLever = new Model("Data/Model/Block/gimmick_lever_asset.mdl");//オンレバー
     Warpmdl1 = new Model("Data/Model/Block/Warp/WarpPoint1.mdl");
     Warpmdl2 = new Model("Data/Model/Block/Warp/WarpPoint2.mdl");
     Warpmdl3 = new Model("Data/Model/Block/Warp/WarpPoint3.mdl");
     Warpmdl4 = new Model("Data/Model/Block/Warp/WarpPoint4.mdl");
     Warpmdl5 = new Model("Data/Model/Block/Warp/WarpPoint5.mdl");
-    SpikeMdl = new Model("Data/Model/Block/SpikeBlockMdl.mdl");
-    SpikeHit = new Model("Data/Model/Block/SpikeBlockHit.mdl");    
-    SpikeFloorMdl = new Model("Data/Model/Block/SpikeBlockFloorMdl.mdl");
-    SpikeFloorHit = new Model("Data/Model/Block/SpikeBlockFloorHit.mdl");
+    BlockFixed = new Model("Data/Model/Block/field_glass_asset.mdl");
+    SpikeFloorMdl = new Model("Data/Model/Block/gimmick_thorn_asset.mdl");
+    SpikeFloorHit = new Model("Data/Model/Block/SpikeBlockHit.mdl");
     // 初期化処理
     for (int PY = 0; PY < MAPDate::mapY; ++PY) {
         for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
             for (int PX = 0; PX < MAPDate::mapX; ++PX) 
             {
                 MapDate.BlockID[PY][PX][PZ] = 0;
+                MapDate.BlockEnergy[PY][PX][PZ] = 0;
             }
         }
     }
-    SetMapdate(0);
+    SetMapdate(L);
     UpdateBlockTransform();
     UpdateTransform();
+
+    UseCost = 0;
+    NowCost = 0;
+
 }
 
 bool Stage::RayCast(const DirectX::XMFLOAT3& start,
@@ -105,15 +120,20 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
                         }
                         break;
                     case 104:
-                        blockModel = Switch;
+                        if (OnBlockColer == OnBlockColer::Blue) {
+                            blockModel = Switch;
+                        }
+                        else {
+                            blockModel = OnSwitch;
+                        }
                         break;
                     case 110:blockModel = Warpmdl1; break;
                     case 111:blockModel = Warpmdl2; break;
                     case 112:blockModel = Warpmdl3; break;
                     case 113:blockModel = Warpmdl4; break;
                     case 114:blockModel = Warpmdl5; break;
-                    case 106:blockModel = SpikeHit; break;
-                    case 107:blockModel = SpikeFloorHit; break;
+                    case 106:blockModel = SpikeFloorHit; break;
+                    case 107:blockModel = BlockFixed; break;
                     }
 
 
@@ -124,9 +144,10 @@ bool Stage::UnifiedRayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
 
                     // レイキャスト処理
                     if (Collision::RayCast(start, end, blockTransform, blockModel, hitPosition, hitNormal)) {
+
                         hitBlock = MapDate.BlockID[PY][PX][PZ];
                         HitBlockAngle = MapDate.angle[PY][PX][PZ];
-
+                        
                         return true; // 衝突があった場合は即座に true を返す
                     }
                 }
@@ -220,7 +241,7 @@ void Stage::MoveBlockUpdate(float elapsedTime)
                         }
                     }
                 }
-        
+
                 DirectX::XMMATRIX BS = DirectX::XMMatrixScaling(
                     MapDate.scale.x * 2, MapDate.scale.y * 2, MapDate.scale.z * 2
                 );
@@ -243,20 +264,8 @@ void Stage::MoveBlockUpdate(float elapsedTime)
 }
 //プレイヤーの初期位置
 DirectX::XMFLOAT3 Stage::GetStatePos()
-{
-    for (int PY = 0; PY < MAPDate::mapY; ++PY) {
-        for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
-            for (int PX = 0; PX < MAPDate::mapX; ++PX) {
-                if (MapDate.BlockID[PY][PX][PZ] == 101)
-                {
-                    DirectX::XMFLOAT3 pos = MapDate.position[PY][PX][PZ];
-                    pos.y += 1;
-                    return pos ;
-                }
-            }
-        }
-    }
-    return DirectX::XMFLOAT3{0,0,0};
+{ 
+    return GetNextStartPos();
 }
 
 void Stage::BlockChange()
@@ -280,7 +289,7 @@ DirectX::XMFLOAT3 Stage::SearchPairPoint(int currentBlockID, const DirectX::XMFL
                         // 新しい座標を計算して返す
                         DirectX::XMFLOAT3 targetPosition;
                         targetPosition.x = (x ) * Blocksize * MapDate.scale.x;
-                        targetPosition.y = y * Blocksize * MapDate.scale.y;
+                        targetPosition.y = (y - 0.5f) * Blocksize * MapDate.scale.y;
                         targetPosition.z = (z) * Blocksize * MapDate.scale.z;
                         return targetPosition;
                     }
@@ -291,6 +300,133 @@ DirectX::XMFLOAT3 Stage::SearchPairPoint(int currentBlockID, const DirectX::XMFL
 
     // 対になるワープ床が見つからなかった場合は現在位置を返す
     return currentPosition;
+}
+
+void Stage::AddCost(int Type)
+{
+    NowCost += PutBlock::Instance().CostGet(Type);
+    UseCost += PutBlock::Instance().CostGet(Type);
+}
+
+void Stage::SubCost(int DeleteType, DirectX::XMFLOAT3 Position)
+{
+    bool found = false;
+
+    for (auto& block : LastPutPositions) {
+        if (block.Position.x == Position.x && block.Position.y == Position.y && block.Position.z == Position.z) {
+            if (block.Timer > 0) {
+                UseCost -= PutBlock::Instance().CostGet(DeleteType);
+                found = true;
+                break;
+            }
+        }
+    }
+
+    if (!found) {
+        if (LastPutPositions.size() >= MaxStoredPositions) {
+            LastPutPositions.erase(LastPutPositions.begin()); // 最古の要素を削除
+        }
+        LastPutPositions.push_back({ Position, 10.0f }); // 新しいブロックを追加
+    }
+
+    NowCost -= PutBlock::Instance().CostGet(DeleteType);
+}
+
+void Stage::DamageBlock(DirectX::XMFLOAT3 pos)
+{
+    int Px = static_cast<int>((pos.x / MapDate.scale.x) / Blocksize);
+    int Py = static_cast<int>((pos.y / MapDate.scale.y) / Blocksize);
+    int Pz = static_cast<int>((pos.z / MapDate.scale.z) / Blocksize);
+
+    MapDate.BlockEnergy[Py][Px][Pz]--;
+    if (MapDate.BlockEnergy[Py][Px][Pz] <= 0)
+    {
+        MapDate.BlockEnergy[Py][Px][Pz] = 0;
+    }
+}
+
+bool Stage::BlockEnergy(DirectX::XMFLOAT3 pos)
+{
+    int Px = static_cast<int>((pos.x / MapDate.scale.x) / Blocksize);
+    int Py = static_cast<int>((pos.y / MapDate.scale.y) / Blocksize);
+    int Pz = static_cast<int>((pos.z / MapDate.scale.z) / Blocksize);
+
+    return(MapDate.BlockEnergy[Py][Px][Pz] > 0);
+}
+
+int Stage::GetEnergy(DirectX::XMFLOAT3 pos)
+{
+    int Px = static_cast<int>((pos.x / MapDate.scale.x) / Blocksize);
+    int Py = static_cast<int>((pos.y / MapDate.scale.y) / Blocksize);
+    int Pz = static_cast<int>((pos.z / MapDate.scale.z) / Blocksize);
+
+    return MapDate.BlockEnergy[Py][Px][Pz];
+}
+
+DirectX::XMFLOAT3 Stage::GetNextStartPos(){
+    if (startPositions.empty()) {
+        return DirectX::XMFLOAT3{ 0, 0, 0 }; // 初期位置が存在しない場合
+    }
+
+    // 現在の位置を取得
+    DirectX::XMFLOAT3 nextPos = startPositions[currentStartIndex];
+
+    // インデックスを更新
+    currentStartIndex = (currentStartIndex + 1) % startPositions.size();
+
+    return nextPos;
+}
+
+void Stage::FindAllStartPositions()
+{
+    startPositions.clear(); // 初期化
+    currentStartIndex = 0;  // インデックスをリセット
+
+    for (int PY = 0; PY < MAPDate::mapY; ++PY) {
+        for (int PX = 0; PX < MAPDate::mapX; ++PX) {
+            for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {               
+                if (MapDate.BlockID[PY][PX][PZ] == 101) {
+                    DirectX::XMFLOAT3 pos = MapDate.position[PY][PX][PZ];
+                    pos.y += 1;
+                    startPositions.push_back(pos); // リストに追加
+                }
+            }
+        }
+    }
+}
+
+void Stage::SavingPutPosUpdateTimers(float deltaTime)
+{
+    for (auto& block : LastPutPositions) {
+        block.Timer -= deltaTime;
+    }
+    // タイマーが0以下のブロックを削除
+    LastPutPositions.erase(
+        std::remove_if(LastPutPositions.begin(), LastPutPositions.end(), [](const BlockInfo& block) {
+            return block.Timer <= 0;
+            }),
+        LastPutPositions.end()
+    );
+}
+
+void Stage::SaveLastPutPos(DirectX::XMFLOAT3 Position)
+{
+    // 同じ位置が既に存在するかチェック
+    auto it = std::find_if(LastPutPositions.begin(), LastPutPositions.end(), [&](const BlockInfo& block) {
+        return block.Position.x == Position.x && block.Position.y == Position.y && block.Position.z == Position.z;
+        });
+
+    if (it != LastPutPositions.end()) {
+        // 既に存在する場合はタイマーをリセット
+        it->Timer = 10.0f;
+    }
+    else {
+        // 新しい位置を追加
+        if (LastPutPositions.size() >= MaxStoredPositions) {
+            LastPutPositions.erase(LastPutPositions.begin()); // 最古の要素を削除
+        }
+        LastPutPositions.push_back({ Position, 10.0f });
+    }
 }
 
 
@@ -331,7 +467,9 @@ void Stage::Finalize()
     delete RedWaku;
     RedWaku = nullptr;  
     delete Switch;
-    Switch = nullptr;
+    Switch = nullptr;    
+    delete OnSwitch;
+    OnSwitch = nullptr;
     delete Warpmdl1;
     Warpmdl1 = nullptr;   
     delete Warpmdl2;
@@ -342,37 +480,46 @@ void Stage::Finalize()
     Warpmdl4 = nullptr;   
     delete Warpmdl5;
     Warpmdl5 = nullptr;
-    delete SpikeMdl;
-    SpikeMdl = nullptr;   
-    delete SpikeHit;
-    SpikeHit = nullptr;   
+    delete BlockFixed;
+    BlockFixed = nullptr;     
     delete SpikeFloorMdl;
     SpikeFloorMdl = nullptr;
     delete SpikeFloorHit;
     SpikeFloorHit = nullptr;
 }
 
-void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX::XMFLOAT3& Angle) 
+bool Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX::XMFLOAT3& Angle, int cost)
 {
+    if (NowCost + PutBlock::Instance().CostGet(Type) > Max_Cost)return false;
+
     int Putx = static_cast<int>((Position.x / MapDate.scale.x) / Blocksize);
     int Puty = static_cast<int>((Position.y / MapDate.scale.y) / Blocksize);
     int Putz = static_cast<int>((Position.z / MapDate.scale.z) / Blocksize);
 
     if (MapDate.BlockID[Puty][Putx][Putz] > 100 ||
-        MapDate.BlockID[Puty + 1][Putx][Putz] > 100 ){ return; }
+        MapDate.BlockID[Puty + 1][Putx][Putz] > 100 ){ return false; }
 
     int SetType = Type;
     DirectX::XMFLOAT3 SetAngle = Angle;
-    if ((MapDate.BlockID[Puty][Putx][Putz] == 3 && Type == 4) ||
-        (MapDate.BlockID[Puty][Putx][Putz] == 4 && Type == 3)) {
+    //if ((MapDate.BlockID[Puty][Putx][Putz] == 3 && Type == 4) ||
+    //    (MapDate.BlockID[Puty][Putx][Putz] == 4 && Type == 3)) {
 
-        SetType = 5;
-        if (Type == 3)
-        {
-            SetAngle = MapDate.angle[Puty][Putx][Putz];
-        }
+    //    SetType = 5;
+    //    if (Type == 3)
+    //    {
+    //        SetAngle = MapDate.angle[Puty][Putx][Putz];
+    //    }
+    //}
+    if (MapDate.BlockID[Puty][Putx][Putz] != 0 && Type!= 0)return false;
+
+    if(Type != 0)
+    {
+        AddCost(Type);
     }
-    else if (MapDate.BlockID[Puty][Putx][Putz] != 0 && Type!= 0)return;
+    else
+    {
+        SubCost(MapDate.BlockID[Puty][Putx][Putz], MapDate.position[Puty][Putx][Putz]);
+    }
 
     // ブロックIDと回転角度を設定
     MapDate.BlockID[Puty][Putx][Putz] = SetType;
@@ -380,31 +527,37 @@ void Stage::putBlock(int Type, const DirectX::XMFLOAT3& Position, const DirectX:
 
     // ブロック位置を計算
     MapDate.position[Puty][Putx][Putz] = {
-        (Putx) * Blocksize * MapDate.scale.x,
+        (Putx)*Blocksize* MapDate.scale.x,
         (Puty)*Blocksize * MapDate.scale.y,
-        (Putz) * Blocksize * MapDate.scale.z
+        (Putz)*Blocksize * MapDate.scale.z
     };
-    MapDate.orgposition[Puty][Putx][Putz] = MapDate.position[Puty][Putx][Putz];
+
+    MapDate.orgposition[Puty][Putx][Putz] = MapDate.position[Puty][Putx][Putz];//ブロックの初期値地点を設定
+    MapDate.BlockEnergy[Puty][Putx][Putz] = 3;//ブロックのエネルギーを設定
+    SaveLastPutPos(MapDate.position[Puty][Putx][Putz]);
+
+    return true;
 }
 
 void Stage::Update(float elapsedTime)
 {
     //MoveBlockUpdate(elapsedTime);
+    SavingPutPosUpdateTimers(elapsedTime);
 }
 
 //真布チップでテスト用
 void Stage::SetMapdate(int Level)
 {
-    L = Level;
     for (int PY = 0; PY < MAPDate::mapY; ++PY) {
         for (int PZ = 0; PZ < MAPDate::mapZ; ++PZ) {
             for (int PX = 0; PX < MAPDate::mapX; ++PX) {
                 if (Mapid[L][PY][PX][PZ] == 0) { continue; }
-
+                L;
                 int ID = 0;
                 ID = Mapid[L][PY][PX][PZ];
                 MapDate.BlockID[PY][PX][PZ] = ID + 100;//+100することで設置ブロックと分けやすくする
-
+                MapDate.BlockEnergy[PY][PX][PZ] = 3;
+    
                 //ブロックの位置計算
                 MapDate.position[PY][PX][PZ] = {
                    (PX) * Blocksize * MapDate.scale.x,
@@ -414,6 +567,7 @@ void Stage::SetMapdate(int Level)
             }
         }
     }
+    FindAllStartPositions();
 }
 
 void Stage::Render(const RenderContext& rc, ModelRenderer* renderer)
@@ -478,13 +632,49 @@ void Stage::BlockRender(const RenderContext& rc, ModelRenderer* renderer)
                         }
                         break;
                     case 104:
-                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], Switch, ShaderId::Lambert);
+                        DirectX::XMMATRIX BS = DirectX::XMMatrixScaling(
+                            MapDate.scale.x, MapDate.scale.y, MapDate.scale.z
+                        );
+                        DirectX::XMMATRIX BR = DirectX::XMMatrixRotationRollPitchYaw(
+                            MapDate.angle[PY][PX][PZ].x,
+                            MapDate.angle[PY][PX][PZ].y,
+                            MapDate.angle[PY][PX][PZ].z
+                        );
+
+                        DirectX::XMMATRIX BT = DirectX::XMMatrixTranslation(
+                            MapDate.position[PY][PX][PZ].x,
+                            MapDate.position[PY][PX][PZ].y,
+                            MapDate.position[PY][PX][PZ].z
+                        );
+
+                        if (MapDate.BlockID[PY][PX][PZ] == 104)
+                        {
+                            BT = DirectX::XMMatrixTranslation(
+                                MapDate.position[PY][PX][PZ].x,
+                                MapDate.position[PY][PX][PZ].y - 2,
+                                MapDate.position[PY][PX][PZ].z + 2
+                            );
+                        }
+                        DirectX::XMMATRIX BWorldTransform = BS * BR * BT;
+
+                        DirectX::XMFLOAT4X4 SwichPos;
+                        DirectX::XMStoreFloat4x4(&SwichPos, BWorldTransform);
+                        
+                        if (OnBlockColer == OnBlockColer::Blue) {
+                            renderer->Render(rc, MapDate.transform[PY][PX][PZ], Switch, ShaderId::Lambert);
+                            renderer->Render(rc, SwichPos, Lever, ShaderId::Lambert);
+
+                        }
+                        else {
+                            renderer->Render(rc, MapDate.transform[PY][PX][PZ], OnSwitch, ShaderId::Lambert);
+                            renderer->Render(rc, SwichPos, OnLever, ShaderId::Lambert);
+                        }
                         break;
                     case 106:
-                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], SpikeMdl, ShaderId::Lambert);
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], SpikeFloorMdl, ShaderId::Lambert);
                         break;     
                     case 107:
-                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], SpikeFloorMdl, ShaderId::Lambert);
+                        renderer->Render(rc, MapDate.transform[PY][PX][PZ], BlockFixed, ShaderId::Lambert);
                         break;
                     case 110:
                         renderer->Render(rc, MapDate.transform[PY][PX][PZ], Warpmdl1, ShaderId::Lambert);
@@ -507,7 +697,7 @@ void Stage::BlockRender(const RenderContext& rc, ModelRenderer* renderer)
         }
     }
 }
-//
+
 void Stage::UpdateTransform()
 {
     DirectX::XMMATRIX S = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
@@ -524,6 +714,11 @@ void Stage::UpdateBlockTransform()
             for (int PX = 0; PX < MAPDate::mapX; ++PX) {
                 if (MapDate.BlockID[PY][PX][PZ] != 0)
                 {
+                    int A = 0;
+                    if (MapDate.BlockID[PY][PX][PZ] == 1)
+                    {
+                        A = 1;
+                    }
                     DirectX::XMMATRIX BS = DirectX::XMMatrixScaling(
                         MapDate.scale.x, MapDate.scale.y, MapDate.scale.z
                     );
@@ -532,11 +727,22 @@ void Stage::UpdateBlockTransform()
                         MapDate.angle[PY][PX][PZ].y,
                         MapDate.angle[PY][PX][PZ].z
                     );
+
                     DirectX::XMMATRIX BT = DirectX::XMMatrixTranslation(
                         MapDate.position[PY][PX][PZ].x,
                         MapDate.position[PY][PX][PZ].y,
                         MapDate.position[PY][PX][PZ].z
                     );
+
+                    if (MapDate.BlockID[PY][PX][PZ] == 104)
+                    {
+                        BT = DirectX::XMMatrixTranslation(
+                            MapDate.position[PY][PX][PZ].x,
+                            MapDate.position[PY][PX][PZ].y - 2,
+                            MapDate.position[PY][PX][PZ].z
+                        );
+                    }
+
                     DirectX::XMMATRIX BWorldTransform = BS * BR * BT;
                     DirectX::XMStoreFloat4x4(&MapDate.transform[PY][PX][PZ], BWorldTransform);
                 }

@@ -7,6 +7,7 @@
 #include "System/Graphics.h"
 #include "Stage.h"
 
+
 class PutBlock
 {
 public:
@@ -24,6 +25,10 @@ public:
 	void UpdateTransform();
 
 	void Update(float elapsedTime);
+
+	int CostGet(int i);
+
+	int GetVewEnergy() {return VewEnergy;}
 
 	//カメラの目線からレイキャスト
 	void performRaycast(DirectX::XMFLOAT3& RayState, DirectX::XMFLOAT3& RayEnd);
@@ -50,6 +55,7 @@ private:
 	Model* PutBlockModel5 = nullptr;
 	Model* PutBlockModel6 = nullptr;
 	Model* PutBlockModel7 = nullptr;
+	Model* FrameModel = nullptr;
 	DirectX::XMFLOAT3 RayState = { 0,0,0 };
 	DirectX::XMFLOAT3 RayEnd = { 0,0,0 };
 	DirectX::XMVECTOR WorldPositionFar = {};
@@ -59,8 +65,8 @@ private:
 	DirectX::XMFLOAT3 screenPosition = { 0,0,0 };
 	DirectX::XMFLOAT3 HitPos = { 0,0,10 };
 	DirectX::XMFLOAT3 HitNor = {0,0,0};
-	DirectX::XMFLOAT3		scale = { 1, 1, 1 };
-	DirectX::XMFLOAT4X4		transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+	DirectX::XMFLOAT3	scale = {};
+	DirectX::XMFLOAT4X4	transform = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 	float mouseX=0;
 	float mouseY=0;
 	float screenWidth=0;
@@ -69,5 +75,6 @@ private:
 	int HitType = 1;
 	float Timer = 0;
 	int wheel = 0;
+	int VewEnergy = 0;
 };
 

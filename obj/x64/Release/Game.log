@@ -1,18 +1,21 @@
-﻿  SceneStageSelect.cpp
-  SceneTitle.cpp
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(24,13): warning C4267: '初期化中': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(201,26): warning C4244: '引数': 'const int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(201,7): warning C4244: '引数': 'const int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(199,18): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(198,18): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(209,23): warning C4244: '引数': 'const int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(209,7): warning C4244: '引数': 'const int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(208,19): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp(208,7): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+﻿  Character.cpp
+  PutBlock.cpp
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.h(117,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル 'Source/Character.cpp' をコンパイルしています)
+  
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\character.h(117,24): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+  (ソース ファイル 'Source/PutBlock.cpp' をコンパイルしています)
+  
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.h(26,57): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  (ソース ファイル 'Source/PutBlock.cpp' をコンパイルしています)
+  
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.cpp(46,20): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.cpp(436,45): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Character.cpp(838,22): warning C4244: '-=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\PutBlock.cpp(61,18): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
      ライブラリ bin\x64\Release\Game.lib とオブジェクト bin\x64\Release\Game.exp を作成中
   コード生成しています。
-  2 of 5008 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    31 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+  All 5706 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   コード生成が終了しました。
   Game.vcxproj -> C:\Users\2240114\Desktop\チーム制作３\GitHub\bin\x64\Release\Game.exe

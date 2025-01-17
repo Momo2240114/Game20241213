@@ -9,8 +9,11 @@
 #include "ProjectileHoming.h"
 #include "System/Graphics.h"
 #include "Stage.h"
+#include "KeyPut.h"
+#include "PutBlock.h"
 
 int Player::GoalNum = 0;
+DirectX::XMFLOAT3  Player::StartVec = { 0,0,0 };
 
 void Player::OnLanding()
 {
@@ -43,6 +46,7 @@ void Player::Initialize()
 	position.y = 5;
 
 	Startpos = position;
+	StartVec = { 0,0,0 };
 }
 
 // デストラクタの代わり
@@ -119,19 +123,46 @@ void Player::Render(const RenderContext& rc, ModelRenderer* renderer)
 // デバッグ用GUI描画
 void Player::DrawDebugGUI()
 {
+	float Blocksize = Stage::Instance().GetBlockSize();
+	DirectX::XMFLOAT3 Bscale = Stage::Instance().GetBlockscale();
 	ImVec2 pos = ImGui::GetMainViewport()->GetWorkPos();
 	ImGui::SetNextWindowPos(ImVec2(pos.x + 10, pos.y + 10), ImGuiCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
+
+	float Cost = Stage::Instance().GetUseCost();
+	float NowCost = Stage::Instance().GetNowCost();
+
+	float Px = static_cast<int>(round(position.x / (Bscale.x * Blocksize)));
+	float Py = static_cast<int>(round(position.y / (Bscale.y * Blocksize)));
+	float Pz = static_cast<int>(round(position.z / (Bscale.z * Blocksize)));
+
+	float Ppx = static_cast<int>((position.x / Bscale.x) / Blocksize);
+	float Ppy = static_cast<int>((position.y / Bscale.y) / Blocksize);
+	float Ppz = static_cast<int>((position.z / Bscale.z) / Blocksize);
+
+	float  Ene = (float)PutBlock::Instance().GetVewEnergy();
 
 	if (ImGui::Begin("Player", nullptr, ImGuiWindowFlags_None))
 	{
 		// トランスフォーム
 		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 		{
+			ImGui::InputFloat3("position", &position.x);
 			// 位置
-			ImGui::InputFloat3("Position", &position.x);
+			ImGui::InputFloat("Cost", &Cost);
+			ImGui::InputFloat("nowCost", &NowCost);
 
-			// 回転
+			ImGui::InputFloat("Px", &Px);
+			ImGui::InputFloat("Py", &Py);
+			ImGui::InputFloat("Pz", &Pz);	
+
+			ImGui::InputFloat("Ppx", &Ppx);
+			ImGui::InputFloat("Ppy", &Ppy);
+			ImGui::InputFloat("Ppz", &Ppz);
+
+			ImGui::InputFloat("Ene", &Ene);
+
+			/* 回転
 			DirectX::XMFLOAT3 a;
 			a.x = DirectX::XMConvertToDegrees(angle.x);
 			a.y = DirectX::XMConvertToDegrees(angle.y);
@@ -142,8 +173,8 @@ void Player::DrawDebugGUI()
 			angle.y = DirectX::XMConvertToRadians(a.y);
 			angle.z = DirectX::XMConvertToRadians(a.z);
 
-			// スケール
-			ImGui::InputFloat3("Scale", &scale.x);
+			 スケール
+			ImGui::InputFloat3("Scale", &scale.x);*/
 
 			// 回転値
 			//ImGui::InputFloat("rot", &rot);
@@ -164,7 +195,7 @@ void Player::DeadTime(float elapsedTime)
 	if (IsMove && Velocity.x == 0 && Velocity.z == 0)
 	{
 		DeadTimer += elapsedTime;
-		if (DeadTimer > 3)
+		if (DeadTimer > 5)
 		{
 			IsLive = true;
 		}
@@ -316,11 +347,12 @@ void Player::InputMove(float elapsedTime)
 	//移動フラグの管理
 	if (Startpos.x != position.x || Startpos.z != position.z)
 	{
+
 		IsMove = true;
 	}
 
-	//移動開始OK　Enter　OR　Second3↑
-	if (IsKeyPressed(VK_RETURN) || OnMovingFloorTime > 3)
+	//移動開始OK　Enter
+	if (KeyPressed(VK_RETURN))
 	{
 		if (moveState == 0)
 		{
@@ -333,7 +365,6 @@ void Player::InputMove(float elapsedTime)
 			}
 		}
 		moveState = 1;
-	
 	}
 
 	// 進行ベクトル取得
@@ -341,7 +372,15 @@ void Player::InputMove(float elapsedTime)
 	if (!IsMove)
 	{
 		moveVec = GetMoveVec();
+		if (moveVec.x != 0 && moveVec.z != 0) {
+			StartVec = moveVec;
+		}
 		OnMovingFloorTime += elapsedTime;
+		if (OnMovingFloorTime > 3 && !(StartVec.x == 0 && StartVec.z == 0) && moveState == 0)
+		{
+			moveVec = StartVec;
+			moveState = 1;
+		}
 	}
 	// 移動処理
 	if(moveState == 1)

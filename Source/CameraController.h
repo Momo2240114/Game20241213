@@ -16,10 +16,10 @@ public:
 	DirectX::XMFLOAT3 moveTarget(float elapsedTime);
 private:
 	DirectX::XMFLOAT3		target = { 40, 0, 40 };
-	DirectX::XMFLOAT3		angle = { DirectX::XMConvertToRadians(45), DirectX::XMConvertToRadians(45), 0 };
+	DirectX::XMFLOAT3		angle = { DirectX::XMConvertToRadians(45), DirectX::XMConvertToRadians(0), 0 };
 	int AddAng = 45;
-	float					rollSpeed = DirectX::XMConvertToRadians(90);
-	float	range = 50;
+	float	rollSpeed = DirectX::XMConvertToRadians(90);
+	float	range = 80;
 	float currentTime = 0.0f; // åoâﬂéûä‘
 	float rotationDuration = 1.0f; // âÒì]Ç…Ç©ÇØÇÈéûä‘ÅiïbÅj
 	bool isRotating = false; // âÒì]íÜÇ©Ç«Ç§Ç©
@@ -28,7 +28,7 @@ private:
 	float minAngleX = DirectX::XMConvertToRadians(45);
 	float rangeChangeSpeed = 25;
 	float minRange = 20;
-	float maxRange = 100;
+	float maxRange = 80;
 	float wheelDelta;
 	void UpdateVer1(float elapsedTime);
 	void UpdateVer2(float elapsedTime);

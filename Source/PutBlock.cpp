@@ -1,36 +1,33 @@
 #include "PutBlock.h"
 #include "System/Input.h"
+#include "EnergyRender.h"
+#include "AudioManager.h"
 
+enum Cost {
+	Erase = 0,
+	Dirt = 2,
+	Stairs = 3,
+	Jump = 10,
+	direction = 10,
+	Stop = 5,
+	Accel = 5,
+};
+
+int BlockCost[] = {
+	Erase,
+	Dirt,
+	Stairs,
+	Jump,
+	direction,
+	Stop,
+	Accel,
+};
 
 PutBlock& PutBlock::Instance()
 {
 	static PutBlock Instance;
 	return Instance;
 }
-
-//前のやつ
-
-//{
-	////
-	////void PutBlock::putBlock()
-	////{
-	////	performRaycast(RayState, RayEnd);
-	////
-	////		ステージとのレイキャストを行い配置座標を決める
-	////		HitPos, HitNor;
-	////
-	////		if (Stage::Instance().RayCast(
-	////			RayState, RayEnd,
-	////			HitPos, HitNor)) {
-	////			UpdateTransform();
-	////		}
-	////		if (Input::Instance().GetMouse().GetButtonDown() & Mouse::BTN_LEFT)
-	////		{
-	////			Stage::Instance().putBlock(Type, HitPos, Angle);
-	////			Stage::Instance().UpdateBlockTransform();
-	////	}
-	////}
-//}
 
 void PutBlock::putBlockOnBlock()
 {
@@ -47,14 +44,18 @@ void PutBlock::putBlockOnBlock()
 		if(Stage::Instance().UnifiedRayCast(RayState, RayEnd,
 			HitPos, HitNor, BlockAngle, HitType,false,true))
 		{
+			VewEnergy = Stage::Instance().GetEnergy(HitPos);
+
+	
+
 			// Typeが0の場合、HitPosをRayEnd方向に少し進める
 			if (Type == 0 || Type == 4)
 			{
 				// RayEnd方向のベクトルを正規化して0.1進める
 				DirectX::XMFLOAT3 direction;
-				direction.x= (RayEnd.x - HitPos.x);
-				direction.y= (RayEnd.y - HitPos.y);
-				direction.z= (RayEnd.z - HitPos.z);
+				direction.x = (RayEnd.x - HitPos.x);
+				direction.y = (RayEnd.y - HitPos.y);
+				direction.z = (RayEnd.z - HitPos.z);
 
 				// ベクトルの長さを計算
 				float length = sqrt(direction.x * direction.x + direction.y * direction.y + direction.z * direction.z);
@@ -78,8 +79,15 @@ void PutBlock::putBlockOnBlock()
 		}
 		if (Input::Instance().GetMouse().GetButtonDown() & Mouse::BTN_LEFT)
 		{
-			Stage::Instance().putBlock(Type, HitPos, Angle);
-			Stage::Instance().UpdateBlockTransform();
+			if (HitType != 0 && Type == 0)
+			{
+				HitPos.y += 1.0f;
+			}
+			if (Stage::Instance().putBlock(Type, HitPos, Angle, 0))
+			{
+				Stage::Instance().UpdateBlockTransform();
+			}
+			else AudioManager::Instance().PlaySE(SE_Number::DonotPutBlock);
 		}
 }
 
@@ -108,14 +116,15 @@ void PutBlock::SetBlock()
 
 void PutBlock::Initialize()
 {
-	PutBlockModel1 = new Model("Data/Model/Block/Block1.mdl");
-	PutBlockModel2 = new Model("Data/Model/Block/Block2.mdl");
-	PutBlockModel3 = new Model("Data/Model/Block/Block3.mdl");
-	PutBlockModel4 = new Model("Data/Model/Block/Block4.mdl");
+	PutBlockModel1 = new Model("Data/Model/Block/field_dirt_asset.mdl");
+	PutBlockModel2 = new Model("Data/Model/Block/gimmick_stairs_asset.mdl");
+	PutBlockModel3 = new Model("Data/Model/Block/gimmick_jump_asset.mdl");
+	PutBlockModel4 = new Model("Data/Model/Block/gimmick_direction_asset.mdl");
 	PutBlockModel5 = new Model("Data/Model/Block/Block5.mdl");
-	PutBlockModel6 = new Model("Data/Model/Block/BlockStop.mdl");
-	PutBlockModel7 = new Model("Data/Model/Block/AccelBlock.mdl");
+	PutBlockModel6 = new Model("Data/Model/Block/gimmick_stop_asset.mdl");
+	PutBlockModel7 = new Model("Data/Model/Block/gimmick_axel_asset.mdl");
 	EraseBlockModel = new Model("Data/Model/Block/Erase.mdl");
+	FrameModel = new Model("Data/Model/Block/Frame.mdl");
 }
 
 void PutBlock::Finalize()
@@ -170,7 +179,11 @@ void PutBlock::render(const RenderContext& rc, ModelRenderer* renderer) {
 		renderer->Render(rc, transform, PutBlockModel7, ShaderId::Lambert);
 		break;
 	}
-
+	if(Type != -1)
+	{
+		renderer->Render(rc, transform, FrameModel, ShaderId::Lambert);
+	}
+	
 }
 
 
@@ -181,14 +194,17 @@ void PutBlock::UpdateTransform()
 	int mapZ = Stage::Instance().GetMapZsize();
 	scale = Stage::Instance().GetBlockscale();
 
+
 	int Putx = static_cast<int>(HitPos.x / (Blocksize * scale.x));
-	int Puty = static_cast<int>(HitPos.y / (Blocksize * scale.y));
+	int Puty = static_cast<int>((HitPos.y + 1.0f) / (Blocksize * scale.y));
 	int Putz = static_cast<int>(HitPos.z / (Blocksize * scale.z));
 
 	// 位置をブロックのグリッドに合わせるために、HitPosを補正
 	HitPos.x = static_cast<float>(Putx) * Blocksize * scale.x;
 	HitPos.y = static_cast<float>(Puty) * Blocksize * scale.y;
 	HitPos.z = static_cast<float>(Putz) * Blocksize * scale.z;
+
+	EnergyRender::Instance().SetLockBlock(HitPos, VewEnergy);
 
 	DirectX::XMMATRIX S = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
 	DirectX::XMMATRIX R = DirectX::XMMatrixRotationRollPitchYaw(Angle.x,Angle.y, Angle.z);
@@ -206,6 +222,11 @@ void PutBlock::Update(float elapsedTime)
 		putBlockOnBlock();
 		UpdateTransform();
 	}
+}
+
+int PutBlock::CostGet(int i)
+{
+	return BlockCost[i];
 }
 
 void PutBlock::performRaycast(DirectX::XMFLOAT3& RayState, DirectX::XMFLOAT3& RayEnd)

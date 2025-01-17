@@ -19,7 +19,7 @@ void BlockManager::Initialize() {
     for (int y = 0; y < mapY; ++y) {
         for (int x = 0; x < mapX; ++x) {
             for (int z = 0; z < mapZ; ++z) {
-                blocks[GetIndex(x, y, z)] = { 0, {}, {}, {}, {}, false };
+                blocks[GetIndex(x, y, z)] = { 0,0, {}, {}, {}, {}, false };
             }
         }
     }
@@ -61,7 +61,7 @@ void BlockManager::RemoveBlock(int x, int y, int z) {
     if (x < 0 || x >= mapX || y < 0 || y >= mapY || z < 0 || z >= mapZ) return;
 
     BlockData& block = blocks[GetIndex(x, y, z)];
-    block = { 0, {}, {}, {}, {}, false };
+    block = {0, 0, {}, {}, {}, {}, false };
 }
 
 BlockManager::BlockData* BlockManager::GetBlockData(int x, int y, int z) {

@@ -39,9 +39,26 @@ void PlayerManager::Clear()
 {
 	for (Player* player : players)
 	{
-		delete player;
+		Remove(player);
 	}
-	players.clear();
+
+	playerNo = 0;
+	moveStateTimer = 0;
+	GoalNum = 0;
+	DeadNum = 0;
+	HP = 3;
+	for (Player* Pla : removes)
+	{
+		std::vector<Player*>::iterator it = std::find(players.begin(), players.end(), Pla);
+		{
+			if (it != players.end())
+			{
+				players.erase(it);
+			}
+		}
+		delete Pla;
+	}
+	removes.clear();
 }
 
 void PlayerManager::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)
@@ -69,9 +86,9 @@ bool PlayerManager::PopCool(float elapsedTime)
 		}
 		for (Player* player : players)
 		{
-			
 				if (player->ISGoal())
 				{
+
 					Remove(player);
 					GoalNum++;
 					if (PopPlayerNum() <= PlayerMax && players.back()->pupCool())
@@ -84,6 +101,7 @@ bool PlayerManager::PopCool(float elapsedTime)
 				{
 					Remove(player);
 					DeadNum++;
+					HP--;
 					if (PopPlayerNum() <= PlayerMax && players.back()->pupCool())
 					{
 						moveStateTimer = 0.0f; // タイマーをリセット
@@ -100,4 +118,21 @@ void PlayerManager::DrawDebugGUI()
 	{
 		player->DrawDebugGUI();
 	}
+}
+
+bool PlayerManager::GameClear()
+{
+	if (GoalNum > 3) { return true; }
+	return false;
+}
+
+bool PlayerManager::EndGame()
+{
+	if (DeadNum > 3) { return true; }
+	return false;
+}
+
+void PlayerManager::Init()
+{
+	HP = 3;
 }

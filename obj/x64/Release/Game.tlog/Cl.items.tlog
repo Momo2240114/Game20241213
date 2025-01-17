@@ -4,6 +4,7 @@ C:\Users\2240114\Desktop\チーム制作３\GitHub\External\imgui-docking\imgui_
 C:\Users\2240114\Desktop\チーム制作３\GitHub\External\imgui-docking\imgui_impl_dx11.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\imgui_impl_dx11.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\External\imgui-docking\imgui_impl_win32.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\imgui_impl_win32.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\External\imgui-docking\imgui_widgets.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\imgui_widgets.obj
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\AudioManager.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\AudioManager.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\AutoRunCharacter.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\AutoRunCharacter.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Block.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\Block.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Camera.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\Camera.obj
@@ -13,11 +14,15 @@ C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Collision.cpp;C:\Users
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Enemy.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\Enemy.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\EnemyManager.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\EnemyManager.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\EnemySlime.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\EnemySlime.obj
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\EnergyRender.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\EnergyRender.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Framework.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\Framework.obj
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\GameUIRener.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\GameUIRener.obj
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\KeyPut.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\KeyPut.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Main.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\Main.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\MathUtiles.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\MathUtiles.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Player.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\Player.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\PlayerManager.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\PlayerManager.obj
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\PoseRender.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\PoseRender.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Projectile.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\Projectile.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileHoming.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\ProjectileHoming.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ProjectileManager.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\ProjectileManager.obj
@@ -29,7 +34,9 @@ C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneLoading.cpp;C:\Us
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneManager.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\SceneManager.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneStageSelect.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\SceneStageSelect.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\SceneTitle.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\SceneTitle.obj
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\ScoreRender.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\ScoreRender.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\Stage.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\Stage.obj
+C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\StageSave.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\StageSave.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\System\Audio.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\Audio.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\System\AudioResource.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\AudioResource.obj
 C:\Users\2240114\Desktop\チーム制作３\GitHub\Source\System\AudioSource.cpp;C:\Users\2240114\Desktop\チーム制作３\GitHub\obj\x64\Release\AudioSource.obj

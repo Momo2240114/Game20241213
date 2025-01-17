@@ -7,17 +7,30 @@
 #include "Player.h"
 #include "PutBlock.h"
 #include "PlayerManager.h"
-
+#include "SceneManager.h"
+#include "SceneStageSelect.h"
+#include "SceneTitle.h"
+#include "StageSave.h"
+#include "KeyPut.h"
+#include "PoseRender.h"
+#include "EnergyRender.h"
+#include "AudioManager.h"
 // 初期化
 void SceneGame::Initialize()
 {
+	StageSaveManager::Instance().Load();
+	Timer = 0;
+	L = Stage::Instance().GetLevel();
 	//ステージ初期化
 	/*stage = new Stage();*/
 	Stage::Instance().init();
 	Stage::Instance().UpdateBlockTransform();
 	Stage::Instance().UpdateTransform();
 	PutBlock::Instance().Initialize();
-
+	PlayerManager::Instance().Clear();
+	PoseRender::Instance().Init();
+	AudioManager::Instance().PlayBGM(BGM_Number::Game);
+	AudioManager::Instance().SetVolumeBGM(BGM_Number::Game, 0.5f);
 	//プレイヤー初期化
 
 	//いったいめ
@@ -26,7 +39,7 @@ void SceneGame::Initialize()
 	One->Initialize();
 	One->SetStartPos(Stage::Instance().GetStatePos());
 	PlayerManager::Instance().Register(One);
-	
+
 	//カメラコントローラー初期化
 	cameraController = new CameraController();
 
@@ -59,8 +72,11 @@ void SceneGame::Finalize()
 {
 	//エネミーの終了化
 	EnemyManager::Instance().Clear();
+	//playerの終了化
 	PlayerManager::Instance().Clear();
-
+	PutBlock::Instance().Finalize();
+	Stage::Instance().Finalize();
+	PoseRender::Instance().Delete();
 	//カメラコントローラー終了化
 	if (cameraController != nullptr)
 	{
@@ -68,36 +84,55 @@ void SceneGame::Finalize()
 		cameraController = nullptr;
 	}
 
-	//プレイヤcameraControllerー終了化
-	//if (player != nullptr)
-	//{
-	//	delete player;
-	//	player = nullptr;
-	//}
-	/*Player::Instance().Finalize();*/
-
-
-	////ステージ終了化
-	//if (stage != nullptr)
-	//{
-	//	delete stage;
-	//	stage = nullptr;
-	//}
 }
 
 // 更新処理
 void SceneGame::Update(float elapsedTime)
 {
-	if (PutBlock::Instance().PutOff())
+	if (KeyPressedOut(32))
 	{
-		cameraController->moveTarget(elapsedTime);
+		Pose = !Pose; // Pose の状態を反転させる
 	}
-	cameraController->Update(elapsedTime);
-	PutBlock::Instance().Update(elapsedTime);
-	Stage::Instance().Update(elapsedTime);
-	PlayerManager::Instance().Update(elapsedTime);
-	PopPlayer(elapsedTime);
 
+	if (KeyPressedIn(8))//BackSpaceでクイックリセット
+	{
+		AudioManager::Instance().StopBGM();
+		SceneManager::Instance().ChangeScene(new SceneGame);
+	}
+
+
+	if (!Pose) {
+		Timer += elapsedTime;
+		if (PutBlock::Instance().PutOff())
+		{
+			cameraController->moveTarget(elapsedTime);
+		}
+		cameraController->Update(elapsedTime);
+		PutBlock::Instance().Update(elapsedTime);
+		Stage::Instance().Update(elapsedTime);
+		PlayerManager::Instance().Update(elapsedTime);
+		PopPlayer(elapsedTime);
+		if (PlayerManager::Instance().EndGame() || PlayerManager::Instance().GameClear())
+		{
+			AudioManager::Instance().StopBGM();
+			if (PlayerManager::Instance().GameClear())
+			{
+				int cost = Stage::Instance().GetUseCost();
+				StageSaveManager::Instance().SetStageCleared(L, true);
+				StageSaveManager::Instance().SetShortestTime(L, Timer);
+				StageSaveManager::Instance().SetLowestCost(L, cost);
+				StageSaveManager::Instance().Save();
+				SceneManager::Instance().ChangeScene(new SceneTitle);
+				PlayerManager::Instance().Clear(); // 追加: 状態リセット
+			}
+			else
+			{
+				SceneManager::Instance().ChangeScene(new SceneTitle);
+				PlayerManager::Instance().Clear(); // 追加: 状態リセット
+			}
+		}
+	}
+	
 }
 
 // 描画処理
@@ -127,11 +162,9 @@ void SceneGame::Render()
 		PutBlock::Instance().render(rc, modelRenderer);
 
 		//プレイヤー描画
-
 		PlayerManager::Instance().Render(rc, modelRenderer);
-
 		// エネミー描画
-		EnemyManager::Instance().Render(rc, modelRenderer);
+		//EnemyManager::Instance().Render(rc, modelRenderer);
 
 	}
 
@@ -141,14 +174,23 @@ void SceneGame::Render()
 		EnemyManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
 	}
 
+
+	Graphics& SpriteGraphics = Graphics::Instance();
+	ID3D11DeviceContext* Spritedc = SpriteGraphics.GetDeviceContext();
+	RenderState* Spriterenderstate = SpriteGraphics.GetRenderState();
+
+	RenderContext SpriteRc;
+	SpriteRc.deviceContext = Spritedc;
+	SpriteRc.renderState = Spriterenderstate;
 	// 2Dスプライト描画
 	{
-
+		if (Pose)
+		{
+			PoseRender::Instance().Render(SpriteRc);
+		}
 	}
+	
 }
-
-
-
 // GUI描画
 void SceneGame::DrawGUI()
 {

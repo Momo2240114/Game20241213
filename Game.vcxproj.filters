@@ -19,6 +19,9 @@
     <Filter Include="Source\System">
       <UniqueIdentifier>{bdca9bd5-7c86-4bde-986d-9cf51f91eb5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NewFilter1">
+      <UniqueIdentifier>{5484d291-e9cb-43fa-a665-c66a4d778a5a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui-docking\imconfig.h">
@@ -135,6 +138,13 @@
     <ClInclude Include="Source\PlayerManager.h" />
     <ClInclude Include="Source\Block.h" />
     <ClInclude Include="Source\SceneStageSelect.h" />
+    <ClInclude Include="Source\KeyPut.h" />
+    <ClInclude Include="Source\StageSave.h" />
+    <ClInclude Include="Source\ScoreRender.h" />
+    <ClInclude Include="Source\GameUIRener.h" />
+    <ClInclude Include="Source\EnergyRender.h" />
+    <ClInclude Include="Source\PoseRender.h" />
+    <ClInclude Include="Source\AudioManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui-docking\imgui.cpp">
@@ -282,6 +292,27 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneStageSelect.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KeyPut.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StageSave.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ScoreRender.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameUIRener.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EnergyRender.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AudioManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PoseRender.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

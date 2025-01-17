@@ -30,6 +30,9 @@ private:
 
 	//Player* player = nullptr;
 
+	int L = 0;
+	float Timer = 0;
+	bool Pose;
 	CameraController* cameraController = nullptr;
 
 	DirectX::XMFLOAT3 target = { 0,0,0 };

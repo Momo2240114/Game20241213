@@ -19,5 +19,8 @@ public:
 
 private:
 	Sprite* sprite = nullptr;
+
+	bool Ready = false;
+	float Timer = 0;
 };
 
